@@ -29,7 +29,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "node app.js",
-    "start": "pm2 start ./app.js --name 'sanjiadian' "
+    "start": "pm2 start ./app.js --name '3inns' "
   },
   "author": "tujiaw",
   "license": "ISC",
