@@ -1,0 +1,20 @@
+<header class="post-header" style="display:flex;flex-direction:column;">
+    <div><h1><a href="/post/{{ post.id }}" class="post-title">{{ post.title }}</a></h1></div>
+    <div class="post-footer" style="display:flex;flex: 1; flex-direction:row;justify-content:flex-start;margin-bottom:20px;color:#666;">
+            <span class="glyphicon glyphicon-tags"></span>&nbsp;&nbsp;
+            {% for tag in post.tags %}
+            {% if tag.length > 0 %}
+                {% set encode_tag = encodeURIComponent(tag) %}
+                <a href="/tags/{{ encode_tag }}" class="posttags"> {{ tag }}</a>&nbsp;
+            {% endif %}
+            {% endfor %}&nbsp;
+            <span class="glyphicon glyphicon-calendar"></span><span class="post-date">&nbsp;{{ post.created_at }}</span>&nbsp;&nbsp;
+            <span class="glyphicon glyphicon-eye-open"></span>&nbsp;阅读({{ post.pv }})
+            {% if user && post.author._id && user._id.toString() === post.author._id.toString() %}
+                &nbsp;&nbsp;<span class="glyphicon glyphicon-edit"></span>&nbsp;
+                <a href="/edit/{{ post._id.toString() }}">编辑</a>
+                &nbsp;&nbsp;<span class="glyphicon glyphicon glyphicon-remove"></span>&nbsp;
+                <a href="/remove/{{ post._id.toString() }}" onclick="return confirm('确认要删除这篇文章吗？');">删除</a>
+            {% endif %}
+    </div>
+</header>

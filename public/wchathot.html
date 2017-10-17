@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="never"> <!-- 反盗链 -->
+  <title>泊客网 - 文章精选</title>
+  <link href="https://cdn.jsdelivr.net/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/wchathot.css">
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-108126205-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-108126205-1');
+  </script>
+
+  <script id="mainContent" type="text/template">
+    <h4 id="mainTitle">微信热门精选</h4>
+    <div class="row">
+      <div class="typePanel">
+        <ul class="typeList">
+          <% typeList.forEach(function(type) { %>
+            <li class="typeItem">
+              <a typeId="<%= type.id %>" href="javascript:void(0)" onclick="typeItemClicked(this)"><%= type.name %></a>
+            </li>
+          <% }) %>
+        </ul>
+      </div>
+
+      <div class="articlePanel">
+        <% if (typeof(pagebean) != 'undefined' && pagebean && pagebean.contentlist.length > 0) { %>
+          <%
+            var curTypeId = parseInt(pagebean.contentlist[0].typeId);
+            var curPage = parseInt(pagebean.currentPage);
+            var typeName = pagebean.contentlist[0].typeName;
+          %>
+
+          <div class="articleHeader">
+            <span id="currentType" onclick="currentTypeClicked(this)">
+              &nbsp;&nbsp;<%= typeName %>
+            </span>
+            <div class="pageButton">
+              <% if (curPage <= 1) { %>
+                <a href="#" class="disabled text-muted" onclick="return false;">上一页</a>
+              <% } else { %>
+                <a href="javascript:void(0)" class="prePage" onclick="prePageClicked(this)">上一页</a>
+              <% } %>
+              <a href="javascript:void(0)" class="nextPage" onclick="nextPageClicked(this)">下一页</a>
+            </div>
+          </div>
+
+          <div class="articleList">
+            <% pagebean.contentlist.forEach(function(article) { %>
+                <div class="articleItem" url="<%= article.url %>" onclick="articleItemClicked(this)">
+                  <img class="img-rounded" src="<%= article.contentImg %>" >
+                  <div id="content">
+                    <div id="userName">
+                      <%= article.userName %>
+                    </div>
+                    <div class="articleTitle">
+                      <%= article.title %>
+                    </div>
+                  </div>
+                  <div class="clearBoth"></div>
+                </div>
+            <% }); %>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </script>
+</head>
+<body>
+  <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">泊客网</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="/">主页</a></li>
+            <li><a href="/archives">归档</a></li>
+            <li><a href="/about">关于</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">相关链接 <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/wchathot.html">微信文章精选</a></li>
+                <li><a href="http://blog.csdn.net/tujiaw">CSDN Blog</a></li>
+                <li><a href="https://github.com/tujiaw">GitHub</a></li>
+                <li role="separator" class="divider"></li>
+                <li class="dropdown-header">工具</li>
+                <li><a href="http://123.57.244.170:3100/base64">base64编解码</a></li>
+                <li><a href="/upload.html">上传图片</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+<div id="main"></div>
+<footer class="footer navbar-fixed-bottom">
+    <a href="http://www.miitbeian.gov.cn/" target="_blank">鄂ICP备17003086号. Copyright © 2016. All Rights Reserved.&nbsp;</a> 
+</footer>
+<script src="https://cdn.jsdelivr.net/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="/js/thirdparty/ejs.min.js"></script>
+<script src="/js/thirdparty/md5.min.js"></script>
+<script src="/js/showapi.js"></script>
+<script src="/js/wchathot.js"></script>
+<script type="text/javascript">
+  $(function() {
+    getWchatHot();
+  })
+</script>
+</body>
+</html>

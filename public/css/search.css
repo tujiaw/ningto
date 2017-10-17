@@ -1,0 +1,13 @@
+#hot-search-word a {
+  color: #26C9FF;
+  cursor: pointer;
+  margin: 0px 8px;
+}
+
+#all-tags {
+  margin-top: 5px;
+}
+
+#all-tags a {
+  margin-bottom: 2px;
+}

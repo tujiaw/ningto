@@ -1,0 +1,49 @@
+body {
+    margin-bottom: 40px;
+}
+
+#content {
+    margin-top: 70px;
+    margin-bottom: 60px;
+}
+
+td code:hover {
+    background: rgb(222, 226, 211);
+}
+
+.footer {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    justify-content: center;
+    background: rgb(238, 238, 238);
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.footer>a {
+    text-decoration: none;
+    color: #666;
+}
+
+
+#dropbox {
+    padding-top: 50px;
+    height: 300px;
+    border:3px dashed #aaaaaa;
+    border-radius: 10px;
+}
+
+#dropbox h1 {
+    text-align: center;
+}
+
+#dropbox h3 {
+    text-align: center;
+    color: #666;
+}
+
+#tips {
+    text-align: center;
+    color: blue;
+}

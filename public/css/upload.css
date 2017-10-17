@@ -1,0 +1,22 @@
+body {
+    margin-bottom: 40px;
+}
+
+td code:hover {
+    background: rgb(222, 226, 211);
+}
+
+.footer {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    justify-content: center;
+    background: rgb(238, 238, 238);
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.footer>a {
+    text-decoration: none;
+    color: #666;
+}

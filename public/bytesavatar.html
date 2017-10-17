@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>BASE64二进制数据头像测试</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style type="text/css">
+        body {
+            padding: 20px;
+        }
+        #imagepreview {
+            border: 1px solid #333;
+            min-height: 200px;
+        }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-108126205-1"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-108126205-1');
+    </script>
+
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <label for="">图片BASE64数据</label>
+        </div>
+        <div class="row">
+            <textarea name="" id="base64data" class="form-control" rows="5" required="required"></textarea>
+        </div><br>
+        <div class="row">
+            <input type="file" id="inputfile">
+            <div class="pull-right">
+                <input type="checkbox" id="checkhead" name="vehicle" /> 增加头&nbsp;&nbsp;
+                <button type="button" id="btnpreview">预览</button>
+            </div>
+        </div><br>
+        <div class="row">
+            <div id="imagepreview">
+                <img src=" " class="img-responsive" alt="Image" style="display: none;">
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        const BASE64HEAD = 'data:image/png;base64,';
+        $('#base64data').val(BASE64HEAD);
+        $('#checkhead').attr('checked', true);
+        function preview() {
+            console.log('input event');
+            const $img = $('#imagepreview>img');
+            var base64data = $('#base64data').val();
+            if (base64data.length > BASE64HEAD.length) {
+                $img.show();
+            } else {
+                $img.hide();
+            }
+            $img.attr('src', base64data);
+        }
+
+        var inputfile = document.getElementById('inputfile');
+        $('#inputfile').on('change', function() {
+            let file = this.files[0];
+            if (!/image\/\w+/.test(file.type)) {
+                alert('请选择图片！');
+                return;
+            }
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                $('#base64data').val(this.result);
+                preview();
+            }
+            reader.readAsDataURL(file);
+        });
+
+        $('#btnpreview').on('click', function() {
+            preview();
+        });
+
+        $('#checkhead').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('#base64data').val(BASE64HEAD + $('#base64data').val());
+            } else {
+                $('#base64data').val($('#base64data').val().replace(new RegExp(BASE64HEAD), ''));
+            }
+        });
+
+    </script>
+</body>
+</html>

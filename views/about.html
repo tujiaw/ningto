@@ -1,0 +1,80 @@
+{% extends 'main_layout.html' %} 
+{% block title %}泊客网 - 关于{% endblock %} 
+{% block subhead %}
+  <link href="/css/about.css" type="text/css" rel="stylesheet" />
+{% endblock %} 
+{% block content %}
+<div class="container">
+  <h1>关于</h1>
+  <h3>网站名片</h3>
+  <div class="ghProfile ghProfile-grey">
+	<div class="ghProfile-top">
+	<table><tbody>
+		<tr>
+		<td>
+			<a href="https://github.com/tujiaw">
+			<img alt="avatar" src="https://avatars1.githubusercontent.com/u/5338512?v=3&s=460">
+			</a>
+		</td>
+		<td>
+			<h2>3inns.cn</h2>
+			<span>Keep it simple,stupid</span><br>
+			<span class="glyphicon glyphicon-map-marker"></span>&nbsp;&nbsp;
+			<span>Shanghai,China</span><br>
+			<span class="glyphicon glyphicon-envelope"></span>&nbsp;&nbsp;
+			<a href="mailto:tujiaw@live.com">tujiaw@live.com</a><br>
+			<span class="glyphicon glyphicon-link"></span>&nbsp;&nbsp;
+			<a href="http://blog.csdn.net/tujiaw" target="_blank">csdn</a><span> | </span><a href="https://github.com/tujiaw" target="_blank">github</a>
+		</td>
+		</tr>
+	</tbody></table>
+	</div>
+	<div class="ghProfile-bottom">
+	<table class="ghProfile-table"><tbody>
+		<tr>
+			<td style="width: 20%;">
+				<div class="ghProfile-metric">{{ about.postCount }}</div>
+				<div>文章数</div>
+			</td>
+			<td style="width: 20%;">
+				<div class="ghProfile-metric">{{ about.postHits}}</div>
+				<div>阅读数</div>
+			</td>
+			<td style="width: 30%;">
+				<div class="ghProfile-metric">2016-12-11</div>
+				<div>创建时间</div>
+			</td>
+			<td style="width: 30%;">
+				<div class="ghProfile-metric">{{ about.lastUpdate }}</div>
+				<div>最后更新</div>
+			</td>
+		</tr>
+	</tbody></table>
+	</div>
+  </div> <!--ghProfile-->
+</div> <!--card-->
+
+	<br><br>
+	<!-- 代码1：放在页面需要展示的位置  -->
+	<!-- 如果您配置过sourceid，建议在div标签中配置sourceid、cid(分类id)，没有请忽略  -->
+	<div id="cyReward" role="cylabs" class="col-md-offset-5" data-use="reward"></div>
+	<!-- 代码2：用来读取评论框配置，此代码需放置在代码1之后。 -->
+	<!-- 如果当前页面有评论框，代码2请勿放置在评论框代码之前。 -->
+	<!-- 如果页面同时使用多个实验室项目，以下代码只需要引入一次，只配置上面的div标签即可 -->
+	<script type="text/javascript" charset="utf-8" src="https://changyan.itc.cn/js/lib/jquery.js"></script>
+	<script type="text/javascript" charset="utf-8" src="https://changyan.sohu.com/js/changyan.labs.https.js?appid=cysWB0Du9"></script>
+
+    <!--畅言-->
+    <div id="SOHUCS"></div> 
+    <script type="text/javascript"> 
+    (function(){ 
+    var appid = 'cysWB0Du9'; 
+    var conf = '691d31a2c6c0e4c3c74db69baf69415e'; 
+    var width = window.innerWidth || document.documentElement.clientWidth; 
+    if (width < 960) { 
+    window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("http://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); 
+    </script>
+<!--畅言-->
+{% endblock %}
+{% block extend_script %}
+{% endblock %}

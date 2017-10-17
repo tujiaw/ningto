@@ -1,0 +1,134 @@
+{% extends 'main_layout.html' %}
+{% block title %}泊客网 - 站内搜索{% endblock %}
+{% block subhead %}
+<link rel="stylesheet" href="/css/search.css">
+{% endblock %}
+{% block content %}
+<h1>站内搜索</h1>
+<div class="input-group">
+  <input id="input-keyword" type="text" class="form-control" placeholder="请至少输入两个关键字..." required autofocus>
+  <span class="input-group-btn">
+    <button id="button-search" class="btn btn-default" type="button">搜索</button>
+  </span>
+</div><!-- /input-group -->
+</br>
+<div id="hot-search-word"></div>
+<div id="all-tags">
+  <span>标签组:</span>
+  {% for tag in tags %}
+    {% set encode_tag = encodeURIComponent(tag) %}
+    <a href="/tags/{{ encode_tag }}" class="posttags"> {{ tag }}</a>&nbsp;
+  {% endfor %}
+</div>
+<div id="search-result"></div>
+
+{% endblock %}
+{% block extend_script %}
+<script>
+function plainText(html) {
+  return $('<p>' + html + '</p>').text();
+}
+
+function markStr(keyword, str) {
+  var term = keyword;
+  term = term.replace(/(\s+)/,"(<[^>]+>)*$1(<[^>]+>)*");
+  var pattern = new RegExp("("+term+")", "gi");
+  str = str.replace(pattern, "<mark>$1</mark>");
+  return str;
+}
+
+function updateSearchKeys(keys) {
+  if (keys && keys.length) {
+    var html = "<span>热搜词:</span>"
+      for (var i = 0; i < keys.length; i++) {
+        html += "<a href='#'>" + keys[i].key + "</a>"
+    }
+    $('#hot-search-word').html(html);
+  }
+}
+
+function search(keyword) {
+  if (typeof(keyword) !== 'string' || keyword.length <= 1) {
+    return;
+  }
+
+  $.ajax({
+      type: 'POST',
+      url: 'search',
+      data: {keyword: keyword},
+      success: function(result) {
+        if (result && result.posts) {
+          var i = 0;
+          var count = result.posts.length;
+          var html = "<br><i><strong>本次搜索找到的结果" + count + "条</strong></i><hr>"
+          for (i = 0; i < count; i++) {
+            var post = result.posts[i];
+            html += "<div>" + 
+              "<h3><a href='/post/" + post._id + "'>" + markStr(keyword, plainText(post.title))  + "</a></h3>" + 
+              "<p>" + markStr(keyword, plainText(post.content)) + "</p>" + 
+              "<hr>" + 
+            "</div>"
+          }
+          $('#search-result').html(html);
+        }
+        result && updateSearchKeys(result.keys);
+      }
+  })
+}
+
+function hotSearch() {
+  $.ajax({
+      type: 'POST',
+      url: 'hotsearch',
+      success: function(result) {
+        if (result && result.posts) {
+          var i = 0;
+          var count = result.posts.length;
+          var html = "<br><i><strong>热搜文章列表" + count + "条</strong></i><hr>"
+          for (i = 0; i < count; i++) {
+            var post = result.posts[i];
+            html += "<div>" + 
+              "<h3><a href='/post/" + post._id + "'>" + plainText(post.title)  + "</a></h3>" + 
+              "<p>" + plainText(post.content) + "</p>" + 
+              "<hr>" + 
+            "</div>"
+          }
+          $('#search-result').html(html);
+        }
+        result && updateSearchKeys(result.keys);
+      }
+  })
+}
+
+$('#input-keyword').on('keydown', function(event) {
+  if (event.keyCode == '13') {
+    $('#button-search').click();
+  }
+})
+
+var prevKeyword = 'hot search'; // 默认进行热搜
+$('#button-search').on('click', function() {
+  var keyword = $('#input-keyword').val().trim()
+  if (prevKeyword === keyword) {
+    return;
+  }
+
+  prevKeyword = keyword;
+  if (keyword.length > 1) {
+    search(keyword);
+  } else {
+    hotSearch();
+  }
+  return false;
+})
+
+$('#hot-search-word').on('click', 'a', function() {
+  $('#input-keyword').val($(this).text());
+  $('#button-search').click();
+  return false;
+})
+
+$('#button-search').click();
+
+</script>
+{% endblock %}

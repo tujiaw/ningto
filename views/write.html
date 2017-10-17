@@ -1,0 +1,51 @@
+{% extends 'main_layout.html' %}
+{% block title %}泊客网 - 写文章{% endblock %}
+{% block subhead %}
+<link rel="stylesheet" href="/css/write.css">
+{% endblock %}
+{% block content %}
+<div class="flex-container">
+    <h1 class="text-center">发表博客</h1>
+    {% if post %}
+        {% set action_path="/edit" %}
+        {% set edit_title=post.title %}
+        {% set edit_content=post.content %}
+        {% set edit_tags=post.tags.join(';') %}
+    {% else %}
+        {% set action_path="/add" %}
+        {% set edit_title='' %}
+        {% set edit_content='' %}
+        {% set edit_tags='' %}
+    {% endif %}
+    <form role="form" action="{{ action_path }}" method="post">
+        <div class="form-group">
+            <label for="name">文章标题</label>
+            <input type="text" class="form-control" name="title" placeholder="请输入文章标题" value="{{ edit_title }}" required>
+        </div>
+        <div class="form-group">
+            <label for="title">文章内容</label>
+            <textarea class="form-control required" name="content" cols="30" rows="15">{{ edit_content }}</textarea>
+            <p class="help-block">支持Markdown语法。</p>
+        </div>
+        <div class="form-group">
+            <label for="name">标签云</label>
+            <div class="tag-cloud">
+                {% for tag in tags %}
+                    <button type="button" class="btn btn-default btn-xs" onclick="onTagClick(this)" tagname="{{ tag }}">
+                        <span class="glyphicon glyphicon-star-empty"></span> {{tag}}
+                    </button>
+                {% endfor %}
+            </div>
+            <input id="tags" type="text" name="tags" style="display:none" value="{{ edit_tags }}">
+            {% if post %}
+                <input id="edit_id" type="text" name="_id" style="display:none" value="{{ post._id.toString() }}">
+            {% endif %}
+        </div>
+        <input type="checkbox" name="continue_write" value="true">继续写文章</input>&nbsp;&nbsp;
+        <button type="submit" class="btn btn-primary">提交</button>
+    </form>
+</div> <!-- flex-container -->
+{% endblock %}
+{% block extend_script %}
+<script src="/js/write.js"></script>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'main_layout.html' %} 
+{% block title %}泊客网 - 登录{% endblock %} 
+{% block subhead %}
+  <link rel="stylesheet" href="/css/signin.css">
+{% endblock %} 
+{% block content %}
+<div class="flex-container">
+  <form class="form-signin" action="/user/signin" method="post">
+    <h1 class="form-signin-heading">管理员登录</h1>
+    <label for="inputUsername" class="sr-only">用户名</label>
+    <input id="username" type="text" name="username" class="form-control" placeholder="用户名" required autofocus>
+
+    <label for="inputPassword" class="sr-only">密码</label>
+    <input id="password" type="password" name="password" class="form-control" placeholder="密码" required>
+    <div class="checkbox">
+      <label>
+        <input id="remember-me" type="checkbox" value="remember-me"> 记住密码
+      </label>
+    </div>
+    <button id="signin" class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+  </form>
+</div>
+<!-- flex-container -->
+{% endblock %}
+{% block extend_script %}
+<script src="https://cdn.jsdelivr.net/jquery.cookie/1.4.1/jquery.cookie.min.js"></script>
+<script>
+  var $rememberMe = $('#remember-me');
+  var $username = $('#username');
+  var $password = $('#password');
+  
+  if ($.cookie('bit') === 'true') {
+    $rememberMe.attr('checked', 'checked');
+    $username.val($.cookie('username'));
+    $password.val($.cookie('password'));
+  }
+
+  $('#signin').on('click', function() {
+    if ($rememberMe.is(':checked')) {
+      $.cookie('username', $username.val(), { expires: 7 });
+      $.cookie('password', $password.val(), { expires: 7 });
+      $.cookie('bit', 'true', { expires: 7 });
+    } else {
+      $.removeCookie('username');
+      $.removeCookie('password');
+      $.removeCookie('bit');
+    }
+  })
+</script>
+{% endblock %}

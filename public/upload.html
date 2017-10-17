@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/upload.css">
+    <title>泊客网 - 上传图片</title>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-108126205-1"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-108126205-1');
+    </script>
+
+</head>
+<body>
+        <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">泊客网</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="/">主页</a></li>
+            <li><a href="/archives">归档</a></li>
+            <li><a href="/about">关于</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">相关链接 <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/wchathot.html">微信文章精选</a></li>
+                <li><a href="http://blog.csdn.net/tujiaw">CSDN Blog</a></li>
+                <li><a href="https://github.com/tujiaw">GitHub</a></li>
+                <li role="separator" class="divider"></li>
+                <li class="dropdown-header">工具</li>
+                <li><a href="http://123.57.244.170:3100/base64">base64编解码</a></li>
+                <li><a href="/upload.html">上传图片</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    
+    <div class="container">
+        <br><br><br>
+        <div class="jumbotron" id="dragContainer">
+            <h3>上传图片</h3>
+            <ul>
+                <li>使用html5、Flash、html4模式上传图片到七牛云</li>
+                <li>html5 模式大于4M时可分块上传，小于4M时直传，Flash、html4模式直接上传</li>
+                <li>最大上传文件大小限制为100M</li>
+                <li>支持拖曳上传</li>
+            </ul>
+            <div id="uploadContainer" style="position: relative;">
+                <a class="btn btn-default" id="pickfiles" href="#" style="position: relative; z-index: 1;">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    <span>选择文件</span>
+                </a>
+            </div>
+        </div>
+        <div class="uploadTable" style="display: none">
+            <p>上传的文件列表</p>
+            <div class="table-responsive">          
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>文件名</th>
+                        <th>大小</th>
+                        <th>链接(单击拷贝)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            </div>
+        </div>
+
+        <footer class="footer navbar-fixed-bottom">
+            <a href="http://www.miitbeian.gov.cn/" target="_blank"><img alt="beian" src="/img/beian_gov_cn.png" style="vertical-align:middle;margin-right:5px;">鄂ICP备17003086号. Copyright © 2016. All Rights Reserved. </a> 
+        </footer>
+    </div>
+
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/plupload/2.1.9/plupload.full.min.js"></script>
+    <script src="https://cdn.staticfile.org/qiniu-js-sdk/1.0.14-beta/qiniu.min.js"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="/js/upload.js"></script>
+</body>
+</html>

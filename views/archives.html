@@ -1,0 +1,26 @@
+{% extends 'main_layout.html' %}
+{% block title %}泊客网 - 归档{% endblock %}
+{% block subhead %}
+<link rel="stylesheet" href="/css/archive.css">
+{% endblock %}
+{% block content %}
+<header>
+    <h3>{{ tagname || '文章归档'}}</h3>
+</header>
+{% for item in archives %}
+    <div class="list-group">
+        <li href="" class="list-group-item active">
+            <h4 class="list-group-item-heading">
+                {{ item.yearMonth }}
+            </h4>
+        </li>
+    
+    {% for title in item.titles %}
+        <a href="/post/{{ title._id.toString() }}" class="list-group-item">
+            <span class="badge">{{ title.from_now }}</span>
+            {{ title.title }}
+        </a>
+    {% endfor %}
+    </div>
+{% endfor %}	
+{% endblock %}

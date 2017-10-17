@@ -1,0 +1,36 @@
+{% extends 'main_layout.html' %}
+{% block title %}三家店 - 泊客网{% endblock %}
+{% block subhead %}<link href="/css/list.css" rel="stylesheet">{% endblock %}
+{% block content %}
+{% for post in posts %}
+<div class="post-inner">
+    {% include "post_header_section.html" %}
+    <div class="post-entry">
+        {{ post.content }}
+    </div>
+    <p class="more"><a href="/post/{{ post.id }}">阅读全文 »</a></p>
+</div>
+{% endfor %}
+
+{% if pageNumbers.length > 1 %}
+<ul class="pagination">
+	<li {% if page === 1 %}class="disabled"{% endif %}>
+        <a href="/?page={{ prevPage }}">&laquo;</a>
+    </li>
+    {% for number in pageNumbers %}
+        {% if number === 0 %}
+            <li><a href="/?page={{ morePage }}">...</a></li>
+        {% else %}
+            {% if number === page %}
+            <li class="active"><a href="/?page={{ number }}">{{ number }}</a></li>
+            {% else %}
+            <li><a href="/?page={{ number }}">{{ number }}</a></li>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+	<li {% if page === lastPage %}class="disabled"{% endif %}>
+        <a href="/?page={{ nextPage }}">&raquo;</a>
+    </li>
+</ul>
+{% endif %}
+{% endblock %}

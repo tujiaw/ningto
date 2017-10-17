@@ -1,0 +1,16 @@
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card {
+    width: 20rem;
+    margin: 10px 10px;
+}
+
+.card img {
+    width: 20rem;
+    height: 15rem;
+    overflow:hidden;
+    border-radius: 5px;
+}

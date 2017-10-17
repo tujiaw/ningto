@@ -1,0 +1,45 @@
+{% extends 'main_layout.html' %}
+{% block title %}{{ post.title }}{% endblock %}
+{% block subhead %}
+<link rel="stylesheet" href="/css/github.css">
+<link rel="stylesheet" href="/css/github-markdown.min.css">
+<link rel="stylesheet" href="/css/show.css">
+{% endblock %}
+{% block content %}
+    <div class="show-content">
+        {% include "post_header_section.html" %}
+        <div class="markdown-body">
+            {% autoescape false %}
+            {{ post.content }}
+            {% endautoescape %}
+        </div>
+        <footer class="reference">
+            <strong>
+                （转载本站文章请注明作者和出处：<a href="http://3inns.cn">三家店 - 3inns.cn</a>）
+            </strong>
+        </footer>
+        <nav aria-label="...">
+            <ul class="pager">
+                {% if prevPost && prevPost.title && prevPost.title.length > 0 %}
+                    <li class="previous"><a href="/post/{{ prevPost._id.toString() }}"><span aria-hidden="true">&larr;</span> {{ prevPost.title }}</a></li>
+                {% endif %}
+                {% if nextPost && nextPost.title && nextPost.title.length > 0 %}
+                    <li class="next"><a href="/post/{{ nextPost._id.toString() }}">{{ nextPost.title }} <span aria-hidden="true">&rarr;</span></a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    <!--畅言-->
+    <div id="SOHUCS"></div> 
+    <script type="text/javascript"> 
+    (function(){ 
+    var appid = 'cysWB0Du9'; 
+    var conf = '691d31a2c6c0e4c3c74db69baf69415e'; 
+    var width = window.innerWidth || document.documentElement.clientWidth; 
+    if (width < 960) { 
+    window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("http://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); 
+    </script>
+<!--畅言-->
+{% endblock %}
+{% block extend_script %}
+{% endblock %}

@@ -1,0 +1,148 @@
+.ghProfile {
+	border-radius: 10px;
+	font-family: 'Helvetica Neue', arial, freesans, clean, sans-serif;
+	border: 1px solid #444;
+	font-size: 15px;
+  max-width: 500px;
+	min-width: 350px;
+}
+
+.ghProfile h1, .ghProfile h2, .ghProfile h3 {
+	font-weight: lighter;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	font-size: 2em;
+	font-family: 'Helvetica Neue', arial, freesans, clean, sans-serif;
+}
+
+.ghProfile h2 {
+	font-size: 1.5em;
+}
+
+.ghProfile h3 {
+	font-size: 1.17em;
+}
+
+.ghProfile img {
+	width: 150px;
+	height: 150px;
+	border-radius: 10px;
+	margin: 10px;
+	margin-right: 20px;
+	padding: 0;
+}
+
+.ghProfile-table {
+	width: 100%;
+	text-align: center;
+}
+
+.ghProfile-table > tbody > tr > td {
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.ghProfile-table > tbody > tr:first-child > td {
+	padding-top: 15px;
+}
+
+.ghProfile-table > tbody > tr:last-child > td {
+	padding-bottom: 15px;
+}
+
+.ghProfile-top {
+	border-radius: 10px 10px 0 0;
+}
+
+.ghProfile-bottom {
+	border-top: 3px solid;
+	border-radius: 0 0 10px 10px;
+}
+
+.ghProfile-metric {
+	font-size: 20px;;
+}
+
+/* Grey */
+.ghProfile-grey h1, .ghProfile-grey h2, .ghProfile-grey h3 {
+	color: #555;
+}
+
+.ghProfile-grey img {
+	 border-color: #747474;
+}
+
+.ghProfile-grey .ghProfile-top {
+	background-color: #EEE;
+	color: #545454;
+}
+
+.ghProfile-grey .ghProfile-bottom {
+	border-color: white;
+	background-color: #545454;
+	color: white;
+}
+
+/* Blue */
+.ghProfile-blue h1 {
+	color: #266294;
+}
+
+.ghProfile-blue h2, .ghProfile-blue h3 {
+	color: steelblue;
+}
+
+.ghProfile-blue img {
+	 border-color: steelblue;
+}
+
+.ghProfile-blue .ghProfile-top {
+	background-color: white;
+	color: steelblue;
+}
+
+.ghProfile-blue .ghProfile-bottom {
+	border-color: white;
+	background-color: steelblue;
+	color: white;
+}
+
+/* Black */
+.ghProfile-black h1, .ghProfile-black h2, .ghProfile-black h3 {
+	color: black;
+}
+
+.ghProfile-black img {
+	 border-color: black;
+}
+
+.ghProfile-black .ghProfile-top {
+	background-color: white;
+	color: black;
+}
+
+.ghProfile-black .ghProfile-bottom {
+	border-color: white;
+	background-color: black;
+	color: white;
+}
+
+/* Green */
+.ghProfile-green h1, .ghProfile-green h2, .ghProfile-green h3 {
+	color: #009900;
+}
+
+.ghProfile-green img {
+	 border-color: #009900;
+}
+
+.ghProfile-green .ghProfile-top {
+	background-color: white;
+	color: steelblue;
+}
+
+.ghProfile-green .ghProfile-bottom {
+	border-color: white;
+	background-color: #4DB84d;
+	color: white;
+}
