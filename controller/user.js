@@ -14,7 +14,7 @@ module.exports.signout = async function(ctx) {
   if (ctx.session.user) {
     ctx.session.user = null
   }
-  ctx.redirect('/')
+  ctx.redirect('back')
 }
 
 module.exports.reqSignin = async function(ctx) {
@@ -36,12 +36,11 @@ module.exports.reqSignin = async function(ctx) {
 
     delete result.password
     ctx.session.user = result
-
-    if (ctx.session.path_from_write) {
-      delete ctx.session.path_from_write;
-      ctx.redirect('/write');
+    
+    if (req.referrer) {
+      ctx.redirect(req.referrer);
     } else {
-      ctx.redirect('/')
+      ctx.redirect('/');
     }
   }
 }

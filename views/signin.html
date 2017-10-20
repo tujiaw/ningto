@@ -17,6 +17,7 @@
         <input id="remember-me" type="checkbox" value="remember-me"> 记住密码
       </label>
     </div>
+    <input id="referrer" type="text" name="referrer" class="form-control" style="display:none;">
     <button id="signin" class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
   </form>
 </div>
@@ -28,6 +29,7 @@
   var $rememberMe = $('#remember-me');
   var $username = $('#username');
   var $password = $('#password');
+  $('#referrer').val(document.referrer);
   
   if ($.cookie('bit') === 'true') {
     $rememberMe.attr('checked', 'checked');

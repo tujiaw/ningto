@@ -138,7 +138,6 @@ module.exports.show = async function(ctx, id) {
 
 module.exports.write = async function(ctx) {
   if (!ctx.session.user) {
-    ctx.session.path_from_write = true;
     ctx.redirect('/user/signin')
     return
   }
