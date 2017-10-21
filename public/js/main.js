@@ -1,30 +1,32 @@
 'use strict';
 
 $(document).ready(function() {
-  var trigger = $('.hamburger'),
-    overlay = $('.overlay'),
-    isClosed = true;
-
+  var trigger = $('.hamburger');
   trigger.click(function() {
     hamburger_cross();
   });
 
   function hamburger_cross() {
     if (trigger.hasClass('is-open')) {
-      //overlay.hide();
       trigger.removeClass('is-open');
       trigger.addClass('is-closed');
-      isClosed = false;
     } else {
-      //overlay.show();
       trigger.removeClass('is-closed');
       trigger.addClass('is-open');
-      isClosed = true;
     }
   }
 
   $('[data-toggle="offcanvas"]').click(function() {
     $('#wrapper').toggleClass('toggled');
+
+    // 内容居中
+    $('#page-content-wrapper').toggleClass('toggled');
+    $('.page-content .row>div:eq(0)').toggleClass('col-md-1');
+    $('.page-content .row>div:eq(1)').toggleClass('col-md-10');
+    $('.page-content .row>div:eq(2)').toggleClass('col-md-1');
+    $('.page-content .row>div:eq(0)').toggleClass('col-md-3');
+    $('.page-content .row>div:eq(1)').toggleClass('col-md-6');
+    $('.page-content .row>div:eq(2)').toggleClass('col-md-3');
   });
 
   $('.back-to-top').on('click', function() {
