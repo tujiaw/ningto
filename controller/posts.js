@@ -110,10 +110,8 @@ module.exports.show = async function(ctx, id) {
     const prevPosts = await PostsModel.getPrevPostById(id)
     const nextPosts = await PostsModel.getNextPostById(id)
     await PostsModel.incPv(id)
-    if (post) {
-      MongoHelp.addOneCreateAt(post)
-      MongoHelp.postContent2html(post)
-    }
+    MongoHelp.addOneCreateAt(post)
+    MongoHelp.post2html(post)
 
     const MAX_NAV_TITLE_LENGTH = 30;
     let prevPost = prevPosts.length > 0 ? prevPosts[0] : null;

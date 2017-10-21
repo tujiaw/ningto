@@ -18,6 +18,7 @@
         {% include "post_header_section.html" %}
         <div class="markdown-body">
             {% autoescape false %}
+            {% if post.toc %}<div id="toc">{{ post.toc }}</div>{% endif %}
             {{ post.content }}
             {% endautoescape %}
         </div>
