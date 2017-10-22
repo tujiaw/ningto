@@ -62,7 +62,9 @@ a:focus { text-decoration: none; }
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
     transition: all 0.5s ease;
-    background: #363636 url(/img/debut_dark.png) repeat;
+    background: #4d4d4d;
+    border-radius: 0 10px 0px 0;
+    box-shadow: 5px 5px 5px #aaa;
 }
 
 #collapse-sidebar-wrapper {
@@ -224,7 +226,7 @@ a:focus { text-decoration: none; }
     border-radius: 0;
     border: none;
     box-shadow: none;
-    background: #363636 url(/img/debut_dark.png) repeat;
+    background: #4d4d4d;
 }
 
 /*-------------------------------*/
@@ -305,7 +307,7 @@ a:focus { text-decoration: none; }
 .hamburger.is-open .hamb-top,
 .hamburger.is-open .hamb-middle,
 .hamburger.is-open .hamb-bottom {
-    background-color: #555;
+    background-color: #999;
 }
 .hamburger.is-open .hamb-top,
 .hamburger.is-open .hamb-bottom {
