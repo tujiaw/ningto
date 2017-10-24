@@ -24,7 +24,7 @@ app.use(serve(path.join(__dirname, 'public')))
 app.use(session(SessionConfig, app))
 app.use(koaBody({ multipart: true }))
 app.use(bodyParser({
-  formLimit: '1mb'
+  formLimit: '2mb'
 }))
 app.context.render = co.wrap(render({
   root: path.join(__dirname, 'views'),
