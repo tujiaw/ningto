@@ -2,6 +2,7 @@
 
 var config = require('config-lite');
 var PostsModel = require('../models/posts');
+var SearchKeyModel = require('../models/searchKey');
 var MongoHelp = require('../models/mongo').mongoHelp;
 var fs = require('fs');
 var marked = require('marked');
@@ -101,4 +102,14 @@ module.exports.createpostlist = async function(ctx, next) {
     html = html.replace('dt-list-placeholder', content);
     ctx.set('Content-disposition', 'attachment;filename=3inns.cn.html');
     ctx.body = html;
+}
+
+module.exports.addHit = async function(pathname) {
+    await SearchKeyModel.addHit(pathname);
+}
+
+module.exports.totalHit = async function() {
+    const allHit = SearchKeyModel.allHit();
+    console.log('xxxxxxxxxxxxxxxxx:' + typeof allHit);
+    console.log(allHit);
 }
