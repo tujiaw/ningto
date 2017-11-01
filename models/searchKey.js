@@ -3,7 +3,7 @@ var config = require('config-lite');
 var PAGE_COUNT = config.pageCount;
 
 const SearchPrefix = 'search';
-const HitPrefix = 'hit'
+const TotalHitPrefix = 'totalhit';
 
 var SearchKeySchema = new mongoose.Schema({
   prefix: { type: String },
@@ -20,11 +20,11 @@ SearchKeySchema.statics.setSearchKey = function(key) {
 };
 
 SearchKeySchema.statics.addHit = function(pathname) {
-  return this.update({ prefix: HitPrefix, key: pathname }, { $inc: {count: 1} }, {upsert: true}).exec();
+  return this.update({ prefix: TotalHitPrefix }, { $inc: {count: 1}}, {upsert: true}).exec();
 }
 
-SearchKeySchema.statics.allHit = function() {
-  return this.find({ prefix: HitPrefix }).sort({ count: -1 }).exec();
+SearchKeySchema.statics.totalHit = function() {
+  return this.findOne({ prefix: TotalHitPrefix }, 'count').exec();
 }
 
 module.exports = mongoose.model('SearchKey', SearchKeySchema);

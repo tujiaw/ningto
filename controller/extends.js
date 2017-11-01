@@ -106,10 +106,6 @@ module.exports.createpostlist = async function(ctx, next) {
 
 module.exports.addHit = async function(pathname) {
     await SearchKeyModel.addHit(pathname);
-}
-
-module.exports.totalHit = async function() {
-    const allHit = SearchKeyModel.allHit();
-    console.log('xxxxxxxxxxxxxxxxx:' + typeof allHit);
-    console.log(allHit);
+    const totalHit = await SearchKeyModel.totalHit();
+    return Promise.resolve(totalHit.count);
 }

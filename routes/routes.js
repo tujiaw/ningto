@@ -7,7 +7,8 @@ const Extends = require('../controller/extends')
 
 module.exports = function(app, route) {
   app.use(async (ctx, next) => {
-    Extends.addHit(ctx.path);
+    const totalhit = await Extends.addHit(ctx.path);
+    ctx.state = Object.assign(ctx.state, { totalhit: totalhit });
     await next();
   })
 
