@@ -61,10 +61,11 @@ PostSchema.statics.getPostByTag = function(tag) {
 };
 
 PostSchema.statics.searchPost = function(name) {
+  const keyword = name.replace(/([\^\$\(\)\*\+\?\.\\\|\[\]\{\}])/g, "\\$1");
   return this.find({
     '$or': [
-      {title: new RegExp(name, 'i')},
-      {content: new RegExp(name, 'i')}
+      {title: new RegExp(keyword, 'i')},
+      {content: new RegExp(keyword, 'i')}
     ]
   })
   .sort({ 'pv': -1 })

@@ -32,6 +32,7 @@ function plainText(html) {
 function markStr(keyword, str) {
   var term = keyword;
   term = term.replace(/(\s+)/,"(<[^>]+>)*$1(<[^>]+>)*");
+  term = term.replace(/([\^\$\(\)\*\+\?\.\\\|\[\]\{\}])/g, "\\$1");
   var pattern = new RegExp("("+term+")", "gi");
   str = str.replace(pattern, "<mark>$1</mark>");
   return str;
