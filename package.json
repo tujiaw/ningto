@@ -18,6 +18,7 @@
     "koa-session": "^5.0.0",
     "koa-static": "^3.0.0",
     "koa-swig": "^2.2.1",
+    "koa2-cors": "^2.0.4",
     "marked": "^0.3.6",
     "moment": "^2.18.1",
     "mongoose": "^4.9.1",

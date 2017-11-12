@@ -86,7 +86,7 @@ module.exports.list = async function(ctx) {
       }
     }
     
-    ctx.body = await ctx.render('list', {
+    const result = {
       posts: pagePosts,
       page: page,
       lastPage: lastPage,
@@ -94,7 +94,30 @@ module.exports.list = async function(ctx) {
       prevPage: prevPage,
       nextPage: nextPage,
       morePage: morePage,
-    })
+    }
+
+    if (ctx.path.indexOf('/api') == 0) {
+      let allPosts = await PostsModel.getPostsProfile();
+      allPosts = allPosts.sort((a, b) => ( a.pv > b.pv ));
+      const tagsCount = []
+      allPosts.forEach((post) => {
+          post.tags.forEach((tag) => {
+              if (tag.length) {
+                const fitem = tagsCount.find((item) => ( item.name === tag ));
+                if (fitem) {
+                  fitem.count++;
+                } else {
+                  tagsCount.push({ name: tag, count: 1})
+                }
+              }
+          })
+      })
+      result.tagsCount = tagsCount;
+      result.hotPosts = allPosts.slice(0, 10);
+      ctx.body = result;
+    } else {
+      ctx.body = await ctx.render('list', result)  
+    }
   } catch (err) {
     ctx.throw(err)
   }
@@ -293,3 +316,4 @@ module.exports.reqEdit = async function(ctx) {
     ctx.throw(err)
   }
 }
+

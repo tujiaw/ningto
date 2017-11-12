@@ -9,7 +9,9 @@ const config = require('config-lite')
 const session = require('koa-session');
 const serve = require('koa-static')
 const Koa = require('koa')
+const cors = require('koa2-cors')
 const app = new Koa()
+app.use(cors())
 
 const SessionConfig = {
   key: 'koa:sess', /** (string) cookie key (default is koa:sess) */

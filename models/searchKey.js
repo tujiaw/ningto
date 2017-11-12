@@ -4,6 +4,7 @@ var PAGE_COUNT = config.pageCount;
 
 const SearchPrefix = 'search';
 const TotalHitPrefix = 'totalhit';
+const TagsPrefix = 'tags';
 
 var SearchKeySchema = new mongoose.Schema({
   prefix: { type: String },
@@ -25,6 +26,14 @@ SearchKeySchema.statics.addHit = function(pathname) {
 
 SearchKeySchema.statics.totalHit = function() {
   return this.findOne({ prefix: TotalHitPrefix }, 'count').exec();
+}
+
+SearchKeySchema.statics.getTags = function() {
+  return this.findOne({ prefix: TagPrefix }).exec();
+}
+
+SearchKeySchema.statics.updateTags = function(tags) {
+  return this.update({ prefix: TagPrefix }, { $set: {key: tags}}, { upsert: true}).exec();
 }
 
 module.exports = mongoose.model('SearchKey', SearchKeySchema);

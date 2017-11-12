@@ -18,7 +18,8 @@ module.exports = {
     bucket: 'myimages',
     ak: 'C1NMwcgz9IAjZVnpYF5LvuCJ6HV5MyJek68QhPfz',
     sk: 'PcWuJ18qByV-hjo-EzSiND3WtdLB94-wRQUwMwCQ',
-  }
+  },
+  PREFIX_API: '/api',
 };
 
 // 1.安装mondb
