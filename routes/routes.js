@@ -18,6 +18,7 @@ module.exports = function(app, route) {
   app.use(route.get('/api/list', Posts.list))
   app.use(route.get('/write', Posts.write))
   app.use(route.get('/post/:id', Posts.show))
+  app.use(route.get('/api/post/:id', Posts.show))
   app.use(route.get('/archives', Posts.archives))
   app.use(route.get('/search', Posts.search))
   app.use(route.get('/remove/:id', Posts.remove))

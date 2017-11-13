@@ -146,12 +146,18 @@ module.exports.show = async function(ctx, id) {
       nextPost.title = nextPost.title.substr(0, MAX_NAV_TITLE_LENGTH) + '...';
     }
 
-    ctx.body = await ctx.render('show', {
+    const result = {
       post: post,
       user: ctx.session.user,
       prevPost: prevPost,
       nextPost: nextPost
-    })
+    }
+
+    if (ctx.path.indexOf('/api') == 0) {
+      ctx.body = result
+    } else {
+      ctx.body = await ctx.render('show', result)
+    }
   } catch (err) {
     ctx.throw(err)
   }
