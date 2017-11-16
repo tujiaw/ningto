@@ -98,7 +98,7 @@ module.exports.list = async function(ctx) {
 
     if (ctx.path.indexOf('/api') == 0) {
       let allPosts = await PostsModel.getPostsProfile();
-      allPosts = allPosts.sort((a, b) => ( a.pv - b.pv ));
+      allPosts = allPosts.sort((a, b) => ( b.pv - a.pv ));
       const hotPosts = []
       const tagsCount = []
       allPosts.forEach((post) => {
