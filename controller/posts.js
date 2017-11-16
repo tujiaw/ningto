@@ -98,7 +98,8 @@ module.exports.list = async function(ctx) {
 
     if (ctx.path.indexOf('/api') == 0) {
       let allPosts = await PostsModel.getPostsProfile();
-      allPosts = allPosts.sort((a, b) => ( a.pv > b.pv ));
+      allPosts = allPosts.sort((a, b) => ( a.pv - b.pv ));
+      const hotPosts = []
       const tagsCount = []
       allPosts.forEach((post) => {
           post.tags.forEach((tag) => {
@@ -111,6 +112,15 @@ module.exports.list = async function(ctx) {
                 }
               }
           })
+          if (hotPosts.length === 0) {
+            hotPosts.push(post)
+          } else {
+            for (let i = 0; i < hotPosts.length; i++) {
+              if (post.pv > hotPosts[i].pv) {
+                hotPosts.insert()
+              }
+            }
+          }
       })
       result.tagsCount = tagsCount;
       result.hotPosts = allPosts.slice(0, 10);
