@@ -10,6 +10,10 @@ const SEARCH_KEY_COUNT = config.searchKeyCount;
 const PAGE_STEP = 5;
 const HOT_POST_COUNT = 10;
 
+function isRestapi(ctx) {
+  return ctx.path.indexOf('/api') === 0
+}
+
 function getArchives(posts) {
   MongoHelp.addAllCreateDateTime(posts);
   var archives = [];
@@ -96,7 +100,7 @@ module.exports.list = async function(ctx) {
       morePage: morePage,
     }
 
-    if (ctx.path.indexOf('/api') == 0) {
+    if (isRestapi(ctx)) {
       let allPosts = await PostsModel.getPostsProfile();
       allPosts = allPosts.sort((a, b) => ( b.pv - a.pv ));
       const hotPosts = []
@@ -163,7 +167,7 @@ module.exports.show = async function(ctx, id) {
       nextPost: nextPost
     }
 
-    if (ctx.path.indexOf('/api') == 0) {
+    if (isRestapi(ctx)) {
       ctx.body = result
     } else {
       ctx.body = await ctx.render('show', result)
@@ -299,11 +303,17 @@ module.exports.tags = async function(ctx, name) {
   }
   try {
     let posts = await PostsModel.getPostByTag(name)
-    const archives = getArchives(posts);
-    ctx.body = await ctx.render('archives', {
+    const archives = getArchives(posts)
+    const result = {
       tagname: '标签 & ' + name,
       archives: archives
-    })
+    }
+
+    if (isRestapi(ctx)) {
+      ctx.body = result
+    } else {
+      ctx.body = await ctx.render('archives', result)
+    }
   } catch (err) {
     ctx.throw(err)
   }
