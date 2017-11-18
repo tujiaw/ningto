@@ -224,13 +224,17 @@ module.exports.archives = async function(ctx, next) {
 
 module.exports.search = async function(ctx, next) {
   if (isRestapi(ctx)) {
-    var keyword = ctx.query.keyword || ''
-    await SearchKeyModel.setSearchKey(keyword.toLowerCase())
-    const searchResult = await PostsModel.searchPost(keyword)
-    const archives = getArchives(searchResult)
-    result.tagname = '搜索 & ' + keyword
-    result.archives = archives
-    ctx.body = result
+    const keyword = ctx.request.body.keyword || ''
+    let archives = {}
+    if (keyword.length) {
+      await SearchKeyModel.setSearchKey(keyword.toLowerCase())
+      const searchResult = await PostsModel.searchPost(keyword)
+      archives = getArchives(searchResult)
+    }
+    ctx.body = {
+      tagname: '搜索 & ' + keyword,
+      archives: archives
+    }
   } else {
     ctx.body = await ctx.render('search', {
       tags: config.tags
