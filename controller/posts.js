@@ -223,9 +223,19 @@ module.exports.archives = async function(ctx, next) {
 }
 
 module.exports.search = async function(ctx, next) {
-  ctx.body = await ctx.render('search', {
-    tags: config.tags
-  })
+  if (isRestapi(ctx)) {
+    var keyword = ctx.query.keyword || ''
+    await SearchKeyModel.setSearchKey(keyword.toLowerCase())
+    const searchResult = await PostsModel.searchPost(keyword)
+    const archives = getArchives(searchResult)
+    result.tagname = '搜索 & ' + keyword
+    result.archives = archives
+    ctx.body = result
+  } else {
+    ctx.body = await ctx.render('search', {
+      tags: config.tags
+    })
+  }
 }
 
 module.exports.reqSearch = async function(ctx, next) {
@@ -237,16 +247,10 @@ module.exports.reqSearch = async function(ctx, next) {
   if (keyword.length) {
     await SearchKeyModel.setSearchKey(keyword.toLowerCase())
     const searchResult = await PostsModel.searchPost(keyword)
-    if (isRestapi(ctx)) {
-      const archives = getArchives(searchResult)
-      result.tagname = '搜索 & ' + keyword
-      result.archives = archives
-    } else {
-      searchKeys = await SearchKeyModel.getSearchKey(SEARCH_KEY_COUNT)
-      posts = MongoHelp.postsContent2Profile(searchResult)
-      result.posts = posts
-      result.keys = searchKeys
-    }
+    searchKeys = await SearchKeyModel.getSearchKey(SEARCH_KEY_COUNT)
+    posts = MongoHelp.postsContent2Profile(searchResult)
+    result.posts = posts
+    result.keys = searchKeys
   }
   ctx.body = result
 }

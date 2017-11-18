@@ -22,6 +22,7 @@ module.exports = function(app, route) {
   app.use(route.get('/api/post/:id', Posts.show))
   app.use(route.get('/archives', Posts.archives))
   app.use(route.get('/search', Posts.search))
+  app.use(route.get('/api/search', Posts.search))
   app.use(route.get('/remove/:id', Posts.remove))
   app.use(route.get('/edit/:id', Posts.edit))
 
@@ -31,9 +32,7 @@ module.exports = function(app, route) {
   app.use(route.post('/add', Posts.reqAdd))
   app.use(route.post('/edit', Posts.reqEdit))
   app.use(route.post('/search', Posts.reqSearch))
-  app.use(route.post('/api/search', Posts.reqSearch))
   app.use(route.post('/hotsearch', Posts.reqHotSearch))
-
   app.use(route.get('/user/signin', User.signin))
   app.use(route.get('/user/signout', User.signout))
   app.use(route.post('/user/signin', User.reqSignin))
