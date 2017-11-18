@@ -224,6 +224,7 @@ module.exports.archives = async function(ctx, next) {
 
 module.exports.search = async function(ctx, next) {
   if (isRestapi(ctx)) {
+    console.log(ctx.query)
     const keyword = ctx.query.keyword || ''
     let archives = {}
     if (keyword.length) {
