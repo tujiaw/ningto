@@ -27,6 +27,7 @@ module.exports = function(app, route) {
   app.use(route.post('/add', Posts.reqAdd))
   app.use(route.post('/edit', Posts.reqEdit))
   app.use(route.post('/search', Posts.reqSearch))
+  app.use(route.post('/api/search', Posts.reqSearch))
   app.use(route.post('/hotsearch', Posts.reqHotSearch))
 
   app.use(route.get('/user/signin', User.signin))

@@ -229,13 +229,22 @@ module.exports.reqSearch = async function(ctx, next) {
   const keyword = req.keyword
   let posts = []
   let searchKeys = []
+  const result = {}
   if (keyword.length) {
     await SearchKeyModel.setSearchKey(keyword.toLowerCase())
-    const result = await PostsModel.searchPost(keyword)
-    searchKeys = await SearchKeyModel.getSearchKey(SEARCH_KEY_COUNT)
-    posts = MongoHelp.postsContent2Profile(result)
+    const searchResult = await PostsModel.searchPost(keyword)
+    if (isRestapi(ctx)) {
+      const archives = getArchives(searchResult)
+      result.tagname = '搜索 & ' + keyword
+      result.archives = archives
+    } else {
+      searchKeys = await SearchKeyModel.getSearchKey(SEARCH_KEY_COUNT)
+      posts = MongoHelp.postsContent2Profile(searchResult)
+      result.posts = posts
+      result.keys = searchKeys
+    }
   }
-  ctx.body = { posts: posts, keys: searchKeys }
+  ctx.body = result
 }
 
 // 热搜文章
