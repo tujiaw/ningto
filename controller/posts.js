@@ -224,7 +224,7 @@ module.exports.archives = async function(ctx, next) {
 
 module.exports.search = async function(ctx, next) {
   if (isRestapi(ctx)) {
-    const keyword = ctx.request.body.keyword || ''
+    const keyword = ctx.query.keyword || ''
     let archives = {}
     if (keyword.length) {
       await SearchKeyModel.setSearchKey(keyword.toLowerCase())
