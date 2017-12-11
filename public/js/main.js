@@ -33,6 +33,16 @@ $(document).ready(function() {
     $('body,html').animate({ scrollTop: 0 }, 800);
   })
 
+  $('.profile .search-group').on('keydown', function(event) {
+    if (event.keyCode == '13') {
+      const keyword = $(event.target).val().trim()
+      if (!keyword.length) {
+        return
+      }
+      window.open('/titlesearch?keyword=' + encodeURIComponent(keyword), '_self')
+    }
+  })
+
   if (!(isMobile.Android() || isMobile.IOS())) {
     $('.right-bottom-panel').show();
     var updatePercent = function() {

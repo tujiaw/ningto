@@ -425,7 +425,7 @@ a.posttags:hover {
     margin: 0px;
     padding: 0px;
     width: 400px;
-    height: 510px;
+    height: 520px;
     display: none;
     border-radius: 5px;
     border: 0px;
@@ -450,4 +450,30 @@ a.posttags:hover {
 .right-bottom-panel>button {
     border: none;
     outline: none;
+}
+
+/* 
+    主搜索栏
+ */
+.navbar .search-group {
+    display: flex;
+    flex :1;
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-right: 5px;
+}
+
+.navbar .search-group .input {
+    background: transparent;
+    color: #eee;
+    padding-right: 30px;
+    border: 1px solid #999;
+    border-radius: 5px;
+}
+
+.navbar .search-group .glyphicon-search {
+    position: relative; 
+    top: 0px;
+    left: -25px;
+    color:#999;
 }

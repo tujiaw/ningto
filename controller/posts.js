@@ -260,6 +260,16 @@ module.exports.reqSearch = async function(ctx, next) {
   ctx.body = result
 }
 
+module.exports.titleSearch = async function(ctx, next) {
+  const keyword = ctx.query.keyword || ''
+  const searchResult = await PostsModel.searchPost(keyword, true)
+  if (searchResult.length) {
+    ctx.redirect('/post/' + searchResult[0]._id)
+  } else {
+    ctx.redirect('/search')
+  }
+}
+
 // 热搜文章
 module.exports.reqHotSearch = async function(ctx, next) {
   let posts = []
