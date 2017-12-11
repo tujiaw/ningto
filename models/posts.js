@@ -55,7 +55,8 @@ PostSchema.statics.getRawPostById = function(postId) {
 };
 
 PostSchema.statics.getPostByTag = function(tag) {
-  return this.find({tags: { $in: [tag] }})
+  tag = tag.replace(/([\^\$\(\)\*\+\?\.\\\|\[\]\{\}])/g, "\\$1");
+  return this.find({tags: { $in: [new RegExp(tag, 'i')]}})
     .sort({ _id: -1 })
     .exec();
 };

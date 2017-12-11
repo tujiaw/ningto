@@ -330,7 +330,7 @@ module.exports.tags = async function(ctx, name) {
     ctx.throw(404, 'invalid tag name')
   }
   try {
-    let posts = await PostsModel.getPostByTag(name.toLowerCase())
+    let posts = await PostsModel.getPostByTag(name)
     const archives = getArchives(posts)
     const result = {
       tagname: '标签 & ' + name,
