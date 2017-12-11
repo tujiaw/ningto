@@ -55,7 +55,7 @@ PostSchema.statics.getRawPostById = function(postId) {
 };
 
 PostSchema.statics.getPostByTag = function(tag) {
-  return this.find({tags: { $all: [tag] }})
+  return this.find({tags: { $in: [tag] }})
     .sort({ _id: -1 })
     .exec();
 };
