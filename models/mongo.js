@@ -14,7 +14,7 @@ const tocObj = {
     this.toc.push({ anchor: anchor, level: level, text: text });
     return anchor;
   },
-  // 使用堆栈的方式处理嵌套的ul,li，level即ul的嵌套层次，1是最外层
+  // 使用堆栈的方式处理嵌套的ul和li，level即ul的嵌套层次，1是最外层
   // <ul>
   //   <li></li>
   //   <ul>

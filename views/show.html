@@ -18,7 +18,13 @@
         {% include "post_header_section.html" %}
         <div class="markdown-body">
             {% autoescape false %}
-            {% if post.toc %}<div id="toc">{{ post.toc }}</div>{% endif %}
+            {% if post.toc %}<div id="toc">
+                <div id="toc-head">
+                    <span>文章目录</span>
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </div>
+                {{ post.toc }}
+            </div>{% endif %}
             {{ post.content }}
             {% endautoescape %}
         </div>
@@ -51,4 +57,10 @@
 <!--畅言-->
 {% endblock %}
 {% block extend_script %}
+<script>
+    $('#toc-head').on('click', function() {
+        $('#toc-head .glyphicon').toggleClass('glyphicon-chevron-up');
+        $('#toc ul').toggle();
+    })
+</script>
 {% endblock %}
