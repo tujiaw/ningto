@@ -16,6 +16,14 @@
     max-width: 250px;
     min-width: 90px;
     font-size: 12px;
+    margin-left: 5px;
+    margin-bottom: 2px;
+}
+
+@media (max-width: 767px) {
+    #toc {
+        display: none;
+    }
 }
 
 #toc ul {
