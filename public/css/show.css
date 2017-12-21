@@ -6,25 +6,23 @@
 }
 
 #toc {
+    float: right;
     border:1px solid #e2e2e2;
     background: #eee;
-    padding: 10px;
+    padding: 8px 12px;
     -webkit-border-radius: 4px;
     border-radius: 4px;
     border: 1px solid #ddd;
-    max-width: 350px;
-    font-size: 14px;
-    margin-bottom: 10px;
+    max-width: 250px;
+    min-width: 90px;
+    font-size: 12px;
 }
 
-/* #toc::before {
-    content: '文章目录';
-    font-weight: bold;
-    border-bottom: 1px solid #e2e2e2;
-    margin-bottom: 10px;
-    padding-bottom: 5px;
-    display: block;
-} */
+#toc ul {
+    padding-left: 1em;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
 
 #toc-head {
     display: flex;
