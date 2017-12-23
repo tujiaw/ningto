@@ -4,6 +4,7 @@ var PostsModel = require('../models/posts');
 var SearchKeyModel = require('../models/searchKey');
 var MongoHelp = require('../models/mongo').mongoHelp;
 var config = require('config-lite');
+var moment = require('moment');
 
 const PAGE_COUNT = config.pageCount;
 const SEARCH_KEY_COUNT = config.searchKeyCount;
