@@ -128,7 +128,10 @@ module.exports.list = async function(ctx) {
       })
       result.tagsCount = tagsCount;
       result.hotPosts = allPosts.slice(0, 10);
-      result.totalCount = totalCount;
+      result.profile = {
+        postCount: totalCount,
+        hitCount: ctx.state.totalHit,
+      }
       ctx.body = result;
     } else {
       ctx.body = await ctx.render('list', result)  
