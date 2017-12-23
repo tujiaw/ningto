@@ -78,7 +78,7 @@ module.exports.list = async function(ctx) {
         pageNumbers.push(0);
       }
     }
-    
+
     var prevPage = Math.max(page - 1, 1);
     var nextPage = Math.min(lastPage, page + 1);
     var morePage;
@@ -99,6 +99,10 @@ module.exports.list = async function(ctx) {
       prevPage: prevPage,
       nextPage: nextPage,
       morePage: morePage,
+      profile: {
+        postCount: totalCount,
+        hitCount: ctx.state.totalHit,
+      }
     }
 
     if (isRestapi(ctx)) {
@@ -129,10 +133,6 @@ module.exports.list = async function(ctx) {
       })
       result.tagsCount = tagsCount;
       result.hotPosts = allPosts.slice(0, 10);
-      result.profile = {
-        postCount: totalCount,
-        hitCount: ctx.state.totalHit,
-      }
       ctx.body = result;
     } else {
       ctx.body = await ctx.render('list', result)  
