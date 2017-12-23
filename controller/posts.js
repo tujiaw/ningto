@@ -106,34 +106,57 @@ module.exports.list = async function(ctx) {
       allPosts = allPosts.sort((a, b) => ( b.pv - a.pv ));
       const hotPosts = []
       const tagsCount = []
+      const archivesCount = {}
       allPosts.forEach((post) => {
-          post.tags.forEach((tag) => {
-              if (tag.length) {
-                const fitem = tagsCount.find((item) => ( item.name === tag ));
-                if (fitem) {
-                  fitem.count++;
-                } else {
-                  tagsCount.push({ name: tag, count: 1})
-                }
-              }
-          })
-          if (hotPosts.length === 0) {
-            hotPosts.push(post)
+        // 归档
+        const createYearMonth = moment(objectIdToTimestamp(post._id)).format('YYYY-MM-DD').substr(0, 7);
+        if (createYearMonth.length) {
+          if (archivesCount[createYearMonth]) {
+            archivesCount[createYearMonth]++;
           } else {
-            for (let i = 0; i < hotPosts.length; i++) {
-              if (post.pv > hotPosts[i].pv) {
-                hotPosts.insert()
+            archivesCount[createYearMonth] = 1;
+          }
+        }
+        
+        // 标签
+        post.tags.forEach((tag) => {
+            if (tag.length) {
+              const fitem = tagsCount.find((item) => ( item.name === tag ));
+              if (fitem) {
+                fitem.count++;
+              } else {
+                tagsCount.push({ name: tag, count: 1})
               }
             }
+        })
+
+        // 热搜
+        if (hotPosts.length === 0) {
+          hotPosts.push(post)
+        } else {
+          for (let i = 0; i < hotPosts.length; i++) {
+            if (post.pv > hotPosts[i].pv) {
+              hotPosts.insert()
+            }
           }
+        }
       })
-      result.tagsCount = tagsCount;
-      result.hotPosts = allPosts.slice(0, 10);
+      
       result.profile = {
         postCount: totalCount,
         hitCount: ctx.state.totalhit,
         hitToday: ctx.state.todayhit
       };
+      result.hotPosts = allPosts.slice(0, 10);
+      result.tagsCount = tagsCount;
+      result.archives = []
+      for (let item in archivesCount) {
+        result.archives.push({
+          yearMonth: item,
+          count: archivesCount[item]
+        })
+      }
+      result.archives.sort((a, b) => a.yearMonth > b.yearMonth);
       ctx.body = result;
     } else {
       ctx.body = await ctx.render('list', result)  
