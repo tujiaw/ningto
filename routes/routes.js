@@ -5,10 +5,17 @@ const User = require('../controller/user')
 const Qiniu = require('../controller/qiniu')
 const Extends = require('../controller/extends')
 
+let hitToday = 0;
+setInterval(() => {
+  if (new Date().getHours() === 0 && new Date().getMinutes() === 0) {
+    hitToday = 0;
+  }
+}, 10000);
+
 module.exports = function(app, route) {
   app.use(async (ctx, next) => {
     const totalhit = await Extends.addHit(ctx.path);
-    ctx.state = Object.assign(ctx.state, { totalhit: totalhit });
+    ctx.state = Object.assign(ctx.state, { totalhit: totalhit, todayhit: ++hitToday });
     await next();
   })
 

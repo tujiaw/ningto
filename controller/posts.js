@@ -132,6 +132,7 @@ module.exports.list = async function(ctx) {
       result.profile = {
         postCount: totalCount,
         hitCount: ctx.state.totalhit,
+        hitToday: ctx.state.todayhit
       };
       ctx.body = result;
     } else {
