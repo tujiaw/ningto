@@ -99,10 +99,6 @@ module.exports.list = async function(ctx) {
       prevPage: prevPage,
       nextPage: nextPage,
       morePage: morePage,
-      profile: {
-        postCount: totalCount,
-        hitCount: ctx.state.totalHit,
-      }
     }
 
     if (isRestapi(ctx)) {
@@ -133,6 +129,10 @@ module.exports.list = async function(ctx) {
       })
       result.tagsCount = tagsCount;
       result.hotPosts = allPosts.slice(0, 10);
+      result.profile = {
+        postCount: totalCount,
+        hitCount: ctx.state.totalhit,
+      };
       ctx.body = result;
     } else {
       ctx.body = await ctx.render('list', result)  
