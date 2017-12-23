@@ -78,6 +78,7 @@ module.exports.list = async function(ctx) {
         pageNumbers.push(0);
       }
     }
+    
     var prevPage = Math.max(page - 1, 1);
     var nextPage = Math.min(lastPage, page + 1);
     var morePage;
