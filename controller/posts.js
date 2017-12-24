@@ -158,7 +158,7 @@ module.exports.list = async function(ctx) {
           count: archivesCount[item]
         })
       }
-      result.archives.sort((a, b) => a.yearMonth > b.yearMonth);
+      result.archives.sort((a, b) => a.yearMonth > b.yearMonth ? -1 : 1);
       ctx.body = result;
     } else {
       ctx.body = await ctx.render('list', result)  
