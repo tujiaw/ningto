@@ -168,6 +168,43 @@ module.exports.list = async function(ctx) {
   }
 }
 
+module.exports.title = async function(ctx) {
+  console.log(ctx.query)
+  const type = ctx.query.type || ''
+  const keyword = ctx.query.keyword || ''
+  if (type.length === 0 || keyword.length === 0) {
+    ctx.throw('need type and keyword')
+  }
+
+  try {
+    const result = {}
+    if (type === 'search') {
+      result.tagname = '搜索 & ' + keyword
+      await SearchKeyModel.setSearchKey(keyword.toLowerCase())
+      const searchResult = await PostsModel.searchPost(keyword)
+      result.archives = getArchives(searchResult)
+    } else if (type === 'tag') {
+      result.tagname = '类别 & ' + keyword
+      let posts = await PostsModel.getPostByTag(keyword)
+      result.archives = getArchives(posts)
+    } else if (type === 'yearMonth') {
+      result.tagname = '存档 & ' + keyword
+      let posts = await PostsModel.getPostsProfile()
+      posts = posts.filter((item) => {
+        return moment(objectIdToTimestamp(item._id)).format('YYYY-MM-DD').substr(0, 7) === keyword
+      })
+      result.archives = getArchives(posts)
+    } else {
+      ctx.throw('type is error')
+    }
+
+    console.log(result)
+    ctx.body = result
+  } catch (err) {
+    ctx.throw(err)
+  }
+}
+
 module.exports.show = async function(ctx, id) {
   if (!id) {
     ctx.throw(404, 'invalid post id')
@@ -254,24 +291,9 @@ module.exports.archives = async function(ctx, next) {
 }
 
 module.exports.search = async function(ctx, next) {
-  if (isRestapi(ctx)) {
-    console.log(ctx.query)
-    const keyword = ctx.query.keyword || ''
-    let archives = {}
-    if (keyword.length) {
-      await SearchKeyModel.setSearchKey(keyword.toLowerCase())
-      const searchResult = await PostsModel.searchPost(keyword)
-      archives = getArchives(searchResult)
-    }
-    ctx.body = {
-      tagname: '搜索 & ' + keyword,
-      archives: archives
-    }
-  } else {
-    ctx.body = await ctx.render('search', {
-      tags: config.tags
-    })
-  }
+  ctx.body = await ctx.render('search', {
+    tags: config.tags
+  })
 }
 
 module.exports.reqSearch = async function(ctx, next) {
@@ -368,11 +390,7 @@ module.exports.tags = async function(ctx, name) {
       archives: archives
     }
 
-    if (isRestapi(ctx)) {
-      ctx.body = result
-    } else {
-      ctx.body = await ctx.render('archives', result)
-    }
+    ctx.body = await ctx.render('archives', result)
   } catch (err) {
     ctx.throw(err)
   }

@@ -19,23 +19,23 @@ module.exports = function(app, route) {
     await next();
   })
 
-  app.use(route.get('/', Posts.list))
   app.use(route.get('/api/', Posts.list))
-  app.use(route.get('/list', Posts.list))
+  app.use(route.get('/api/title', Posts.title))
   app.use(route.get('/api/list', Posts.list))
+  app.use(route.get('/api/post/:id', Posts.show))
+  
+  app.use(route.get('/', Posts.list))
+  app.use(route.get('/list', Posts.list))
 
   app.use(route.get('/write', Posts.write))
   app.use(route.get('/post/:id', Posts.show))
-  app.use(route.get('/api/post/:id', Posts.show))
   app.use(route.get('/archives', Posts.archives))
   app.use(route.get('/search', Posts.search))
   app.use(route.get('/titlesearch', Posts.titleSearch))
-  app.use(route.get('/api/search', Posts.search))
   app.use(route.get('/remove/:id', Posts.remove))
   app.use(route.get('/edit/:id', Posts.edit))
 
   app.use(route.get('/tags/:name', Posts.tags))
-  app.use(route.get('/api/tags/:name', Posts.tags))
 
   app.use(route.post('/add', Posts.reqAdd))
   app.use(route.post('/edit', Posts.reqEdit))
