@@ -237,7 +237,7 @@ module.exports.show = async function(ctx, id) {
     }
 
     if (isRestapi(ctx)) {
-      result.toc = Base64.encode(result.toc)
+      result.post.toc = Base64.encode(result.post.toc)
       ctx.body = result
     } else {
       ctx.body = await ctx.render('show', result)
