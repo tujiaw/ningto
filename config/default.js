@@ -10,7 +10,7 @@ module.exports = {
     maxAge: 2592000000,
   },
   tags: ['Windows', 'Linux', 'Mobile', 'C/C++', 'Qt', 'Node.js', 'React', 'Database', 
-        'Web', 'Tools', 'Bug', 'Life', 'Tips', 'Design', 'Javascript', 'MongoDB', 'React'],
+        'Web', 'Tools', 'Bug', 'Life', 'Tips', 'Design', 'Javascript', 'MongoDB', 'React', 'Product'],
   mongodb: 'mongodb\://localhost:27017/nodeblog', // :一定要转义
   // mongodb:'mongodb\://tujiaw:123456@ds133428.mlab.com:33428/tujiawblog'
   // mongodb: 'mongodb\://123.57.244.170:27017/nodeblog',
