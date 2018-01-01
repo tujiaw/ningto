@@ -23,6 +23,7 @@ module.exports = function(app, route) {
   app.use(route.get('/api/title', Posts.title))
   app.use(route.get('/api/list', Posts.list))
   app.use(route.get('/api/post/:id', Posts.show))
+  app.use(route.get('/api/rightsidebar', Posts.rightsidebar))
   
   app.use(route.get('/', Posts.list))
   app.use(route.get('/list', Posts.list))

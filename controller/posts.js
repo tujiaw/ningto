@@ -51,6 +51,78 @@ function getArchives(posts) {
   return archives;
 }
 
+async function getRightSidebarData(ctx) {
+  let allPosts = await PostsModel.getPostsProfile();
+  allPosts = allPosts.sort((a, b) => ( b.pv - a.pv ));
+  const totalCount = allPosts.length;
+  const hotPosts = []
+  const tagsCount = []
+  const archivesCount = {}
+  allPosts.forEach((post) => {
+    // 归档
+    const createYearMonth = moment(objectIdToTimestamp(post._id)).format('YYYY-MM-DD').substr(0, 7);
+    if (createYearMonth.length) {
+      if (archivesCount[createYearMonth]) {
+        archivesCount[createYearMonth]++;
+      } else {
+        archivesCount[createYearMonth] = 1;
+      }
+    }
+    
+    // 标签
+    post.tags.forEach((tag) => {
+        if (tag.length) {
+          const fitem = tagsCount.find((item) => ( item.name === tag ));
+          if (fitem) {
+            fitem.count++;
+          } else {
+            tagsCount.push({ name: tag, count: 1})
+          }
+        }
+    })
+
+    // 热搜
+    if (hotPosts.length === 0) {
+      hotPosts.push(post)
+    } else {
+      for (let i = 0; i < hotPosts.length; i++) {
+        if (post.pv > hotPosts[i].pv) {
+          hotPosts.insert()
+        }
+      }
+    }
+  })
+  
+  const result = {}
+  result.profile = {
+    postCount: totalCount,
+    hitCount: ctx.state.totalhit,
+    hitToday: ctx.state.todayhit
+  };
+  result.hotPosts = allPosts.slice(0, 10);
+  result.tagsCount = tagsCount;
+  result.archives = []
+  for (let item in archivesCount) {
+    result.archives.push({
+      yearMonth: item,
+      count: archivesCount[item]
+    })
+  }
+  result.archives.sort((a, b) => a.yearMonth > b.yearMonth ? -1 : 1);
+  return result
+}
+
+module.exports.rightsidebar = async function(ctx) {
+  try {
+    const result = {
+      rightSidebarData: await getRightSidebarData(ctx)
+    }
+    ctx.body = result
+  } catch (err) {
+    ctx.throw(err)
+  }
+}
+
 module.exports.list = async function(ctx) {
   var page = ctx.query.page || 1
   page = parseInt(page)
@@ -105,61 +177,7 @@ module.exports.list = async function(ctx) {
     }
 
     if (isRestapi(ctx)) {
-      let allPosts = await PostsModel.getPostsProfile();
-      allPosts = allPosts.sort((a, b) => ( b.pv - a.pv ));
-      const hotPosts = []
-      const tagsCount = []
-      const archivesCount = {}
-      allPosts.forEach((post) => {
-        // 归档
-        const createYearMonth = moment(objectIdToTimestamp(post._id)).format('YYYY-MM-DD').substr(0, 7);
-        if (createYearMonth.length) {
-          if (archivesCount[createYearMonth]) {
-            archivesCount[createYearMonth]++;
-          } else {
-            archivesCount[createYearMonth] = 1;
-          }
-        }
-        
-        // 标签
-        post.tags.forEach((tag) => {
-            if (tag.length) {
-              const fitem = tagsCount.find((item) => ( item.name === tag ));
-              if (fitem) {
-                fitem.count++;
-              } else {
-                tagsCount.push({ name: tag, count: 1})
-              }
-            }
-        })
-
-        // 热搜
-        if (hotPosts.length === 0) {
-          hotPosts.push(post)
-        } else {
-          for (let i = 0; i < hotPosts.length; i++) {
-            if (post.pv > hotPosts[i].pv) {
-              hotPosts.insert()
-            }
-          }
-        }
-      })
-      
-      result.profile = {
-        postCount: totalCount,
-        hitCount: ctx.state.totalhit,
-        hitToday: ctx.state.todayhit
-      };
-      result.hotPosts = allPosts.slice(0, 10);
-      result.tagsCount = tagsCount;
-      result.archives = []
-      for (let item in archivesCount) {
-        result.archives.push({
-          yearMonth: item,
-          count: archivesCount[item]
-        })
-      }
-      result.archives.sort((a, b) => a.yearMonth > b.yearMonth ? -1 : 1);
+      result.rightSidebarData = await getRightSidebarData(ctx);
       ctx.body = result;
     } else {
       ctx.body = await ctx.render('list', result)  
@@ -199,7 +217,7 @@ module.exports.title = async function(ctx) {
       ctx.throw('type is error')
     }
 
-    console.log(result)
+    result.rightSidebarData = await getRightSidebarData(ctx)
     ctx.body = result
   } catch (err) {
     ctx.throw(err)
@@ -237,6 +255,7 @@ module.exports.show = async function(ctx, id) {
     }
 
     if (isRestapi(ctx)) {
+      result.rightSidebarData = await getRightSidebarData(ctx)
       result.toc = result.post.toc
       ctx.body = result
     } else {
