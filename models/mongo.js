@@ -74,7 +74,11 @@ marked.setOptions({
     },
 });
 
-mongoose.connect(config.mongodb);
+const option = {
+  user: 'tujiaw',
+  pass: 'fighting'
+}
+mongoose.connect(config.mongodb, option);
 
 const PROFILE_COUNT = 150;
 module.exports.mongoose = mongoose;
