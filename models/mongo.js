@@ -115,6 +115,7 @@ module.exports.mongoHelp = {
     if (post) {
       post.content = marked(post.content);
       post.toc = tocObj.toHTML();
+      post.toc = post.toc.replace(/anchor-fix/, 'anchor-fix-first');
     }
   },
   postsContent2Profile: function(posts) {
