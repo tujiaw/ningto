@@ -64,7 +64,8 @@ const tocObj = {
 
 renderer.heading = function(text, level, raw) {
   var anchor = tocObj.add(text, level);
-  return `<a id=${anchor} class="anchor-fix"></a><h${level}>${text}</h${level}>\n`;
+  var className = (anchor === '#toc11' ? 'anchor-fix-first' : 'anchor-fix');
+  return `<a id=${anchor} class=${className}></a><h${level}>${text}</h${level}>\n`;
 };
 
 marked.setOptions({
@@ -115,7 +116,6 @@ module.exports.mongoHelp = {
     if (post) {
       post.content = marked(post.content);
       post.toc = tocObj.toHTML();
-      post.toc = post.toc.replace(/anchor-fix/, 'anchor-fix-first');
     }
   },
   postsContent2Profile: function(posts) {
