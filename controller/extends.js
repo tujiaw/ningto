@@ -8,6 +8,8 @@ var fs = require('fs');
 var marked = require('marked');
 var iconv = require('iconv-lite');
 var path = require('path');
+require('es6-promise').polyfill();
+require('isomorphic-fetch');
 
 const readFilePromise = (path, encoding) => {
     return new Promise((resolve, reject) => {
@@ -108,4 +110,41 @@ module.exports.addHit = async function(pathname) {
     await SearchKeyModel.addHit(pathname);
     const totalHit = await SearchKeyModel.totalHit();
     return Promise.resolve(totalHit.count);
+}
+
+module.exports.githubOAuthCallbackComment = async function(ctx, next) {
+    const code = ctx.query.code || '';
+    const state = ctx.query.state || '';
+    if (code.length && state.length) {
+        const payload = {
+            client_id: '531ad8e4517595748d97',
+            client_secret: 'bf123fc9fe25a30e3e33d7a07daf825b73e07dc6',
+            code: code,
+            state: state
+        }
+        let res = await fetch('https://github.com/login/oauth/access_token', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        })
+        let content = await res.json()
+        console.log(content);
+        if (content.access_token && content.access_token.length) {
+            res = await fetch('https://api.github.com/user?access_token=' + content.access_token, {
+                header: {
+                    'Accept': 'application/json',
+                    'Authorization': 'token OAUTH-TOKEN'
+                }
+            })
+            content = await res.text()
+            console.log(content)
+        }
+
+        ctx.redirect('/')
+    } else {
+        ctx.body = '<h1>error</h1>';
+    }
 }
