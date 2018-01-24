@@ -9,6 +9,10 @@ var UsersSchema = new mongoose.Schema({
   detail_info: { type: String }
 });
 
+UsersSchema.static.getUserById = function(id) {
+  return this.findOne({ _id: id }).exec()
+}
+
 UsersSchema.statics.getUserByProviderLogin = function(provider, login) {
   return this.findOne({ provider: provider, login: login}).exec();
 }

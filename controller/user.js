@@ -44,10 +44,15 @@ module.exports.githubLogin = async function(ctx) {
   console.log('-------------github signin--------------')
   const user = ctx.session.user
   if (user) {
-    ctx.redirect("back")
-  } else {
-    ctx.redirect('https://github.com/login/oauth/authorize?client_id=531ad8e4517595748d97&state=123456789')
+    const userinfo = await UsersModel.getUserById(user._id)
+    if (userinfo) {
+      delete userinfo.detail_info
+      ctx.session.user = userinfo
+      ctx.redirect("back")
+      return
+    }
   }
+  ctx.redirect('https://github.com/login/oauth/authorize?client_id=531ad8e4517595748d97&state=123456789')
 }
 
 module.exports.signout = async function(ctx) {
@@ -90,7 +95,7 @@ module.exports.githubOAuthCallbackComment = async function(ctx, next) {
   const code = ctx.query.code || '';
   const state = ctx.query.state || '';
   if (code.length === 0) {
-    ctx.body = '<span>Error, code is null!</span>';
+    ctx.body = '<span>Error, code is null!</span>'
     return;
   }
 
@@ -111,8 +116,12 @@ module.exports.githubOAuthCallbackComment = async function(ctx, next) {
   const access = await res.json()
   if (access.access_token && access.access_token.length) {
     const userinfo = await getGithubInfo(access.access_token)
-    delete userinfo.detail_info
-    ctx.session.user = userinfo
+    if (userinfo) {
+      delete userinfo.detail_info
+      ctx.session.user = userinfo
+      ctx.redirect('back')
+      return
+    }
   }
-  ctx.redirect('back')
+  ctx.body = '<span>github return failed!</span>'
 }
