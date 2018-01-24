@@ -19,6 +19,10 @@ module.exports = {
     sk: 'PcWuJ18qByV-hjo-EzSiND3WtdLB94-wRQUwMwCQ',
   },
   PREFIX_API: '/api',
+  github: {
+    client_id: '531ad8e4517595748d97',
+    client_secret: 'bf123fc9fe25a30e3e33d7a07daf825b73e07dc6',
+  }
 };
 
 // 1.安装mondb

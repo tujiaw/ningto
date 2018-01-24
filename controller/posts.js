@@ -6,7 +6,6 @@ var MongoHelp = require('../models/mongo').mongoHelp;
 var config = require('config-lite');
 var moment = require('moment');
 var objectIdToTimestamp = require('objectid-to-timestamp');
-var Base64 = require('js-base64').Base64;
 
 const PAGE_COUNT = config.pageCount;
 const SEARCH_KEY_COUNT = config.searchKeyCount;

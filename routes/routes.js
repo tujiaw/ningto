@@ -43,6 +43,7 @@ module.exports = function(app, route) {
   app.use(route.post('/search', Posts.reqSearch))
   app.use(route.post('/hotsearch', Posts.reqHotSearch))
   app.use(route.get('/user/signin', User.signin))
+  app.use(route.get('/user/githublogin', User.githubLogin))
   app.use(route.get('/user/signout', User.signout))
   app.use(route.post('/user/signin', User.reqSignin))
 
@@ -57,5 +58,5 @@ module.exports = function(app, route) {
 
   app.use(route.post('/mdfile', Extends.mdfile))
 
-  app.use(route.get('/github_oauth_callback_comment', Extends.githubOAuthCallbackComment))
+  app.use(route.get('/github_oauth_callback_comment', User.githubOAuthCallbackComment))
 }

@@ -76,6 +76,9 @@ marked.setOptions({
 });
 
 const option = {
+  useMongoClient: true,
+  reconnectTries: Number.MAX_VALUE,
+  reconnectInterval: 3000,
   user: 'tujiaw',
   pass: 'fighting'
 }
