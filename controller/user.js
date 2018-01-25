@@ -8,33 +8,6 @@ var Base64 = require('js-base64').Base64;
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
 
-async function getGithubInfo(token) {
-  const res = await fetch('https://api.github.com/user?access_token=' + token, {
-    header: {
-      'Accept': 'application/json',
-      'Authorization': 'token OAUTH-TOKEN'
-    }
-  })
-  const userInfo = await res.json()
-  if (userInfo.login) {
-    const oldUserInfo = await UsersModel.getUserByProviderLogin('github', userInfo.login)
-    if (oldUserInfo) {
-      return oldUserInfo
-    } else {
-      await new UsersModel({
-        provider: 'github',
-        login: userInfo.login,
-        token: token,
-        avatar_url: userInfo.avatar_url,
-        detail_info: Base64.encode(JSON.stringify(userInfo))
-      }).save()
-      const newUserInfo = await UsersModel.getUserByProviderLogin('github', userInfo.login)
-      return newUserInfo;
-    }
-  }
-  return undefined
-}
-
 module.exports.signin = async function(ctx) {
   console.log('-------------signin---------------')
   ctx.body = await ctx.render('signin')
@@ -44,10 +17,10 @@ module.exports.githubLogin = async function(ctx) {
   console.log('-------------github signin--------------')
   const user = ctx.session.user
   if (user) {
-    const userinfo = await UsersModel.getUserById(user._id)
+    const userinfo = await UsersModel.getBaseUserById(user._id)
     if (userinfo) {
-      delete userinfo.detail_info
       ctx.session.user = userinfo
+      console.log(userinfo)
       ctx.redirect("back")
       return
     }
@@ -92,6 +65,7 @@ module.exports.reqSignin = async function(ctx) {
 }
 
 module.exports.githubOAuthCallbackComment = async function(ctx, next) {
+  const req = ctx.request.body
   const code = ctx.query.code || '';
   const state = ctx.query.state || '';
   if (code.length === 0) {
@@ -99,13 +73,15 @@ module.exports.githubOAuthCallbackComment = async function(ctx, next) {
     return;
   }
 
+  console.log('--------access token---------')
+  // 获取github token
   const payload = {
       client_id: config.github.client_id,
       client_secret: config.github.client_secret,
       code: code,
       state: state
   }
-  let res = await fetch('https://github.com/login/oauth/access_token', {
+  let access = await fetch('https://github.com/login/oauth/access_token', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -113,15 +89,55 @@ module.exports.githubOAuthCallbackComment = async function(ctx, next) {
     },
     body: JSON.stringify(payload)
   })
-  const access = await res.json()
-  if (access.access_token && access.access_token.length) {
-    const userinfo = await getGithubInfo(access.access_token)
-    if (userinfo) {
-      delete userinfo.detail_info
-      ctx.session.user = userinfo
-      ctx.redirect('back')
+  access = await access.json()
+  console.log(access)
+  if (!access.access_token) {
+    ctx.body = '<span>github access token failed!</span>'  
+    return
+  }
+
+  // 获取github用户信息
+  console.log('------get github user------')
+  let user = await fetch('https://api.github.com/user?access_token=' + access.access_token, {
+    header: {
+      'Accept': 'application/json',
+      'Authorization': 'token OAUTH-TOKEN'
+    }
+  })
+  user = await user.json()
+  if (!user.login) {
+    ctx.body = '<span>github get user info failed!</span>'  
+    return
+  }
+
+  // 判断用户是否在数据库中，存在就更新不存在就写入
+  const newUserinfo = {
+    provider: 'github',
+    login: user.login,
+    token: access.access_token,
+    avatar_url: user.avatar_url,
+    detail_info: Base64.encode(JSON.stringify(user))
+  }
+  try {
+    const resultUserinfo = await UsersModel.findOneAndUpdate(
+      {provider: 'github', login: user.login}, 
+      newUserinfo, 
+      {upsert: true, returnNewDocument: true})
+    if (resultUserinfo && resultUserinfo._doc) {
+      const newUser = resultUserinfo._doc
+      newUser.detail_info = ''
+      ctx.session.user = newUser
+      console.log(ctx.session.user)
+      
+      if (req.referrer) {
+        ctx.redirect(req.referrer);
+      } else {
+        ctx.redirect('/');
+      }
       return
     }
+  } catch(e) {
+    console.log(e)
   }
-  ctx.body = '<span>github return failed!</span>'
+  ctx.body = '<span>save error!</span>'
 }
