@@ -125,7 +125,7 @@ module.exports.githubOAuthCallbackComment = async function(ctx, next) {
       {upsert: true, returnNewDocument: true})
     if (resultUserinfo && resultUserinfo._doc) {
       const newUser = resultUserinfo._doc
-      newUser.detail_info = ''
+      newUser.detail_info = null
       ctx.session.user = newUser
       console.log(ctx.session.user)
       
