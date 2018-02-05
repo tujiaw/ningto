@@ -19,6 +19,8 @@ a:focus { text-decoration: none; }
 }
 
 #top-navbar {
+    display: flex;
+    justify-content: flex-end;
     position: fixed;
     top: 0px;
     width: 100%;
@@ -30,6 +32,13 @@ a:focus { text-decoration: none; }
 
     border-bottom: 1px solid #e8e8e8;
     background: #f8f8f8;
+}
+
+#dropdownMenu1 {
+    height: 25px;
+    padding: 0px 12px;
+    margin-bottom: 2px;
+    background: transparent;
 }
 
 #top-navbar p {

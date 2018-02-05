@@ -15,7 +15,14 @@ setInterval(() => {
 module.exports = function(app, route) {
   app.use(async (ctx, next) => {
     const totalhit = await Extends.addHit(ctx.path);
-    ctx.state = Object.assign(ctx.state, { totalhit: totalhit, todayhit: ++hitToday });
+    const globalData = {
+      totalhit: totalhit, 
+      todayhit: ++hitToday
+    }
+    if (ctx.session.user) {
+      globalData.user = ctx.session.user
+    }
+    ctx.state = Object.assign(ctx.state, globalData);
     await next();
   })
 
@@ -44,6 +51,7 @@ module.exports = function(app, route) {
   app.use(route.post('/hotsearch', Posts.reqHotSearch))
   app.use(route.get('/user/signin', User.signin))
   app.use(route.get('/user/githublogin', User.githubLogin))
+  app.use(route.get('/user/githubrelogin', User.githubRelogin))
   app.use(route.get('/user/signout', User.signout))
   app.use(route.post('/user/signin', User.reqSignin))
 

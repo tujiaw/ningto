@@ -28,6 +28,11 @@ module.exports.githubLogin = async function(ctx) {
   ctx.redirect('https://github.com/login/oauth/authorize?client_id=531ad8e4517595748d97&state=123456789')
 }
 
+module.exports.githubRelogin = async function(ctx) {
+  delete ctx.session.user
+  ctx.redirect('https://github.com/login/oauth/authorize?client_id=531ad8e4517595748d97&state=123456789')
+}
+
 module.exports.signout = async function(ctx) {
   console.log('-------------signout---------------')
   if (ctx.session.user) {

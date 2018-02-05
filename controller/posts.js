@@ -248,7 +248,6 @@ module.exports.show = async function(ctx, id) {
 
     const result = {
       post: post,
-      user: ctx.session.user,
       prevPost: prevPost,
       nextPost: nextPost
     }
