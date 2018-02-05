@@ -166,6 +166,7 @@ module.exports.list = async function(ctx) {
     }
     
     const result = {
+      user: ctx.session.user,
       posts: pagePosts,
       page: page,
       lastPage: lastPage,
