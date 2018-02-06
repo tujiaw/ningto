@@ -5,14 +5,6 @@
 <link rel="stylesheet" href="/css/github-markdown.min.css">
 <link rel="stylesheet" href="/css/show.css">
 {% endblock %}
-{% block top_navbar_start_menu %}
-{% if user %}
-<a href="/user/signout" target="_top">登出</a> | 
-<a href="/write" target="_top">写文章</a> | 
-{% else %}
-<a href="/user/signin" target="_top">登录</a> | 
-{% endif %}
-{% endblock %}
 {% block content %}
     <div class="show-content">
         {% include "post_header_section.html" %}
