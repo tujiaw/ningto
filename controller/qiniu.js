@@ -1,7 +1,7 @@
 'use strict'
 
 var qiniu = require('qiniu');
-var config = require('config-lite');
+var config = require('../config');
 const uuidV1 = require('uuid/v1');
 
 qiniu.conf.ACCESS_KEY = config.qiniu.ak;

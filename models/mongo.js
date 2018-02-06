@@ -1,4 +1,4 @@
-var config = require('config-lite');
+var config = require('../config');
 var marked = require('marked');
 var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird')
@@ -76,7 +76,6 @@ marked.setOptions({
 });
 
 const option = {
-  useMongoClient: true,
   reconnectTries: Number.MAX_VALUE,
   reconnectInterval: 3000,
   user: 'tujiaw',

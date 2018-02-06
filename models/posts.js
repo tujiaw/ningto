@@ -1,5 +1,5 @@
 var mongoose = require('./mongo').mongoose;
-var config = require('config-lite');
+var config = require('../config');
 var PAGE_COUNT = config.pageCount;
 
 var PostSchema = new mongoose.Schema({

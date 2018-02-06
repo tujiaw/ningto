@@ -3,7 +3,7 @@
 var UsersModel = require('../models/users');
 var MongoHelp = require('../models/mongo').mongoHelp;
 var sha1 = require('sha1');
-var config = require('config-lite');
+var config = require('../config');
 var Base64 = require('js-base64').Base64;
 require('es6-promise').polyfill();
 require('isomorphic-fetch');

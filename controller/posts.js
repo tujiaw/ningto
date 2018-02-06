@@ -3,7 +3,7 @@
 var PostsModel = require('../models/posts');
 var SearchKeyModel = require('../models/searchKey');
 var MongoHelp = require('../models/mongo').mongoHelp;
-var config = require('config-lite');
+var config = require('../config');
 var moment = require('moment');
 var objectIdToTimestamp = require('objectid-to-timestamp');
 

@@ -1,6 +1,6 @@
 'use strict'
 
-var config = require('config-lite');
+var config = require('../config');
 var PostsModel = require('../models/posts');
 var SearchKeyModel = require('../models/searchKey');
 var MongoHelp = require('../models/mongo').mongoHelp;
