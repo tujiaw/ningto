@@ -97,10 +97,10 @@ module.exports.createpostlist = async function(ctx, next) {
     let html = await readFilePromise(READ_PATH, 'utf8');
     let content = '';
     posts.forEach((post, index) => {
-        content += `<dt><a href="http://3inns.cn/post/${post._id}" add_date="${post.created_at}">${post.title}</a></dt>\n`
+        content += `<dt><a href="http://ningto.com/post/${post._id}" add_date="${post.created_at}">${post.title}</a></dt>\n`
     })
     html = html.replace('dt-list-placeholder', content);
-    ctx.set('Content-disposition', 'attachment;filename=3inns.cn.html');
+    ctx.set('Content-disposition', 'attachment;filename=ningto.com.html');
     ctx.body = html;
 }
 

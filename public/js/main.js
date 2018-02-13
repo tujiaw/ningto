@@ -60,7 +60,7 @@ $(document).ready(function() {
     $('#side-popup').on('click', function() {
       const chat = $('#chat-frame');
       if (chat.attr('src') === undefined || chat.attr('src').length === 0) {
-        chat.attr('src', 'http://chat.3inns.cn');
+        chat.attr('src', 'http://chat.ningto.com');
         chat.focus();
       }
       chat.toggle();

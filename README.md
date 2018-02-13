@@ -1,3 +1,3 @@
-# 3inns.cn 个人博客
+# ningto.com 个人博客
 
 1.0版本

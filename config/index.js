@@ -1,5 +1,5 @@
 module.exports = {
-  title: '三家店 - 泊客网',
+  title: '泞途 - 泊客网',
   desc: 'Keep It Simple, Stupid',
   port: 3000,
   pageCount: 20,

@@ -1,7 +1,7 @@
 {
   "name": "sanjiadian",
   "version": "1.0.0",
-  "description": "三家店 - 泊客网",
+  "description": "泞途 - 泊客网",
   "main": "app.js",
   "dependencies": {
     "bluebird": "^3.5.0",
