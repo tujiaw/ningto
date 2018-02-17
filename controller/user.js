@@ -36,7 +36,7 @@ module.exports.githubRelogin = async function(ctx) {
 module.exports.signout = async function(ctx) {
   console.log('-------------signout---------------')
   if (ctx.session.user) {
-    ctx.session.user = null
+    ctx.session = null
   }
   ctx.redirect('back')
 }
