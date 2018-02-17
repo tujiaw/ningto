@@ -78,8 +78,8 @@ marked.setOptions({
 const option = {
   reconnectTries: Number.MAX_VALUE,
   reconnectInterval: 3000,
-  user: 'tujiaw',
-  pass: 'fighting'
+  // user: 'tujiaw',
+  // pass: 'fighting'
 }
 mongoose.connect(config.mongodb, option);
 
