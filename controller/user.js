@@ -34,7 +34,9 @@ module.exports.apiGithubLogin = async function(ctx) {
     const userinfo = await UsersModel.getUserByToken(token)
     ctx.body = userinfo
   } else {
-    ctx.body = 'https://github.com/login/oauth/authorize?client_id=531ad8e4517595748d97&state=123456789'
+    ctx.body = {
+      auth_url: 'https://github.com/login/oauth/authorize?client_id=531ad8e4517595748d97&state=123456789'
+    }
   }
 }
 
