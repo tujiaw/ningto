@@ -8,6 +8,7 @@ var Base64 = require('js-base64').Base64;
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
 
+
 const GITHUB_STATE = 'sdgdft3465yhdg'
 const GITHUB_REST_STATE = 'dsfdsag35243tg4g'
 module.exports.signin = async function(ctx) {
@@ -32,16 +33,14 @@ module.exports.githubLogin = async function(ctx) {
     }
   }
 
-  const authUrl = 'https://github.com/login/oauth/authorize?client_id=531ad8e4517595748d97&state=' + 
-    ctx.path.indexOf('/api') === 0 ? GITHUB_REST_STATE : GITHUB_STATE
-  ctx.redirect(authUrl)
+  const state = ctx.path.indexOf('/api') === 0 ? GITHUB_REST_STATE : GITHUB_STATE
+  ctx.redirect(`https://github.com/login/oauth/authorize?client_id=${config.github.client_id}&state=${state}`)
 }
 
 module.exports.githubRelogin = async function(ctx) {
   delete ctx.session.user
-  const authUrl = 'https://github.com/login/oauth/authorize?client_id=531ad8e4517595748d97&state=' + 
-    ctx.path.indexOf('/api') === 0 ? GITHUB_REST_STATE : GITHUB_STATE
-  ctx.redirect(authUrl)
+  const state = ctx.path.indexOf('/api') === 0 ? GITHUB_REST_STATE : GITHUB_STATE
+  ctx.redirect(`https://github.com/login/oauth/authorize?client_id=${config.github.client_id}&state=${state}`)
 }
 
 module.exports.signout = async function(ctx) {
