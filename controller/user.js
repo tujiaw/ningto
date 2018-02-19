@@ -19,9 +19,17 @@ module.exports.githubLogin = async function(ctx) {
   if (user) {
     const userinfo = await UsersModel.getBaseUserById(user._id)
     if (userinfo) {
-      ctx.session.user = userinfo
       console.log(userinfo)
-      ctx.redirect("back")
+      if (ctx.path.indexOf('/api') === 0) {
+        ctx.body = {
+          errcode: 0,
+          msg: 'success',
+          data: userinfo
+        }
+      } else {
+        ctx.session.user = userinfo
+        ctx.redirect("back")
+      }
       return
     }
   }
@@ -70,6 +78,7 @@ module.exports.reqSignin = async function(ctx) {
 }
 
 module.exports.githubOAuthCallbackComment = async function(ctx, next) {
+  console.log('xxxxx, path', ctx.path)
   const req = ctx.request.body
   const code = ctx.query.code || '';
   const state = ctx.query.state || '';
