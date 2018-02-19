@@ -8,9 +8,6 @@ var Base64 = require('js-base64').Base64;
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
 
-
-const GITHUB_STATE = 'sdgdft3465yhdg'
-const GITHUB_REST_STATE = 'dsfdsag35243tg4g'
 module.exports.signin = async function(ctx) {
   console.log('-------------signin---------------')
   ctx.body = await ctx.render('signin')
@@ -22,25 +19,29 @@ module.exports.githubLogin = async function(ctx) {
   if (user) {
     const userinfo = await UsersModel.getBaseUserById(user._id)
     if (userinfo) {
+      ctx.session.user = userinfo
       console.log(userinfo)
-      if (ctx.path.indexOf('/api') === 0) {
-        ctx.body = userinfo
-      } else {
-        ctx.session.user = userinfo
-        ctx.redirect("back")
-      }
+      ctx.redirect("back")
       return
     }
   }
+  ctx.redirect('https://github.com/login/oauth/authorize?client_id=531ad8e4517595748d97&state=123456789')
+}
 
-  const state = ctx.path.indexOf('/api') === 0 ? GITHUB_REST_STATE : GITHUB_STATE
-  ctx.redirect(`https://github.com/login/oauth/authorize?client_id=${config.github.client_id}&state=${state}`)
+module.exports.apiGithubLogin = async function(ctx) {
+  const req = ctx.request.body
+  const token = req.token
+  if (token) {
+    const userinfo = await UsersModel.getUserByToken(token)
+    ctx.body = userinfo
+  } else {
+    ctx.body = 'https://github.com/login/oauth/authorize?client_id=531ad8e4517595748d97&state=123456789'
+  }
 }
 
 module.exports.githubRelogin = async function(ctx) {
   delete ctx.session.user
-  const state = ctx.path.indexOf('/api') === 0 ? GITHUB_REST_STATE : GITHUB_STATE
-  ctx.redirect(`https://github.com/login/oauth/authorize?client_id=${config.github.client_id}&state=${state}`)
+  ctx.redirect('https://github.com/login/oauth/authorize?client_id=531ad8e4517595748d97&state=123456789')
 }
 
 module.exports.signout = async function(ctx) {
@@ -140,18 +141,14 @@ module.exports.githubOAuthCallbackComment = async function(ctx, next) {
       {upsert: true, returnNewDocument: true})
     if (resultUserinfo && resultUserinfo._doc) {
       const newUser = resultUserinfo._doc
-      console.log(ctx.session.newUser)
+      newUser.detail_info = null
+      ctx.session.user = newUser
+      console.log(ctx.session.user)
       
-      if (state === GITHUB_REST_STATE) {
-        ctx.body = newUser
+      if (req.referrer) {
+        ctx.redirect(req.referrer);
       } else {
-        newUser.detail_info = null
-        ctx.session.user = newUser
-        if (req.referrer) {
-          ctx.redirect(req.referrer);
-        } else {
-          ctx.redirect('/');
-        }
+        ctx.redirect('/');
       }
       return
     }
