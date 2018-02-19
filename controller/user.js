@@ -30,13 +30,17 @@ module.exports.githubLogin = async function(ctx) {
 
 module.exports.apiGithubLogin = async function(ctx) {
   const token = ctx.query.token || ''
+  console.log('api github login token', token)
   if (token.length) {
     const userinfo = await UsersModel.getUserByToken(token)
-    ctx.body = userinfo
-  } else {
-    ctx.body = {
-      auth_url: 'https://github.com/login/oauth/authorize?client_id=531ad8e4517595748d97&state=123456789'
-    }
+    if (userinfo) {
+      ctx.body = userinfo
+      return
+    } 
+  }
+  
+  ctx.body = {
+    auth_url: 'https://github.com/login/oauth/authorize?client_id=531ad8e4517595748d97&state=123456789'
   }
 }
 
