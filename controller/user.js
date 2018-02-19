@@ -29,9 +29,8 @@ module.exports.githubLogin = async function(ctx) {
 }
 
 module.exports.apiGithubLogin = async function(ctx) {
-  const req = ctx.request.body
-  const token = req.token
-  if (token) {
+  const token = ctx.query.token || ''
+  if (token.length) {
     const userinfo = await UsersModel.getUserByToken(token)
     ctx.body = userinfo
   } else {
