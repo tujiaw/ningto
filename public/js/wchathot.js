@@ -23,7 +23,7 @@ var typeList = [
 ];
 
 function getWchatHot(typeId, page) {
-    var appParams = {typeId: (typeId || 0), page: (page || 1)};
+    var appParams = {typeId: (typeId || 1), page: (page || 1)};
     $('#main').data('typeId', appParams.typeId);
     $('#main').data('page', appParams.page);
     showapiRequest('http://route.showapi.com/582-2', 17262, appParams, function(json) {
