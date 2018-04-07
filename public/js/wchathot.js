@@ -1,7 +1,7 @@
 'use strict';
 
 var typeList = [
-    {"id":"19","name":"体育迷"},
+    {"id":"1","name":"热点"},
     {"id":"2","name":"段子手"},
     {"id":"3","name":"养生堂"},
     {"id":"4","name":"私房话"},
@@ -19,8 +19,7 @@ var typeList = [
     {"id":"16","name":"古今通"},
     {"id":"17","name":"学霸族"},
     {"id":"18","name":"星座控"},
-    {"id":"1","name":"推荐"},
-    {"id":"0","name":"热点"}
+    {"id":"19","name":"体育迷"}
 ];
 
 function getWchatHot(typeId, page) {
