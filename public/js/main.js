@@ -39,7 +39,7 @@ $(document).ready(function() {
       if (!keyword.length) {
         return
       }
-      window.open('/titlesearch?keyword=' + encodeURIComponent(keyword), '_self')
+      window.open('/search?keyword=' + encodeURIComponent(keyword), '_self')
     }
   })
 

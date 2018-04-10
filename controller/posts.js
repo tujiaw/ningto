@@ -311,8 +311,10 @@ module.exports.archives = async function(ctx, next) {
 }
 
 module.exports.search = async function(ctx, next) {
+  const keyword = ctx.query.keyword || ''
   ctx.body = await ctx.render('search', {
-    tags: config.tags
+    tags: config.tags,
+    keyword: keyword
   })
 }
 
