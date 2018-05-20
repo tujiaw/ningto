@@ -47,9 +47,10 @@
             {% endif %}
           </li>
           {% if user %}
-          <li role="presentation">
-            <a role="menuitem" tabindex="-1" href="/write">写文章</a>
-          </li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="/write">写文章</a></li>
+            {% if user.login==="tujiaw" %}
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="/picture_wall">照片墙</a></li>
+            {% endif%}
           {% endif %}
         </ul>
       </div>
@@ -81,11 +82,6 @@
             <li class="dropdown-header">我的链接</li>
             <li><a href="/react-wchathot" target="_blank">微信文章精选</a></li>
             <li><a href="/react-dzdp" target="_blank">模仿大众点评</a></li>
-            {% if user && user.login==="tujiaw" %}
-            <li><a href="/picture_wall">照片墙</a></li>
-            {% else %}
-            <li><a href="/user/githubLogin">Github登录</a></li>
-            {% endif %}
             <li class="dropdown-header">工具</li>
             <li><a href="/mdviewer" target="_blank">Markdown预览</a></li>
             <li><a href="/upload.html" target="_blank">上传图片</a></li>
