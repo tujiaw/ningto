@@ -419,6 +419,11 @@ module.exports.tags = async function(ctx, name) {
 }
 
 module.exports.pictureWall = async function(ctx) {
+  if (!ctx.session.user || ctx.session.user.login !== 'tujiaw') {
+    ctx.redirect('/')
+    return
+  }
+
   ctx.body = await ctx.render('picture_wall');
 }
 
