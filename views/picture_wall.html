@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>照片墙</title>
-    <link rel="stylesheet" href="../public/zoomify/zoomify.min.css">
+    <link rel="stylesheet" href="/zoomify/zoomify.min.css">
     <style type="text/css">
 body{background-color:#E9E9E9; color:#333333; font-family:"Lucida handwriting",Arial,Helvetica,sans-serif; font-size:16px; margin:0; padding:0;}
 a,a:hover{color:#333333; text-decoration:none;}
@@ -64,7 +64,7 @@ a,a:hover{color:#333333; text-decoration:none;}
     </div>
   </div>
   <script src="http://www.jq22.com/jquery/1.11.1/jquery.min.js"></script>
-  <script src="../public/zoomify/zoomify.min.js"></script>
+  <script src="/zoomify/zoomify.min.js"></script>
   <script type="text/javascript">
     var start = 1;
     var count = 15;
@@ -92,7 +92,7 @@ a,a:hover{color:#333333; text-decoration:none;}
       var end = Math.min(start + count, maxCount + 1);
       for(var i=start; i<end; i+=1){
           var random_width = INIT_WIDTH + INIT_HEIGHT * Math.random();
-          var path = '../private/image'+i+'.jpg';
+          var path = '/marray/image'+i+'.jpg';
           pics += `<a href="#tujiaw" class="pic pic${i % count + 1}"><img style="max-width:150px;" width="${random_width}" src="${path}" />image${i}</a>`;	
       }
       box.innerHTML = pics;
