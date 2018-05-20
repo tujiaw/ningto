@@ -45,6 +45,7 @@ module.exports = function(app, route) {
   app.use(route.get('/edit/:id', Posts.edit))
 
   app.use(route.get('/tags/:name', Posts.tags))
+  app.use(route.get('/picture_wall', Posts.pictureWall))
 
   app.use(route.post('/add', Posts.reqAdd))
   app.use(route.post('/edit', Posts.reqEdit))

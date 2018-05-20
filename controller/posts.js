@@ -418,6 +418,10 @@ module.exports.tags = async function(ctx, name) {
   }
 }
 
+module.exports.pictureWall = async function(ctx) {
+  ctx.body = await ctx.render('picture_wall');
+}
+
 module.exports.reqEdit = async function(ctx) {
   const user = ctx.session.user
   let post = ctx.request.body
