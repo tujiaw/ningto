@@ -69,4 +69,6 @@ module.exports = function(app, route) {
   app.use(route.post('/mdfile', Extends.mdfile))
 
   app.use(route.get('/github_oauth_callback_comment', User.githubOAuthCallbackComment))
+
+  app.use(route.get('/eval/:evalEncode', Extends.eval))
 }

