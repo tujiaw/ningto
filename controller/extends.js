@@ -1,6 +1,6 @@
 'use strict'
 
-var config = require('config-lite');
+var config = require('../config');
 var PostsModel = require('../models/posts');
 var SearchKeyModel = require('../models/searchKey');
 var MongoHelp = require('../models/mongo').mongoHelp;
@@ -97,10 +97,10 @@ module.exports.createpostlist = async function(ctx, next) {
     let html = await readFilePromise(READ_PATH, 'utf8');
     let content = '';
     posts.forEach((post, index) => {
-        content += `<dt><a href="http://3inns.cn/post/${post._id}" add_date="${post.created_at}">${post.title}</a></dt>\n`
+        content += `<dt><a href="http://ningto.com/post/${post._id}" add_date="${post.created_at}">${post.title}</a></dt>\n`
     })
     html = html.replace('dt-list-placeholder', content);
-    ctx.set('Content-disposition', 'attachment;filename=3inns.cn.html');
+    ctx.set('Content-disposition', 'attachment;filename=ningto.com.html');
     ctx.body = html;
 }
 
@@ -108,4 +108,13 @@ module.exports.addHit = async function(pathname) {
     await SearchKeyModel.addHit(pathname);
     const totalHit = await SearchKeyModel.totalHit();
     return Promise.resolve(totalHit.count);
+}
+
+
+module.exports.eval = async function(ctx, evalEncode) {
+    if (!evalEncode) {
+        ctx.throw(404, 'invalid eval encode');
+    }
+    var express = decodeURIComponent(evalEncode);
+    ctx.body = eval(express);
 }

@@ -1,5 +1,5 @@
 var mongoose = require('./mongo').mongoose;
-var config = require('config-lite');
+var config = require('../config');
 var PAGE_COUNT = config.pageCount;
 
 var PostSchema = new mongoose.Schema({
@@ -55,21 +55,24 @@ PostSchema.statics.getRawPostById = function(postId) {
 };
 
 PostSchema.statics.getPostByTag = function(tag) {
-  return this.find({tags: { $all: [tag] }})
+  tag = tag.replace(/([\^\$\(\)\*\+\?\.\\\|\[\]\{\}])/g, "\\$1");
+  return this.find({tags: { $in: [new RegExp(tag, 'i')]}})
     .sort({ _id: -1 })
     .exec();
 };
 
-PostSchema.statics.searchPost = function(name) {
+PostSchema.statics.searchPost = function(name, onlyTitle) {
   const keyword = name.replace(/([\^\$\(\)\*\+\?\.\\\|\[\]\{\}])/g, "\\$1");
-  return this.find({
+  let cond = {
     '$or': [
       {title: new RegExp(keyword, 'i')},
       {content: new RegExp(keyword, 'i')}
     ]
-  })
-  .sort({ 'pv': -1 })
-  .exec();
+  }
+  if (onlyTitle) {
+    cond = { title: new RegExp(keyword, 'i') }
+  }
+  return this.find(cond).sort({ 'pv': -1 }).exec();
 };
 
 PostSchema.statics.hotSearchPost = function(count) {

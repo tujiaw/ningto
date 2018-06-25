@@ -1,4 +1,4 @@
-var config = require('config-lite');
+var config = require('../config');
 var marked = require('marked');
 var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird')
@@ -14,7 +14,7 @@ const tocObj = {
     this.toc.push({ anchor: anchor, level: level, text: text });
     return anchor;
   },
-  // 使用堆栈的方式处理嵌套的ul,li，level即ul的嵌套层次，1是最外层
+  // 使用堆栈的方式处理嵌套的ul和li，level即ul的嵌套层次，1是最外层
   // <ul>
   //   <li></li>
   //   <ul>
@@ -64,7 +64,8 @@ const tocObj = {
 
 renderer.heading = function(text, level, raw) {
   var anchor = tocObj.add(text, level);
-  return `<a id=${anchor} class="anchor-fix"></a><h${level}>${text}</h${level}>\n`;
+  var className = (anchor === '#toc11' ? 'anchor-fix-first' : 'anchor-fix');
+  return `<a id=${anchor} class=${className}></a><h${level}>${text}</h${level}>\n`;
 };
 
 marked.setOptions({
@@ -74,7 +75,13 @@ marked.setOptions({
     },
 });
 
-mongoose.connect(config.mongodb);
+const option = {
+  reconnectTries: Number.MAX_VALUE,
+  reconnectInterval: 3000,
+  // user: 'tujiaw',
+  // pass: 'fighting'
+}
+mongoose.connect(config.mongodb, option);
 
 const PROFILE_COUNT = 150;
 module.exports.mongoose = mongoose;

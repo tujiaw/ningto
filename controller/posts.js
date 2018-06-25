@@ -3,7 +3,9 @@
 var PostsModel = require('../models/posts');
 var SearchKeyModel = require('../models/searchKey');
 var MongoHelp = require('../models/mongo').mongoHelp;
-var config = require('config-lite');
+var config = require('../config');
+var moment = require('moment');
+var objectIdToTimestamp = require('objectid-to-timestamp');
 
 const PAGE_COUNT = config.pageCount;
 const SEARCH_KEY_COUNT = config.searchKeyCount;
@@ -48,6 +50,78 @@ function getArchives(posts) {
   return archives;
 }
 
+async function getRightSidebarData(ctx) {
+  let allPosts = await PostsModel.getPostsProfile();
+  allPosts = allPosts.sort((a, b) => ( b.pv - a.pv ));
+  const totalCount = allPosts.length;
+  const hotPosts = []
+  const tagsCount = []
+  const archivesCount = {}
+  allPosts.forEach((post) => {
+    // 归档
+    const createYearMonth = moment(objectIdToTimestamp(post._id)).format('YYYY-MM-DD').substr(0, 7);
+    if (createYearMonth.length) {
+      if (archivesCount[createYearMonth]) {
+        archivesCount[createYearMonth]++;
+      } else {
+        archivesCount[createYearMonth] = 1;
+      }
+    }
+    
+    // 标签
+    post.tags.forEach((tag) => {
+        if (tag.length) {
+          const fitem = tagsCount.find((item) => ( item.name === tag ));
+          if (fitem) {
+            fitem.count++;
+          } else {
+            tagsCount.push({ name: tag, count: 1})
+          }
+        }
+    })
+
+    // 热搜
+    if (hotPosts.length === 0) {
+      hotPosts.push(post)
+    } else {
+      for (let i = 0; i < hotPosts.length; i++) {
+        if (post.pv > hotPosts[i].pv) {
+          hotPosts.insert()
+        }
+      }
+    }
+  })
+  
+  const result = {}
+  result.profile = {
+    postCount: totalCount,
+    hitCount: ctx.state.totalhit,
+    hitToday: ctx.state.todayhit
+  };
+  result.hotPosts = allPosts.slice(0, 10);
+  result.tagsCount = tagsCount;
+  result.archives = []
+  for (let item in archivesCount) {
+    result.archives.push({
+      yearMonth: item,
+      count: archivesCount[item]
+    })
+  }
+  result.archives.sort((a, b) => a.yearMonth > b.yearMonth ? -1 : 1);
+  return result
+}
+
+module.exports.rightsidebar = async function(ctx) {
+  try {
+    const result = {
+      rightSidebarData: await getRightSidebarData(ctx)
+    }
+    ctx.body = result
+  } catch (err) {
+    ctx.throw(err)
+  }
+}
+
 module.exports.list = async function(ctx) {
   var page = ctx.query.page || 1
   page = parseInt(page)
@@ -78,6 +152,7 @@ module.exports.list = async function(ctx) {
         pageNumbers.push(0);
       }
     }
+
     var prevPage = Math.max(page - 1, 1);
     var nextPage = Math.min(lastPage, page + 1);
     var morePage;
@@ -91,6 +166,7 @@ module.exports.list = async function(ctx) {
     }
     
     const result = {
+      user: ctx.session.user,
       posts: pagePosts,
       page: page,
       lastPage: lastPage,
@@ -101,37 +177,48 @@ module.exports.list = async function(ctx) {
     }
 
     if (isRestapi(ctx)) {
-      let allPosts = await PostsModel.getPostsProfile();
-      allPosts = allPosts.sort((a, b) => ( b.pv - a.pv ));
-      const hotPosts = []
-      const tagsCount = []
-      allPosts.forEach((post) => {
-          post.tags.forEach((tag) => {
-              if (tag.length) {
-                const fitem = tagsCount.find((item) => ( item.name === tag ));
-                if (fitem) {
-                  fitem.count++;
-                } else {
-                  tagsCount.push({ name: tag, count: 1})
-                }
-              }
-          })
-          if (hotPosts.length === 0) {
-            hotPosts.push(post)
-          } else {
-            for (let i = 0; i < hotPosts.length; i++) {
-              if (post.pv > hotPosts[i].pv) {
-                hotPosts.insert()
-              }
-            }
-          }
-      })
-      result.tagsCount = tagsCount;
-      result.hotPosts = allPosts.slice(0, 10);
+      result.rightSidebarData = await getRightSidebarData(ctx);
       ctx.body = result;
     } else {
       ctx.body = await ctx.render('list', result)  
     }
+  } catch (err) {
+    ctx.throw(err)
+  }
+}
+
+module.exports.title = async function(ctx) {
+  console.log(ctx.query)
+  const type = ctx.query.type || ''
+  const keyword = ctx.query.keyword || ''
+  if (type.length === 0 || keyword.length === 0) {
+    ctx.throw('need type and keyword')
+  }
+
+  try {
+    const result = {}
+    if (type === 'search') {
+      result.tagname = '搜索 & ' + keyword
+      await SearchKeyModel.setSearchKey(keyword.toLowerCase())
+      const searchResult = await PostsModel.searchPost(keyword)
+      result.archives = getArchives(searchResult)
+    } else if (type === 'tag') {
+      result.tagname = '类别 & ' + keyword
+      let posts = await PostsModel.getPostByTag(keyword)
+      result.archives = getArchives(posts)
+    } else if (type === 'yearMonth') {
+      result.tagname = '存档 & ' + keyword
+      let posts = await PostsModel.getPostsProfile()
+      posts = posts.filter((item) => {
+        return moment(objectIdToTimestamp(item._id)).format('YYYY-MM-DD').substr(0, 7) === keyword
+      })
+      result.archives = getArchives(posts)
+    } else {
+      ctx.throw('type is error')
+    }
+
+    result.rightSidebarData = await getRightSidebarData(ctx)
+    ctx.body = result
   } catch (err) {
     ctx.throw(err)
   }
@@ -162,12 +249,13 @@ module.exports.show = async function(ctx, id) {
 
     const result = {
       post: post,
-      user: ctx.session.user,
       prevPost: prevPost,
       nextPost: nextPost
     }
 
     if (isRestapi(ctx)) {
+      result.rightSidebarData = await getRightSidebarData(ctx)
+      result.toc = result.post.toc
       ctx.body = result
     } else {
       ctx.body = await ctx.render('show', result)
@@ -223,8 +311,10 @@ module.exports.archives = async function(ctx, next) {
 }
 
 module.exports.search = async function(ctx, next) {
+  const keyword = ctx.query.keyword || ''
   ctx.body = await ctx.render('search', {
-    tags: config.tags
+    tags: config.tags,
+    keyword: keyword
   })
 }
 
@@ -233,13 +323,26 @@ module.exports.reqSearch = async function(ctx, next) {
   const keyword = req.keyword
   let posts = []
   let searchKeys = []
+  const result = {}
   if (keyword.length) {
     await SearchKeyModel.setSearchKey(keyword.toLowerCase())
-    const result = await PostsModel.searchPost(keyword)
+    const searchResult = await PostsModel.searchPost(keyword)
     searchKeys = await SearchKeyModel.getSearchKey(SEARCH_KEY_COUNT)
-    posts = MongoHelp.postsContent2Profile(result)
+    posts = MongoHelp.postsContent2Profile(searchResult)
+    result.posts = posts
+    result.keys = searchKeys
   }
-  ctx.body = { posts: posts, keys: searchKeys }
+  ctx.body = result
+}
+
+module.exports.titleSearch = async function(ctx, next) {
+  const keyword = ctx.query.keyword || ''
+  const searchResult = await PostsModel.searchPost(keyword, true)
+  if (searchResult.length) {
+    ctx.redirect('/post/' + searchResult[0]._id)
+  } else {
+    ctx.redirect('/search')
+  }
 }
 
 // 热搜文章
@@ -309,14 +412,19 @@ module.exports.tags = async function(ctx, name) {
       archives: archives
     }
 
-    if (isRestapi(ctx)) {
-      ctx.body = result
-    } else {
-      ctx.body = await ctx.render('archives', result)
-    }
+    ctx.body = await ctx.render('archives', result)
   } catch (err) {
     ctx.throw(err)
   }
+}
+
+module.exports.pictureWall = async function(ctx) {
+  if (!ctx.session.user || ctx.session.user.login !== 'tujiaw') {
+    ctx.redirect('/')
+    return
+  }
+
+  ctx.body = await ctx.render('picture_wall');
 }
 
 module.exports.reqEdit = async function(ctx) {

@@ -6,7 +6,8 @@
 {% block content %}
 <h1>站内搜索</h1>
 <div class="input-group">
-  <input id="input-keyword" type="text" class="form-control" placeholder="请至少输入两个关键字..." required autofocus>
+  {% set keyword = keyword || '' %}
+  <input id="input-keyword" type="text" class="form-control" value="{{ keyword }}" placeholder="请至少输入两个关键字..." required autofocus>
   <span class="input-group-btn">
     <button id="button-search" class="btn btn-default" type="button">搜索</button>
   </span>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>照片墙</title>
+    <link rel="stylesheet" href="/zoomify/zoomify.min.css">
+    <style type="text/css">
+body{background-color:#E9E9E9; color:#333333; font-family:"Lucida handwriting",Arial,Helvetica,sans-serif; font-size:16px; margin:0; padding:0;}
+a,a:hover{color:#333333; text-decoration:none;}
+.box{width:1100px; height:600px; margin:60px auto 0; font-size:0.75em; position:relative;}
+.title{position:absolute; padding:15px 40px; font-size:2em; border:1px solid #bbbbbb; background:white; -webkit-box-shadow:4px 4px 3px rgba(50, 50, 50, 0.4); -moz-box-shadow:4px 4px 3px rgba(50, 50, 50, 0.4); box-shadow:4px 4px 3px rgba(50, 50, 50, 0.4); left:380px;top:180px; z-index:2;}
+.pic{display:block; padding:10px 10px 15px; text-align:center; background:white; border:1px solid #bfbfbf; -webkit-box-shadow:2px 2px 3px rgba(135, 139, 144, 0.4); -moz-box-shadow:2px 2px 3px rgba(135, 139, 144, 0.4); box-shadow:2px 2px 3px rgba(135, 139, 144, 0.4); -webkit-transition:all 0.5s ease-in; position:absolute; z-index:1;}
+.pic img{display:block; margin-bottom:10px; border:0;}
+.pic:hover,.pic:focus,.pic:active{border-color:#9a9a9a; -webkit-box-shadow:15px 15px 20px rgba(50, 50, 50, 0.4); -moz-box-shadow:15px 15px 20px rgba(50, 50, 50, 0.4); box-shadow:15px 15px 20px rgba(50, 50, 50, 0.4); -webkit-transform:rotate(0deg) scale(1.05); -moz-transform:rotate(0deg) scale(1.05); transform:rotate(0deg) scale(1.05); z-index:2;}
+.pic1{bottom: 10px; right: 365px; -webkit-transform: rotate(10deg); -moz-transform: rotate(10deg); transform: rotate(10deg);}
+.pic2{top: 50px; right: 20px; -webkit-transform: rotate(-4deg); -moz-transform: rotate(-4deg); transform: rotate(-4deg);}
+.pic3{left: 300px; top: 0; -webkit-transform: rotate(-5deg); -moz-transform: rotate(-5deg); transform: rotate(-5deg);}
+.pic4{top: 10px; left: 495px; -webkit-transform: rotate(-20deg); -moz-transform: rotate(-20deg); transform: rotate(-20deg);}
+.pic5{bottom: 0; right: 0; -webkit-transform: rotate(1deg); -moz-transform: rotate(1deg); transform: rotate(1deg);}
+.pic6{bottom: 10px; right: 156px; -webkit-transform: rotate(6deg); -moz-transform: rotate(6deg); transform: rotate(6deg);}
+.pic7{bottom:0; left:400px; -webkit-transform: rotate(-10deg); -moz-transform: rotate(-10deg); transform: rotate(-10deg);}
+.pic8{bottom: -20px; left: 700px; -webkit-transform: rotate(-8deg); -moz-transform: rotate(-8deg); transform: rotate(-8deg);}
+.pic9{bottom: 0; left: 0; -webkit-transform: rotate(-8deg); -moz-transform: rotate(-8deg); transform: rotate(-8deg);}
+.pic10{top: 0; left: 20px; -webkit-transform: rotate(8deg); -moz-transform: rotate(8deg); transform: rotate(8deg);}
+.pic11{top: 0; right: 0; -webkit-transform: rotate(-8deg); -moz-transform: rotate(-8deg); transform: rotate(-8deg);}
+.pic12{top: 0; left: 680px; -webkit-transform: rotate(18deg); -moz-transform: rotate(18deg); transform: rotate(18deg);}
+.pic13{bottom: -20px; right: 680px; -webkit-transform: rotate(4deg); -moz-transform: rotate(4deg); transform: rotate(4deg);}
+.pic14{top: 90px; left: 430px; -webkit-transform: rotate(15deg); -moz-transform: rotate(15deg); transform: rotate(15deg);}
+.pic15{left:176px; top:20px; -webkit-transform: rotate(-8deg); -moz-transform: rotate(-8deg); transform: rotate(-8deg);}
+
+#btnLeft, #btnRight {
+    width: 50px; height: 130px;
+    display: none;
+    position: fixed;
+    top: 220px;
+    margin: 0px 20px;
+    text-decoration: none;
+    color: #fff;
+    font-size: 30px;
+    text-align: center;
+    line-height: 120px;
+    background: rgba(0,0,0,0.3);
+    z-index: 10;
+}
+#btnLeft{
+    left: 0;
+}
+#btnRight{
+    right: 0;
+}
+#btnLeft:hover,#btnRight:hover{
+    background: rgba(0,0,0,0.5);
+}
+
+.music {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.nav {
+  margin: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+.nav a {
+  font-size: 13px;
+  margin-right: 5px;
+  text-decoration: underline;
+}
+.nav .buttons {
+  display: flex;
+  margin: 7px;
+}
+    </style>
+</head>
+<body>
+  <div class="nav">
+    <div class="buttons">
+        <a href="/">首页</a>
+        <a id="musicOnOff" href="#">音乐</a>
+        <a id="musicPrev" class="music" href="#">上一首</a>
+        <a id="musicNext" class="music" href="#">下一首</a>
+    </div>
+    <audio id="audio" class="music" controls="controls">
+        Your browser does not support the audio tag.
+    </audio>
+  </div>
+  <div class="box">
+    <h1 class="title">绚丽多彩的照片墙</h1>
+    <a href="#" id="btnLeft">&lt;</a>
+    <a href="#" id="btnRight">&gt;</a>
+    <div id="box">     
+    </div>
+  </div>
+  <script src="http://www.jq22.com/jquery/1.11.1/jquery.min.js"></script>
+  <script src="/zoomify/zoomify.min.js"></script>
+  <script type="text/javascript">
+    function randomRange(lower, upper) {  
+      return Math.floor(Math.random() * (upper - lower)) + lower;  
+    }
+
+    function handleBtnStatus() {
+      $('#musicPrev').removeClass('disabled');
+      $('#musicPrev').css('color', 'black');
+      $('#musicNext').removeClass('disabled');
+      $('#musicNext').css('color', 'black');
+
+      if (currentIndex <= 0) {
+        $('#musicPrev').addClass('disabled');
+        $('#musicPrev').css('color', 'grey')
+      }
+
+      if (currentIndex >= musicList.length - 1) {
+        $('#musicNext').addClass('disabled');
+        $('#musicNext').css('color', 'grey');
+      }
+    }
+
+    function playMusic() {
+      handleBtnStatus();
+      audio.src = musicDir + musicList[currentIndex];
+      audio.play();
+    }
+
+    var musicDir = '/music/';
+    var musicList = ['Matteo-Panama.mp3', 'VictoriaAcosta-CouldThisBeLove.mp3'];
+    var currentIndex = randomRange(0, musicList.length);
+    var audio = document.getElementById('audio');
+    audio.src = musicDir + musicList[currentIndex];
+
+    $('.music').hide();
+    $('#musicOnOff').click(function() {
+      if ($('.music').is(':hidden')) {
+        $('.music').show();
+      } else {
+        $('.music').hide();
+      }
+    })
+
+    $('#musicPrev').click(function(e) {
+      if ($(this).hasClass('disabled')) {
+        e.preventDefault();
+        return;
+      }
+      currentIndex = Math.max(currentIndex - 1, 0);
+      playMusic();
+    })
+    $('#musicNext').click(function() {
+      if ($(this).hasClass('disabled')) {
+        e.preventDefault();
+        return;
+      }
+      currentIndex = Math.min(currentIndex + 1, musicList.length - 1);
+      playMusic();
+    })
+    handleBtnStatus();
+    
+    /////////////////////////////////////////////////////
+    var start = 1;
+    var count = 15;
+    var maxCount = 135;
+    function afterHandle() {
+      if (start <= 1)  {
+        $('#btnLeft').hide();
+      } else {
+        $('#btnLeft').show();
+      }
+
+      if (start + count > maxCount) {
+        $('#btnRight').hide();
+      } else {
+        $('#btnRight').show();
+      }
+      $('#box img').zoomify();
+    }
+
+    function updateImagesContent(start, count) {
+      var box = document.getElementById("box");
+      var pics = "";
+      var INIT_WIDTH = 100;
+      var INIT_HEIGHT = 106;
+      var end = Math.min(start + count, maxCount + 1);
+      for(var i=start; i<end; i+=1){
+          var random_width = INIT_WIDTH + INIT_HEIGHT * Math.random();
+          var path = '/marray/image'+i+'.jpg';
+          pics += `<a href="#tujiaw" class="pic pic${i % count + 1}"><img style="max-width:150px;" width="${random_width}" src="${path}" />image${i}</a>`;	
+      }
+      box.innerHTML = pics;
+      afterHandle();
+    }
+
+    $('#btnLeft').click(function() {
+      start -= count;
+      updateImagesContent(start, count);
+    })
+    $('#btnRight').click(function() {
+      start += count;
+      updateImagesContent(start, count);
+    })
+
+    updateImagesContent(start, count);
+  </script>
+</body>
+</html>

@@ -1,15 +1,28 @@
 var mongoose = require('./mongo').mongoose;
 
 var UsersSchema = new mongoose.Schema({
-  name: { type: String },
+  provider: { type: String },
+  login: { type: String },
   password: { type: String },
-  avatar: {type: String },
-  gender: { type: String, enum:['m', 'f', 'x'] },
-  bio: { type: String }
+  token: { type: String },
+  avatar_url: { type: String },
+  detail_info: { type: String }
 });
 
-UsersSchema.statics.getUserByName = function(name) {
-  return this.findOne({name: name}).exec();
-};
+UsersSchema.statics.getUserById = function(id) {
+  return this.findOne({ _id: id }).exec()
+}
+
+UsersSchema.statics.getBaseUserById = function(id) {
+  return this.findOne({ _id: id }, { detail_info: 0 }).exec()
+}
+
+UsersSchema.statics.getUserByProviderLogin = function(provider, login) {
+  return this.findOne({ provider: provider, login: login}).exec();
+}
+
+UsersSchema.statics.getUserByToken = function(token) {
+  return this.findOne({ token: token }).exec();
+}
 
 module.exports = mongoose.model('Users', UsersSchema);

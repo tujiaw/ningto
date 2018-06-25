@@ -33,6 +33,16 @@ $(document).ready(function() {
     $('body,html').animate({ scrollTop: 0 }, 800);
   })
 
+  $('.profile .search-group').on('keydown', function(event) {
+    if (event.keyCode == '13') {
+      const keyword = $(event.target).val().trim()
+      if (!keyword.length) {
+        return
+      }
+      window.open('/search?keyword=' + encodeURIComponent(keyword), '_self')
+    }
+  })
+
   if (!(isMobile.Android() || isMobile.IOS())) {
     $('.right-bottom-panel').show();
     var updatePercent = function() {
@@ -50,7 +60,7 @@ $(document).ready(function() {
     $('#side-popup').on('click', function() {
       const chat = $('#chat-frame');
       if (chat.attr('src') === undefined || chat.attr('src').length === 0) {
-        chat.attr('src', 'http://chat.3inns.cn');
+        chat.attr('src', 'http://chat.ningto.com');
         chat.focus();
       }
       chat.toggle();

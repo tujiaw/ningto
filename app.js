@@ -5,7 +5,7 @@ const koaBody = require('koa-body');
 const bodyParser = require('koa-bodyparser')
 const co = require('co')
 const render = require('koa-swig')
-const config = require('config-lite')
+const config = require('./config')
 const session = require('koa-session');
 const serve = require('koa-static')
 const Koa = require('koa')
@@ -14,11 +14,16 @@ const app = new Koa()
 app.use(cors())
 
 const SessionConfig = {
-  key: 'koa:sess', /** (string) cookie key (default is koa:sess) */
-  maxAge: 3600000, /** 1个小时 (number) maxAge in ms (default is 1 days) */
+  key: 'ningto:sess', /** (string) cookie key (default is koa:sess) */
+  /** (number || 'session') maxAge in ms (default is 1 days) */
+  /** 'session' will result in a cookie that expires when session/browser is closed */
+  /** Warning: If a session cookie is stolen, this cookie will never expire */
+  maxAge: 86400000 / 2,
   overwrite: true, /** (boolean) can overwrite or not (default true) */
   httpOnly: true, /** (boolean) httpOnly or not (default true) */
   signed: true, /** (boolean) signed or not (default true) */
+  rolling: false, /** (boolean) Force a session identifier cookie to be set on every response. The expiration is reset to the original maxAge, resetting the expiration countdown. (default is false) */
+  renew: false, /** (boolean) renew session when session is nearly expired, so we can always keep user logged in. (default is false)*/
 }
 app.keys = ['sdds34sdfs4654635dggsdgdsg']
 app.use(logger())
