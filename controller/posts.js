@@ -445,7 +445,7 @@ module.exports.reqEdit = async function(ctx) {
       content: content,
       tags: tags
     })
-    ctx.redirect('/')
+    ctx.redirect('/post/' + post._id)
   } catch (err) {
     ctx.throw(err)
   }
