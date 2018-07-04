@@ -25,7 +25,7 @@ const SessionConfig = {
   rolling: false, /** (boolean) Force a session identifier cookie to be set on every response. The expiration is reset to the original maxAge, resetting the expiration countdown. (default is false) */
   renew: false, /** (boolean) renew session when session is nearly expired, so we can always keep user logged in. (default is false)*/
 }
-app.keys = ['sdds34sdfs4654635dggsdgdsg']
+app.keys = ['7BBF9DD3-4C79-4D6A-8220-25605F87E8FA']
 app.use(logger())
 app.use(serve(path.join(__dirname, 'public')))
 app.use(session(SessionConfig, app))
