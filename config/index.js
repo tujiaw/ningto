@@ -9,8 +9,9 @@ module.exports = {
     key: 'nodeblog',
     maxAge: 2592000000,
   },
-  tags: ['Windows', 'Linux', 'Mobile', 'C/C++', 'Qt', 'Node.js', 'React', 'Database', 
-        'Web', 'Tools', 'Bug', 'Life', 'Tips', 'Design', 'Javascript', 'MongoDB', 'React', 'Product'],
+  tags: ['Windows', 'Linux', 'Android', 'IOS', 'Mac', 'Mobile', 'C/C++', 'Qt', 'Node.js', 'Java', 'Database', 
+        'Web', 'Tools', 'Bug', 'Life', 'Tips', 'Design', 'Javascript', 'MongoDB', 
+        'React', 'Product'],
   //mongodb: 'mongodb\://localhost:27017/nodeblog', // :一定要转义
   mongodb: 'mongodb\://127.0.0.1:27017/nodeblog',
   qiniu: {
