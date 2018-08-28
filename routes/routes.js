@@ -4,6 +4,7 @@ const Posts = require('../controller/posts')
 const User = require('../controller/user')
 const Qiniu = require('../controller/qiniu')
 const Extends = require('../controller/extends')
+const Comments = require('../controller/comments')
 
 let hitToday = 0;
 setInterval(() => {
@@ -33,6 +34,7 @@ module.exports = function(app, route) {
   app.use(route.get('/api/rightsidebar', Posts.rightsidebar))
   app.use(route.get('/api/githublogin', User.apiGithubLogin))
   app.use(route.post('/api/comments/add', Comments.add))
+  app.use(route.get('/api/comments/:postId', Comments.getByPostId))
   
   app.use(route.get('/', Posts.list))
   app.use(route.get('/list', Posts.list))
