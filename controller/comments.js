@@ -28,7 +28,7 @@ module.exports.getByPostId = async function(ctx, postId) {
     let result = undefined
     try {
         result = await CommentsModel.getByPostId(postId)
-        MongoHelp.addAllCreateDateTime(result);
+        MongoHelp.addAllCreateDateTime(result)
     } catch (err) {
         result = err
     }
