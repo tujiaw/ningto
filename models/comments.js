@@ -1,5 +1,4 @@
 var mongoose = require('./mongo').mongoose;
-var config = require('../config');
 
 var CommentsSchema = new mongoose.Schema({
   postId: { type: mongoose.Schema.Types.ObjectId },
