@@ -7,7 +7,7 @@ var CommentsSchema = new mongoose.Schema({
 });
 
 CommentsSchema.statics.getByPostId = function(postId) {
-    return this.find({ postId: postId }).exec()
+    return this.find({ postId: postId }).sort({ _id: -1 }).exec()
 }
 
 CommentsSchema.statics.countByPostId = function(postId) {

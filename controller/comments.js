@@ -25,17 +25,25 @@ module.exports.add = async function(ctx) {
 }
 
 module.exports.getByPostId = async function(ctx, postId) {
-    let result = undefined
+    let result = {
+        error: '',
+        content: []
+    }
     try {
-        result = await CommentsModel.getByPostId(postId)
-        console.log('111', result)
-        if (result && Array.isArray(result)) {
-            console.log('222')
-            MongoHelp.addAllCreateDateTime(result)
-            console.log('333', result)
+        const datas = await CommentsModel.getByPostId(postId)
+        if (datas && Array.isArray(datas)) {
+            MongoHelp.addAllCreateDateTime(datas)
         }
+        result.content = datas.map(item => {
+            return {
+                id: item.id,
+                name: item.name,
+                content: item.content,
+                created_at: item.created_at
+            }
+        })
     } catch (err) {
-        result = err
+        result.error = err
     }
     ctx.body = result
 }
