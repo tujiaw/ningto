@@ -1,6 +1,6 @@
 {
   "name": "ningto.com",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "泞途 - 泊客网",
   "main": "app.js",
   "dependencies": {
@@ -32,12 +32,12 @@
   "devDependencies": {},
   "scripts": {
     "test": "node app.js",
-    "start": "pm2 start ./app.js --name '3inns' "
+    "start": "pm2 start ./app.js --name 'ningto' "
   },
   "author": "tujiaw",
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tujiaw/sanjiadian.net.git"
+    "url": "https://github.com/tujiaw/ningto.git"
   }
 }
