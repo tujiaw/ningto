@@ -46,6 +46,8 @@ module.exports = function(app, route) {
   app.use(route.get('/titlesearch', Posts.titleSearch))
   app.use(route.get('/remove/:id', Posts.remove))
   app.use(route.get('/edit/:id', Posts.edit))
+  app.use(route.post('/comments/add', Comments.reqAdd))
+  app.use(route.post('/comments/remove', Comments.reqRemove))
 
   app.use(route.get('/tags/:name', Posts.tags))
   app.use(route.get('/picture_wall', Posts.pictureWall))

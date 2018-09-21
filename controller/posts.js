@@ -1,6 +1,7 @@
 'use strict'
 
 var PostsModel = require('../models/posts');
+var CommentsModel = require('../models/comments');
 var SearchKeyModel = require('../models/searchKey');
 var MongoHelp = require('../models/mongo').mongoHelp;
 var config = require('../config');
@@ -261,8 +262,24 @@ module.exports.show = async function(ctx, id) {
       nextPost.title = nextPost.title.substr(0, MAX_NAV_TITLE_LENGTH) + '...';
     }
 
+    const commentList = await CommentsModel.getByPostId(id)
+    let comments = []
+    if (commentList && Array.isArray(commentList)) {
+        MongoHelp.addAllCreateDateTime(commentList)
+        comments = commentList.map(item => {
+          return {
+              id: item.id,
+              name: item.name,
+              content: item.content,
+              created_at: item.created_at
+          }
+        })
+    }
+
     const result = {
       post: post,
+      comments: comments,
+      deleteComment: (ctx.session.user && ctx.session.user.username === 'tujiaw'),
       prevPost: prevPost,
       nextPost: nextPost
     }

@@ -14,4 +14,8 @@ CommentsSchema.statics.countByPostId = function(postId) {
     return this.count({ postId: postId }).exec()
 }
 
+CommentsSchema.statics.deleteById = function(commentId) {
+    return this.remove({ _id: commentId }).exec()
+}
+
 module.exports = mongoose.model('Comments', CommentsSchema);

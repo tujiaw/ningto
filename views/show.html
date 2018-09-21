@@ -37,7 +37,7 @@
         </nav>
     </div>
     <!--畅言-->
-    <div id="SOHUCS"></div> 
+    <!-- <div id="SOHUCS"></div> 
     <script type="text/javascript"> 
     (function(){ 
     var appid = 'cysWB0Du9'; 
@@ -45,14 +45,91 @@
     var width = window.innerWidth || document.documentElement.clientWidth; 
     if (width < 960) { 
     window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); 
-    </script>
+    </script> -->
 <!--畅言-->
+
+{% if comments && comments.length %}
+<form role="form" class="comments commentList" action="/comments/add" method="post">
+    <h3>评论列表</h3><br/>
+    {% for comment in comments %}
+    <div class="form-group" id={{ comment.id }}>
+        <div>
+            {% if !deleteComment %}
+                <a id="delete" class="glyphicon glyphicon glyphicon-remove"></a>
+            {% endif %}
+            <span id="name">{{comment.name}}</span>
+            <span> 说道：</span>
+        </div>
+        <div id="time">{{comment.created_at}}</div>
+        <div id="content">{{comment.content}}</div>
+    </div>
+    {% endfor %}
+</form>
+{% endif %}
+
+  <form role="form" class="comments commentInput" action="/comments/add" method="post">
+    <h3>发表评论</h3>
+    <h5>电子邮件地址不会被公开。 必填项已用*标注</h5>
+    <br/>
+    <input type="hidden" name="postId" value="{{post._id.toString()}}" />
+    <div class="form-group">
+        <label for="comment">评论 *</label>
+        <textarea id="content" class="form-control required" rows="5" name="content"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="name">姓名 *</label>
+        <input id="name" class="form-control" name="name">
+    </div>
+    <div class="form-group">
+        <label for="email">电子邮件 *</label>
+        <input id="email" class="form-control" name="email">
+    </div>
+    <div class="form-group">
+        <div class="alert alert-warning alert-dismissible hide" role="alert">
+            <strong>警告!</strong> <span id="warningText"></span>
+        </div>
+        <button id="submit" type="submit" class="btn btn-default">发表评论</button>
+    </div>
+</form>
+
 {% endblock %}
 {% block extend_script %}
 <script>
     $('#toc-head').on('click', function() {
         $('#toc-head .glyphicon').toggleClass('glyphicon-chevron-up');
         $('#toc ul').toggle();
+    })
+
+    $('#submit').on('click', function() {
+        if ($('.commentInput #content').val().length < 3) {
+            $('#warningText').html('评论为空或者内容太短.')
+            $('.alert-warning').removeClass('hide')
+            return false;
+        } else if (!$('.commentInput #name').val().length) {
+            $('#warningText').html('姓名不能为空.')
+            $('.alert-warning').removeClass('hide')
+        } else if (!/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test($('.commentInput #email').val())) {
+            $('#warningText').html('邮箱为空或者格式不正确.')
+            $('.alert-warning').removeClass('hide')
+        } else {
+            return true;
+        }
+        return false;
+    })
+
+    $('.commentList #delete').on('click', function() {
+        const commentId = $(this).parent().parent().attr('id')
+        if (commentId && commentId.length) {
+            $.ajax({
+                type: 'POST',
+                url: '/comments/remove/',
+                data: {commentId: commentId},
+                success: function(result) {
+                    console.log(result)
+                    $('#' + commentId).hide();
+                }
+            })
+        }
     })
 </script>
 {% endblock %}
