@@ -54,7 +54,7 @@
     {% for comment in comments %}
     <div class="form-group" id={{ comment.id }}>
         <div>
-            {% if !deleteComment %}
+            {% if deleteComment %}
                 <a id="delete" class="glyphicon glyphicon glyphicon-remove"></a>
             {% endif %}
             <span id="name">{{comment.name}}</span>

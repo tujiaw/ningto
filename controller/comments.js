@@ -25,7 +25,6 @@ module.exports.add = async function(ctx) {
 }
 
 module.exports.reqRemove = async function(ctx) {
-
     let msg = 'success'
     const data = ctx.request.body
     if (data && data.commentId && data.commentId.length) {
