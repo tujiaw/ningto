@@ -279,7 +279,7 @@ module.exports.show = async function(ctx, id) {
     const result = {
       post: post,
       comments: comments,
-      deleteComment: (ctx.session.user && ctx.session.user.username === 'tujiaw'),
+      deleteComment: (ctx.session.user && ctx.session.user.login === 'tujiaw'),
       prevPost: prevPost,
       nextPost: nextPost
     }
