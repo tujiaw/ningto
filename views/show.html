@@ -54,7 +54,7 @@
     {% for comment in comments %}
     <div class="form-group" id={{ comment.id }}>
         <div>
-            {% if deleteComment %}
+            {% if user.login==="tujiaw" %}
                 <a id="delete" class="glyphicon glyphicon glyphicon-remove"></a>
             {% endif %}
             <span id="name">{{comment.name}}</span>
@@ -85,6 +85,11 @@
         <input id="email" class="form-control" name="email">
     </div>
     <div class="form-group">
+        <label for="captcha">验证码 *</label>
+        <input id="captcha" class="form-control" name="captcha">
+        <div id="svgCaptcha" value=""></div>
+    </div>
+    <div class="form-group">
         <div class="alert alert-warning alert-dismissible hide" role="alert">
             <strong>警告!</strong> <span id="warningText"></span>
         </div>
@@ -95,25 +100,49 @@
 {% endblock %}
 {% block extend_script %}
 <script>
+    const refreshCaptcha = function() {
+        $.ajax({
+            type: 'GET',
+            url: '/captcha',
+            success: function(result) {
+                console.log(result);
+                if (result.data) {
+                    $('#svgCaptcha').html(result.data);
+                    $('#svgCaptcha').attr('value', result.text);
+                }
+            }
+        })
+    }
+
+    refreshCaptcha();
+    $('#svgCaptcha').on('click', function() {
+        refreshCaptcha();
+    })
+
     $('#toc-head').on('click', function() {
         $('#toc-head .glyphicon').toggleClass('glyphicon-chevron-up');
         $('#toc ul').toggle();
     })
 
     $('#submit').on('click', function() {
+        let errMsg = '';
         if ($('.commentInput #content').val().length < 3) {
-            $('#warningText').html('评论为空或者内容太短.')
-            $('.alert-warning').removeClass('hide')
-            return false;
+            errMsg = '评论为空或者内容太短.';
         } else if (!$('.commentInput #name').val().length) {
-            $('#warningText').html('姓名不能为空.')
-            $('.alert-warning').removeClass('hide')
+            errMsg = '姓名不能为空.';
         } else if (!/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test($('.commentInput #email').val())) {
-            $('#warningText').html('邮箱为空或者格式不正确.')
-            $('.alert-warning').removeClass('hide')
+            errMsg = '邮箱为空或者格式不正确.';
         } else {
-            return true;
+            const inputCaptcha = $('#captcha').val()
+            const dstCaptcha = $('#svgCaptcha').attr('value')
+            if (inputCaptcha.length && inputCaptcha.toLowerCase() === dstCaptcha.toLowerCase()) {
+                return true;
+            } else {
+                errMsg = '验证码不正确，请重新输入或者单击刷新验证码.'
+            }
         }
+        $('#warningText').html(errMsg)
+        $('.alert-warning').removeClass('hide')
         return false;
     })
 

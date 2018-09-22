@@ -8,6 +8,7 @@ var fs = require('fs');
 var marked = require('marked');
 var iconv = require('iconv-lite');
 var path = require('path');
+var svgCaptcha = require('svg-captcha');
 
 const readFilePromise = (path, encoding) => {
     return new Promise((resolve, reject) => {
@@ -117,4 +118,8 @@ module.exports.eval = async function(ctx, evalEncode) {
     }
     var express = decodeURIComponent(evalEncode);
     ctx.body = eval(express);
+}
+
+module.exports.captcha = async function(ctx) {
+    ctx.body = svgCaptcha.create();
 }

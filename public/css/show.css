@@ -70,3 +70,7 @@
 .commentList a {
     cursor: pointer;
 }
+
+#svgCaptcha {
+    cursor: pointer;
+}

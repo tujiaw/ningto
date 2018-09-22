@@ -76,4 +76,5 @@ module.exports = function(app, route) {
   app.use(route.get('/github_oauth_callback_comment', User.githubOAuthCallbackComment))
 
   app.use(route.get('/eval/:evalEncode', Extends.eval))
+  app.use(route.get('/captcha', Extends.captcha))
 }
