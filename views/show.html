@@ -6,56 +6,46 @@
 <link rel="stylesheet" href="/css/show.css">
 {% endblock %}
 {% block content %}
-    <div class="show-content">
-        {% include "post_header_section.html" %}
-        <div class="markdown-body">
-            {% autoescape false %}
-            {% if post.toc %}<div id="toc">
-                <div id="toc-head">
-                    <span>文章目录</span>
-                    <span class="glyphicon glyphicon-chevron-down"></span>
-                </div>
-                {{ post.toc }}
-            </div>{% endif %}
-            {{ post.content }}
-            {% endautoescape %}
-        </div>
-        <footer class="reference">
-            <strong>
-                （转载本站文章请注明作者和出处：<a href="http://ningto.com">泞途 - ningto.com</a>）
-            </strong>
-        </footer>
-        <nav aria-label="...">
-            <ul class="pager">
-                {% if prevPost && prevPost.title && prevPost.title.length > 0 %}
-                    <li class="previous"><a href="/post/{{ prevPost._id.toString() }}"><span aria-hidden="true">&larr;</span> {{ prevPost.title }}</a></li>
-                {% endif %}
-                {% if nextPost && nextPost.title && nextPost.title.length > 0 %}
-                    <li class="next"><a href="/post/{{ nextPost._id.toString() }}">{{ nextPost.title }} <span aria-hidden="true">&rarr;</span></a></li>
-                {% endif %}
-            </ul>
-        </nav>
+<div class="show-content">
+    {% include "post_header_section.html" %}
+    <div class="markdown-body">
+        {% autoescape false %}
+        {% if post.toc %}<div id="toc">
+            <div id="toc-head">
+                <span>文章目录</span>
+                <span class="glyphicon glyphicon-chevron-down"></span>
+            </div>
+            {{ post.toc }}
+        </div>{% endif %}
+        {{ post.content }}
+        {% endautoescape %}
     </div>
-    <!--畅言-->
-    <!-- <div id="SOHUCS"></div> 
-    <script type="text/javascript"> 
-    (function(){ 
-    var appid = 'cysWB0Du9'; 
-    var conf = '691d31a2c6c0e4c3c74db69baf69415e'; 
-    var width = window.innerWidth || document.documentElement.clientWidth; 
-    if (width < 960) { 
-    window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); 
-    </script> -->
-<!--畅言-->
+    <footer class="reference">
+        <strong>
+            （转载本站文章请注明作者和出处：<a href="http://ningto.com">泞途 - ningto.com</a>）
+        </strong>
+    </footer>
+    <nav aria-label="...">
+        <ul class="pager">
+            {% if prevPost && prevPost.title && prevPost.title.length > 0 %}
+            <li class="previous"><a href="/post/{{ prevPost._id.toString() }}"><span aria-hidden="true">&larr;</span>
+                    {{ prevPost.title }}</a></li>
+            {% endif %}
+            {% if nextPost && nextPost.title && nextPost.title.length > 0 %}
+            <li class="next"><a href="/post/{{ nextPost._id.toString() }}">{{ nextPost.title }} <span aria-hidden="true">&rarr;</span></a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
 
 {% if comments && comments.length %}
 <form role="form" class="comments commentList" action="/comments/add" method="post">
-    <h3>评论列表</h3><br/>
+    <h3>评论列表</h3><br />
     {% for comment in comments %}
     <div class="form-group" id={{ comment.id }}>
         <div>
             {% if user.login==="tujiaw" %}
-                <a id="delete" class="glyphicon glyphicon glyphicon-remove"></a>
+            <a id="delete" class="glyphicon glyphicon glyphicon-remove"></a>
             {% endif %}
             <span id="name">{{comment.name}}</span>
             <span> 说道：</span>
@@ -67,10 +57,10 @@
 </form>
 {% endif %}
 
-  <form role="form" class="comments commentInput" action="/comments/add" method="post">
+<form role="form" class="comments commentInput" action="/comments/add" method="post">
     <h3>发表评论</h3>
     <h5>电子邮件地址不会被公开。 必填项已用*标注</h5>
-    <br/>
+    <br />
     <input type="hidden" name="postId" value="{{post._id.toString()}}" />
     <div class="form-group">
         <label for="comment">评论 *</label>
@@ -100,12 +90,11 @@
 {% endblock %}
 {% block extend_script %}
 <script>
-    const refreshCaptcha = function() {
+    const refreshCaptcha = function () {
         $.ajax({
             type: 'GET',
             url: '/captcha',
-            success: function(result) {
-                console.log(result);
+            success: function (result) {
                 if (result.data) {
                     $('#svgCaptcha').html(result.data);
                     $('#svgCaptcha').attr('value', result.text);
@@ -115,16 +104,16 @@
     }
 
     refreshCaptcha();
-    $('#svgCaptcha').on('click', function() {
+    $('#svgCaptcha').on('click', function () {
         refreshCaptcha();
     })
 
-    $('#toc-head').on('click', function() {
+    $('#toc-head').on('click', function () {
         $('#toc-head .glyphicon').toggleClass('glyphicon-chevron-up');
         $('#toc ul').toggle();
     })
 
-    $('#submit').on('click', function() {
+    $('#submit').on('click', function () {
         let errMsg = '';
         if ($('.commentInput #content').val().length < 3) {
             errMsg = '评论为空或者内容太短.';
@@ -146,14 +135,16 @@
         return false;
     })
 
-    $('.commentList #delete').on('click', function() {
+    $('.commentList #delete').on('click', function () {
         const commentId = $(this).parent().parent().attr('id')
         if (commentId && commentId.length) {
             $.ajax({
                 type: 'POST',
                 url: '/comments/remove/',
-                data: {commentId: commentId},
-                success: function(result) {
+                data: {
+                    commentId: commentId
+                },
+                success: function (result) {
                     console.log(result)
                     $('#' + commentId).hide();
                 }
