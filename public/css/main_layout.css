@@ -126,6 +126,9 @@ a:focus { text-decoration: none; }
     .inset {
         padding-top: 40px;
     }
+    #top-navbar {
+        display: none;
+    }
 }
 
 /*-------------------------------*/

@@ -26,6 +26,12 @@
     }
 }
 
+@media (min-width : 768px) {
+    .commentInput .form-group {
+        width: 60%;
+    }
+}
+
 #toc ul {
     padding-left: 1em;
     padding-bottom: 0px;

@@ -25,36 +25,36 @@
 <body>
   <!-- Fixed navbar -->
   <nav id="top-navbar">
-      <p>
-        <a href="http://ningto.com" style="color:red;">{% if totalhit %}您是第{{ totalhit }}位访问者{% else %}ningto.com{% endif %}</a> | 
-        {% block top_navbar_start_menu %}{% endblock %}
-        <a href="http://next.ningto.com" style="color:red;" target="_top">新版</a> | 
-        <a href="/mdviewer" target="_top">Markdown预览</a> | 
-        <a href="/upload.html" target="_top">上传图片</a> | 
-        <a href="/react-wchathot" target="_blank">微信文章精选</a> | 
-        {% block top_navbar_end_menu %}{% endblock %}
-      </p>
-      <div class="dropdown">
-        <button type="button" class="btn dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown">
-          {% if user %}{{ user.login}}{% else %}登录{% endif %} <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
-          <li role="presentation">
-            {% if user %}
-            <a role="menuitem" tabindex="-1" href="/user/signout">登出</a>
-            {% else %}
-            <a role="menuitem" tabindex="-1" href="/user/githubLogin">Github登录</a>
-            {% endif %}
-          </li>
+    <p>
+      <a href="http://ningto.com" style="color:red;">{% if totalhit %}您是第{{ totalhit }}位访问者{% else %}ningto.com{% endif %}</a> | 
+      {% block top_navbar_start_menu %}{% endblock %}
+      <a href="http://next.ningto.com" style="color:red;" target="_top">新版</a> | 
+      <a href="/mdviewer" target="_top">Markdown预览</a> | 
+      <a href="/upload.html" target="_top">上传图片</a> | 
+      <a href="/react-wchathot" target="_blank">微信文章精选</a> | 
+      {% block top_navbar_end_menu %}{% endblock %}
+    </p>
+    <div class="dropdown">
+      <button type="button" class="btn dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown">
+        {% if user %}{{ user.login}}{% else %}登录{% endif %} <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
+        <li role="presentation">
           {% if user %}
-          <li role="presentation"><a role="menuitem" tabindex="-1" href="/write">写文章</a></li>
-            {% if user.login==="tujiaw" %}
-            <li role="presentation"><a role="menuitem" tabindex="-1" href="/picture_wall">照片墙</a></li>
-            {% endif%}
+          <a role="menuitem" tabindex="-1" href="/user/signout">登出</a>
+          {% else %}
+          <a role="menuitem" tabindex="-1" href="/user/githubLogin">Github登录</a>
           {% endif %}
-        </ul>
-      </div>
-    </nav>
+        </li>
+        {% if user %}
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="/write">写文章</a></li>
+          {% if user.login==="tujiaw" %}
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="/picture_wall">照片墙</a></li>
+          {% endif%}
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
  
   <div id="wrapper">
     <!-- Sidebar -->
