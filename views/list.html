@@ -15,11 +15,11 @@
 {% if pageNumbers.length > 1 %}
 <ul class="pagination">
 	<li {% if page === 1 %}class="disabled"{% endif %}>
-        <a href="/?page={{ prevPage }}">&laquo;</a>
+        <a href="/?page=1">&laquo;</a>
     </li>
     {% for number in pageNumbers %}
         {% if number === 0 %}
-            <li><a href="/?page={{ morePage }}">...</a></li>
+            <li><a>...</a></li>
         {% else %}
             {% if number === page %}
             <li class="active"><a href="/?page={{ number }}">{{ number }}</a></li>
@@ -29,7 +29,7 @@
         {% endif %}
     {% endfor %}
 	<li {% if page === lastPage %}class="disabled"{% endif %}>
-        <a href="/?page={{ nextPage }}">&raquo;</a>
+        <a href="/?page={{ lastPage }}">&raquo;</a>
     </li>
 </ul>
 {% endif %}
