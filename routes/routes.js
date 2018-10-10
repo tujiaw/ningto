@@ -5,6 +5,7 @@ const User = require('../controller/user')
 const Qiniu = require('../controller/qiniu')
 const Extends = require('../controller/extends')
 const Comments = require('../controller/comments')
+const Joke = require('./controller/joke')
 
 let hitToday = 0;
 setInterval(() => {
@@ -77,4 +78,6 @@ module.exports = function(app, route) {
 
   app.use(route.get('/eval/:evalEncode', Extends.eval))
   app.use(route.get('/captcha', Extends.captcha))
+
+  app.use(route.get('/getTextJoke', Joke.getTextJoke))
 }

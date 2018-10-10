@@ -170,16 +170,6 @@ module.exports.list = async function(ctx) {
 
     var prevPage = Math.max(page - 1, 1);
     var nextPage = Math.min(lastPage, page + 1);
-    var morePage;
-    if (pageNumbers.length) {
-      if (pageNumbers[0] === 0) {
-        morePage = Math.max(page - PAGE_STEP, 1);
-      }
-      if (pageNumbers[pageNumbers.length - 1] === 0) {
-        morePage = Math.min(page + PAGE_STEP, lastPage);
-      }
-    }
-    
     const result = {
       user: ctx.session.user,
       posts: pagePosts,
@@ -188,7 +178,6 @@ module.exports.list = async function(ctx) {
       pageNumbers: pageNumbers,
       prevPage: prevPage,
       nextPage: nextPage,
-      morePage: morePage,
     }
 
     if (isRestapi(ctx)) {
