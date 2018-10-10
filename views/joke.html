@@ -1,0 +1,11 @@
+{% extends 'main_layout.html' %}
+{% block title %}泞途 - joke{% endblock %}
+{% block subhead %}<link href="/css/joke.css" rel="stylesheet">{% endblock %}
+{% block content %}
+{% for joke in list %}
+<div>
+    <div class="title">{{ joke.title }}</div>
+    <div class="text">{{ joke.text }}</div>
+</div>
+{% endfor %}
+{% endblock %}

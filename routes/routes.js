@@ -36,6 +36,7 @@ module.exports = function(app, route) {
   app.use(route.get('/api/githublogin', User.apiGithubLogin))
   app.use(route.post('/api/comments/add', Comments.add))
   app.use(route.get('/api/comments/:postId', Comments.getByPostId))
+  app.use(route.get('/api/textjoke', Joke.getTextJoke))
   
   app.use(route.get('/', Posts.list))
   app.use(route.get('/list', Posts.list))
@@ -79,6 +80,6 @@ module.exports = function(app, route) {
   app.use(route.get('/eval/:evalEncode', Extends.eval))
   app.use(route.get('/captcha', Extends.captcha))
 
-  app.use(route.get('/textjoke', Joke.getTextJoke))
+  app.use(route.get('/textjoke', Joke.textJoke))
 }
 
