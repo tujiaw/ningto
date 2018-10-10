@@ -79,5 +79,6 @@ module.exports = function(app, route) {
   app.use(route.get('/eval/:evalEncode', Extends.eval))
   app.use(route.get('/captcha', Extends.captcha))
 
-  app.use(route.get('/getTextJoke', Joke.getTextJoke))
+  app.use(route.get('/textjoke', Joke.getTextJoke))
 }
+
