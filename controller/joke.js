@@ -1,4 +1,4 @@
-const { TextJoke } = require('../model/joke')
+const { TextJoke } = require('../models/joke')
 
 module.exports = {
   saveTextJoke: async function(obj) {

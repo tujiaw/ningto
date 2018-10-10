@@ -1,4 +1,4 @@
-const mongoose = require('./mongo')
+var mongoose = require('./mongo').mongoose;
 
 const TextJokeSchema = new mongoose.Schema({
     ct: { type: String },
