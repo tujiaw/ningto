@@ -5,7 +5,7 @@ const User = require('../controller/user')
 const Qiniu = require('../controller/qiniu')
 const Extends = require('../controller/extends')
 const Comments = require('../controller/comments')
-const Joke = require('./controller/joke')
+const Joke = require('../controller/joke')
 
 let hitToday = 0;
 setInterval(() => {
