@@ -3,9 +3,30 @@
 {% block subhead %}<link href="/css/joke.css" rel="stylesheet">{% endblock %}
 {% block content %}
 {% for joke in list %}
-<div>
-    <div class="title">{{ joke.title }}</div>
-    <div class="text">{{ joke.text }}</div>
+<div class="mouseleave joke">
+  <h4 class="title">{{ joke.title }}</h4>
+  {% autoescape false %}
+    <p class="text">{{ joke.text }}</p>
+  {% endautoescape %}
 </div>
 {% endfor %}
+<div class="btn-group pagination" role="group" aria-label="...">
+  <button type="button" class="btn btn-default"><a href="{{ prevPage }}">上一页</a></button>
+  <button type="button" class="btn btn-default"><a href="{{ nextPage }}">下一页</a></button>
+  <button type="button" class="btn btn-default"><a href="{{ randomPage }}">随便看</a></button>
+</div>
+{% endblock %}
+
+{% block extend_script %}
+<script>
+  $(".joke").mouseenter(function() {
+    $(this).removeClass("mouseleave");
+    $(this).addClass("mouseenter");
+  })
+
+  $(".joke").mouseleave(function() {
+    $(this).removeClass("mouseenter");
+    $(this).addClass("mouseleave");
+  })
+</script>
 {% endblock %}

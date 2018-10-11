@@ -1,4 +1,5 @@
 const { TextJoke } = require('../models/joke')
+const Crontab = require('./crontab')
 
 module.exports = {
   saveTextJoke: async function(obj) {
@@ -20,11 +21,29 @@ module.exports = {
     }
   },
   textJoke: async function(ctx) {
+    const getRandom = (x, y) => {
+      let a = y - x + 1;
+      return a > 0 ? Math.floor(Math.random() * a + x) : 0;
+    }
+
     try {
       const page = ctx.query.page || 1
       const count = ctx.query.count || 20
+      const PAGE_PREFIX = '/textjoke?page=';
+      const totalPage = Crontab.textJokeTotal() / count;
+
+      const prevPage = Math.max(1, parseInt(page) - 1);
+      const nextPage = Math.min(totalPage, parseInt(page) + 1);
+      const randomPage = Math.max(1, getRandom(1, totalPage));
       const list = await TextJoke.get(page, count)
-      ctx.body = await ctx.render('joke', { page, count, list })
+      ctx.body = await ctx.render('joke', { 
+        page, 
+        count, 
+        list,
+        prevPage: PAGE_PREFIX + prevPage,
+        nextPage: PAGE_PREFIX + nextPage,
+        randomPage: PAGE_PREFIX + randomPage 
+      })
     } catch (err) {
       ctx.throw(err)
     }

@@ -8,6 +8,10 @@ const TextJokeSchema = new mongoose.Schema({
     type: { type: Number }
 })
 
+TextJokeSchema.statics.total = function() {
+    return this.count({}).exec();
+}
+
 TextJokeSchema.statics.getById = function(id) {
     return this.find({ id: id }).exec();
 }

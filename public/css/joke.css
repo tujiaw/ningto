@@ -1,0 +1,25 @@
+.joke {
+    padding: 20px;
+    margin: 20px 0;
+    border: 1px solid #eee;
+    border-left-width: 5px;
+    border-radius: 3px;
+}
+
+.mouseleave {
+    border-left-color: #eee;
+}
+
+.mouseenter {
+    border-left-color: #1b809e;
+}
+
+.title {
+    color: #1b809e;
+}
+
+.pagination {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
