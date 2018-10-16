@@ -8,26 +8,6 @@ function crontab() {
     let textJokeTotal = 0;
 
     const initData = async () => {
-        const allJoke = await TextJoke.getAll()
-        let mp = new Map();
-        for (const joke of allJoke) {
-            if (mp.has(joke.text)) {
-                mp.get(joke.text).push(joke.id)
-            } else {
-                mp.set(joke.text, [joke.id])
-            }
-        }
-        let removeCount = 0;
-        mp.forEach((value, key) => {
-            if (value.length > 1) {
-                for (let i = 1; i < value.length; i++) {
-                    TextJoke.removeById(value[i])
-                    ++removeCount;
-                }
-            }
-        })
-        console.log('text joke remove repeat count:' + removeCount);
-
         try {
             hitToday = 0;
             textJokeTotal = await TextJoke.count();
