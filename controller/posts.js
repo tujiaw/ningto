@@ -404,14 +404,12 @@ module.exports.edit = async function(ctx, id) {
 
   try {
     const post = await PostsModel.getPostById(id)
-    console.log('a:', post.author);
-    console.log('b:', ctx.session.user._id);
-    
     if (!post) {
       ctx.body = '文章不存在';
     } else if (post.author != ctx.session.user._id) {
       ctx.body = '权限不足';
     } else {
+      console.log('ddddddddddddddddd');
       ctx.render('write', {
         post: post,
         tags: config.tags
