@@ -47,13 +47,14 @@ function crontab() {
     }
     
     initData();
+    fetchLaifuJoke(); // 临时
     setInterval(() => {
         if (new Date().getHours() === 0) {
-            console.log('零点任务开始');
             initData();
+        }
+        if (new Date().getHours() === 3) {
             fetchTextJoke();
             fetchLaifuJoke();
-            console.log('零点任务结束');
         }
     }, 36000);
 
