@@ -407,6 +407,8 @@ module.exports.edit = async function(ctx, id) {
     if (!post) {
       ctx.body = '文章不存在';
     } else if (post.author._id == ctx.session.user._id) {
+      console.log(post.author)
+      console.log(ctx.session.user)
       ctx.body = '权限不足';
     } else {
       ctx.render('write', {
