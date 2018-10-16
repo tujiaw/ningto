@@ -17,11 +17,11 @@ SearchKeySchema.statics.getSearchKey = function(limit) {
 };
   
 SearchKeySchema.statics.setSearchKey = function(key) {
-  return this.update({ prefix: SearchPrefix, key: key }, { $inc: {count: 1} }, {upsert: true}).exec();
+  return this.updateOne({ prefix: SearchPrefix, key: key }, { $inc: {count: 1} }, {upsert: true}).exec();
 };
 
 SearchKeySchema.statics.addHit = function(pathname) {
-  return this.update({ prefix: TotalHitPrefix }, { $inc: {count: 1}}, {upsert: true}).exec();
+  return this.updateOne({ prefix: TotalHitPrefix }, { $inc: {count: 1}}, {upsert: true}).exec();
 }
 
 SearchKeySchema.statics.totalHit = function() {
@@ -33,7 +33,7 @@ SearchKeySchema.statics.getTags = function() {
 }
 
 SearchKeySchema.statics.updateTags = function(tags) {
-  return this.update({ prefix: TagPrefix }, { $set: {key: tags}}, { upsert: true}).exec();
+  return this.updateOne({ prefix: TagPrefix }, { $set: {key: tags}}, { upsert: true}).exec();
 }
 
 module.exports = mongoose.model('SearchKey', SearchKeySchema);
