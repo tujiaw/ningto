@@ -8,6 +8,26 @@ function crontab() {
     let textJokeTotal = 0;
 
     const initData = async () => {
+        const allJoke = await TextJoke.getAll()
+        let mp = new Map();
+        for (const joke of allJoke) {
+            if (mp.has(joke.text)) {
+                mp.get(joke.text).push(joke.id)
+            } else {
+                mp.set(joke.text, [joke.id])
+            }
+        }
+        let removeCount = 0;
+        mp.forEach((value, key) => {
+            if (value.length > 1) {
+                for (let i = 1; i < value.length; i++) {
+                    TextJoke.removeById(value[i])
+                    ++removeCount;
+                }
+            }
+        })
+        console.log('text joke remove repeat count:' + removeCount);
+
         try {
             hitToday = 0;
             textJokeTotal = await TextJoke.count();
@@ -21,12 +41,16 @@ function crontab() {
     const fetchTextJoke = async () => {
         let result;
         try {
-            result = await getTextJoke(1);
-            const { showapi_res_body } = result.data
-            const { contentlist } = showapi_res_body
-            contentlist.map((content) => {
-                JokeController.saveTextJoke(content)
-            })
+            for (let i = 1; i < 6; i++) {
+                result = await getTextJoke(i);
+                const { showapi_res_body } = result.data
+                const { contentlist } = showapi_res_body
+                if (Array.isArray(contentlist)) {
+                    for (const content of contentlist) {
+                        JokeController.saveTextJoke(content)
+                    }
+                }
+            }
         } catch (err) {
             console.log('fetchTextJoke error', err, result);
         }
@@ -38,16 +62,17 @@ function crontab() {
             result = await getLaifuJoke();
             const { showapi_res_body } = result.data
             const { list } = showapi_res_body
-            list.map((content) => {
-                LaifuController.saveLaifuJoke(content)
-            })
+            if (Array.isArray(list)) {
+                for (const content of list) {
+                    LaifuController.saveLaifuJoke(content)    
+                }
+            }
         } catch (err) {
             console.log('fetchLaifuJoke error', err, result);
         }
     }
     
     initData();
-    fetchLaifuJoke(); // 临时
     setInterval(() => {
         if (new Date().getHours() === 0) {
             initData();
