@@ -11,7 +11,7 @@ CommentsSchema.statics.getByPostId = function(postId) {
 }
 
 CommentsSchema.statics.countByPostId = function(postId) {
-    return this.count({ postId: postId }).exec()
+    return this.countDocuments({ postId: postId }).exec()
 }
 
 CommentsSchema.statics.deleteById = function(commentId) {

@@ -9,7 +9,7 @@ const TextJokeSchema = new mongoose.Schema({
 })
 
 TextJokeSchema.statics.total = function() {
-    return this.count({}).exec();
+    return this.countDocuments({}).exec();
 }
 
 TextJokeSchema.statics.getById = function(id) {

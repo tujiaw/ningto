@@ -41,11 +41,11 @@ PostSchema.statics.getPostsCount = function(author) {
   if (author) {
     query.author = author;
   }
-  return this.count(query).exec();
+  return this.countDocuments(query).exec();
 };
 
 PostSchema.statics.incPv = function(postId) {
-  return this.update({ _id: postId }, { $inc: {pv: 1} }).exec();
+  return this.updateOne({ _id: postId }, { $inc: {pv: 1} }).exec();
 };
 
 PostSchema.statics.getRawPostById = function(postId) {
@@ -80,7 +80,7 @@ PostSchema.statics.hotSearchPost = function(count) {
 };
 
 PostSchema.statics.updatePostById = function(postId, author, content) {
-  return this.update({ author: author, _id: postId }, { $set: content }).exec();
+  return this.updateOne({ author: author, _id: postId }, { $set: content }).exec();
 };
 
 PostSchema.statics.delPostById = function(postId, author) {

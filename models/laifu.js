@@ -9,7 +9,7 @@ const LaifuJokeSchema = new mongoose.Schema({
 })
 
 LaifuJokeSchema.statics.total = function() {
-    return this.count({}).exec();
+    return this.countDocuments({}).exec();
 }
 
 LaifuJokeSchema.statics.getByTitle = function(title) {

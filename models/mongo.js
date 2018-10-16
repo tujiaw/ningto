@@ -78,6 +78,7 @@ marked.setOptions({
 const option = {
   reconnectTries: Number.MAX_VALUE,
   reconnectInterval: 3000,
+  useNewUrlParser: true,
   // user: 'tujiaw',
   // pass: 'fighting'
 }
