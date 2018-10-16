@@ -10,7 +10,7 @@ function crontab() {
     const initData = async () => {
         try {
             hitToday = 0;
-            textJokeTotal = await TextJoke.count();
+            textJokeTotal = await TextJoke.countDocuments();
             textJokeTotal = textJokeTotal || 10000;
             console.log(`initData, hitToday:${hitToday}, textJokeTotal:${textJokeTotal}`);
         } catch (err) {
