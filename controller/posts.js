@@ -403,9 +403,10 @@ module.exports.edit = async function(ctx, id) {
   }
 
   try {
+    const post = await PostsModel.getPostById(id)
     console.log('a:', post.author);
     console.log('b:', ctx.session.user._id);
-    const post = await PostsModel.getPostById(id)
+    
     if (!post) {
       ctx.body = '文章不存在';
     } else if (post.author != ctx.session.user._id) {
