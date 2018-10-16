@@ -23,14 +23,12 @@ PostSchema.statics.getPostsProfile = function(author, page) {
   }
   if (page && page > 0) {
     return this.find(query)
-      .populate({ path: 'author', model: 'Users'})
       .skip(PAGE_COUNT * (page - 1))
       .limit(PAGE_COUNT)
       .sort({ _id: -1 })
       .exec();
   } else {
     return this.find(query)
-      .populate({ path: 'author', model: 'Users'})
       .sort({ _id: -1 })
       .exec();
   }
@@ -49,9 +47,7 @@ PostSchema.statics.incPv = function(postId) {
 };
 
 PostSchema.statics.getRawPostById = function(postId) {
-  return this.findOne({ _id: postId })
-    .populate({ path: 'author', model: 'Users'})
-    .exec();
+  return this.findOne({ _id: postId }).exec();
 };
 
 PostSchema.statics.getPostByTag = function(tag) {

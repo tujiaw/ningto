@@ -415,7 +415,7 @@ module.exports.edit = async function(ctx, id) {
       tags: config.tags
     })
   } catch (err) {
-    ctx.throw(err)
+    ctx.throw('edit', err)
   }
 }
 
