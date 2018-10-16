@@ -11,9 +11,7 @@ var PostSchema = new mongoose.Schema({
 });
 
 PostSchema.statics.getPostById = function(postId) {
-  return this.findOne({ _id: postId})
-    .populate({ path: 'author', model: 'Users'})
-    .exec();
+  return this.findOne({ _id: postId}).exec();
 };
 
 PostSchema.statics.getPostsProfile = function(author, page) {
@@ -44,10 +42,6 @@ PostSchema.statics.getPostsCount = function(author) {
 
 PostSchema.statics.incPv = function(postId) {
   return this.updateOne({ _id: postId }, { $inc: {pv: 1} }).exec();
-};
-
-PostSchema.statics.getRawPostById = function(postId) {
-  return this.findOne({ _id: postId }).exec();
 };
 
 PostSchema.statics.getPostByTag = function(tag) {

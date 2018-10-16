@@ -393,32 +393,28 @@ module.exports.remove = async function(ctx, id) {
 }
 
 module.exports.edit = async function(ctx, id) {
-  console.log('11111111', id);
   if (!ctx.session.user) {
     ctx.redirect('/user/signin')
     return
   }
 
-  console.log('2')
   if (!id) {
     ctx.throw(404, 'invalid post id')
   }
 
   try {
-    console.log('3')
-    const post = await PostsModel.getRawPostById(id)
+    const post = await PostsModel.getPostById(id)
     if (!post) {
-      ctx.throw('文章不存在')
+      ctx.body = '文章不存在';
+    } else if (post.author._id == ctx.session.user._id) {
+      ctx.body = '权限不足';
+    } else {
+      ctx.render('write', {
+        post: post,
+        tags: config.tags
+      })
     }
-    if (post.author._id.toString() !== ctx.session.user._id.toString()) {
-      ctx.throw('权限不足')
-    }
-    ctx.render('write', {
-      post: post,
-      tags: config.tags
-    })
   } catch (err) {
-    console.log(4)
     ctx.throw('edit', err)
   }
 }
