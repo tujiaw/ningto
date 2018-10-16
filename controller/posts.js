@@ -403,12 +403,12 @@ module.exports.edit = async function(ctx, id) {
   }
 
   try {
+    console.log('a:', post.author);
+    console.log('b:', ctx.session.user._id);
     const post = await PostsModel.getPostById(id)
     if (!post) {
       ctx.body = '文章不存在';
-    } else if (post.author._id == ctx.session.user._id) {
-      console.log(post.author)
-      console.log(ctx.session.user)
+    } else if (post.author != ctx.session.user._id) {
       ctx.body = '权限不足';
     } else {
       ctx.render('write', {
