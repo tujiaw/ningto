@@ -409,8 +409,7 @@ module.exports.edit = async function(ctx, id) {
     } else if (post.author != ctx.session.user._id) {
       ctx.body = '权限不足';
     } else {
-      console.log('ddddddddddddddddd');
-      ctx.render('write', {
+      ctx.body = await ctx.render('write', {
         post: post,
         tags: config.tags
       })
