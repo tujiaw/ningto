@@ -22,9 +22,9 @@ LaifuJokeSchema.statics.get = function(page, count) {
     console.log(`page:${page}, count:${count}`)
 
     return this.find()
+    .sort({ pubDate: -1 })
     .skip(count * (page - 1))
     .limit(count)
-    .sort({ pubDate: -1 })
     .exec();
 }
 
