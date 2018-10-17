@@ -29,7 +29,7 @@ TextJokeSchema.statics.get = function(page, count) {
     count = Number(count || 20)
 
     return this.find()
-    .sort({ _id: -1 })
+    .sort({ ct: -1 })
     .skip(count * (page - 1))
     .limit(count)
     .exec();
