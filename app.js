@@ -45,3 +45,11 @@ require('./routes/routes')(app, route)
 app.listen(config.port, () => {
   console.log('listening on port ' + config.port)
 })
+
+// 内存泄漏检测
+const memwatch = require('memwatch-next');
+const heapdump = require('heapdump');
+memwatch.on('leak', function(info) { 
+  console.log('leak', info);
+  heapdump.writeSnapshot('./' + Date.now() + '.heapsnapshot');
+});
