@@ -2,6 +2,7 @@ const { TextJoke } = require('../models/joke')
 const JokeController = require('./joke')
 const LaifuController = require('./laifu')
 const { getTextJoke, getLaifuJoke } = require('../utils/showapi')
+const { sendToSumscope } = require('../utils/sendmail')
 
 function crontab() {
   let hitToday = 0;
@@ -60,6 +61,9 @@ function crontab() {
     if (new Date().getHours() === 3) {
       fetchTextJoke();
       fetchLaifuJoke();
+    }
+    if (new Date().getHours() === 17) {
+      sendToSumscope('today hit', `count:${hitToday}`);
     }
   }, 36000);
 
