@@ -10,6 +10,7 @@ const session = require('koa-session');
 const serve = require('koa-static')
 const Koa = require('koa')
 const cors = require('koa2-cors')
+const { sendToSumscope } = require('./utils/sendmail')
 const app = new Koa()
 app.use(cors())
 
@@ -30,18 +31,14 @@ app.use(logger())
 app.use(serve(path.join(__dirname, 'public')))
 app.use(session(SessionConfig, app))
 app.use(koaBody({ multipart: true }))
-app.use(bodyParser({
-  formLimit: '2mb'
-}))
+app.use(bodyParser({ formLimit: '2mb' }))
 app.context.render = co.wrap(render({
   root: path.join(__dirname, 'views'),
   autoescape: true,
   cache: 'memory',
   ext: 'html',
 }))
-
 require('./routes/routes')(app, route)
-
 app.listen(config.port, () => {
   console.log('listening on port ' + config.port)
 })
@@ -50,6 +47,6 @@ app.listen(config.port, () => {
 const memwatch = require('memwatch-next');
 const heapdump = require('heapdump');
 memwatch.on('leak', function(info) { 
-  console.log('leak', info);
   heapdump.writeSnapshot('./' + Date.now() + '.heapsnapshot');
+  sendToSumscope('leak', info);
 });
