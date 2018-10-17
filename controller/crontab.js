@@ -55,17 +55,18 @@ function crontab() {
 
   initData();
   setInterval(() => {
-    if (new Date().getHours() === 0) {
+    const hours = new Date().getHours();
+    if (hours === 0) {
       initData();
     }
-    if (new Date().getHours() === 3) {
+    if (hours === 3) {
       fetchTextJoke();
       fetchLaifuJoke();
     }
-    if (new Date().getHours() === 17) {
+    if (hours === 17) {
       sendToSumscope('today hit', `count:${hitToday}`);
     }
-  }, 36000);
+  }, 3600 * 1000);
 
   return {
     incHitToday: () => {
