@@ -53,7 +53,7 @@ module.exports = {
     const page = ctx.query.page || 1
     const count = ctx.query.count || 20
 
-    let result;
+    let result = {};
     try {
         result = await getTextJoke(page, count);
         const { showapi_res_body } = result.data

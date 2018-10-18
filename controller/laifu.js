@@ -11,7 +11,7 @@ module.exports = {
     }
   },
   fetchfromshowapi: async function(ctx) {
-    let result;
+    let result = {};
     try {
       result = await getLaifuJoke();
       const { showapi_res_body } = result.data
