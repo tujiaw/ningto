@@ -13,6 +13,7 @@ module.exports = {
   fetchfromshowapi: async function(ctx) {
     try {
       const result = await getLaifuJoke();
+      console.log(result)
       const { showapi_res_body } = result.data
       const { list } = showapi_res_body
       if (Array.isArray(list)) {
