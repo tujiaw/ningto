@@ -62,7 +62,7 @@ module.exports = {
             this.saveTextJoke(content)
           }
         }
-        ctx.body = result;
+        ctx.body = showapi_res_body;
     } catch (err) {
       ctx.throw(err)
     }

@@ -13,7 +13,6 @@ module.exports = {
   fetchfromshowapi: async function(ctx) {
     try {
       const result = await getLaifuJoke();
-      console.log(result)
       const { showapi_res_body } = result.data
       const { list } = showapi_res_body
       if (Array.isArray(list)) {
@@ -21,7 +20,7 @@ module.exports = {
           this.saveLaifuJoke(content)
         }
       }
-      ctx.body = result;
+      ctx.body = showapi_res_body;
     } catch (err) {
       ctx.throw(err)
     }
