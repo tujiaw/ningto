@@ -46,6 +46,7 @@ var showapiRequest = function(mainUrl, appId, appParams, callback) {
       url = url + key + '=' + params[key] + '&';
     }
     url = url + 'showapi_sign=' + sign;
+    console.log(url)
     return axios.get(url)
 };
 
