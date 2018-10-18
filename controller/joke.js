@@ -53,9 +53,8 @@ module.exports = {
     const page = ctx.query.page || 1
     const count = ctx.query.count || 20
 
-    let result = {};
     try {
-        result = await getTextJoke(page, count);
+        const result = await getTextJoke(page, count);
         const { showapi_res_body } = result.data
         const { contentlist } = showapi_res_body
         if (Array.isArray(contentlist)) {
@@ -65,7 +64,7 @@ module.exports = {
         }
         ctx.body = result;
     } catch (err) {
-      ctx.body = { err, result };
+      ctx.throw(err)
     }
   }
 }

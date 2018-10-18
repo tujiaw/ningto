@@ -11,9 +11,8 @@ module.exports = {
     }
   },
   fetchfromshowapi: async function(ctx) {
-    let result = {};
     try {
-      result = await getLaifuJoke();
+      const result = await getLaifuJoke();
       const { showapi_res_body } = result.data
       const { list } = showapi_res_body
       if (Array.isArray(list)) {
@@ -23,7 +22,7 @@ module.exports = {
       }
       ctx.body = result;
     } catch (err) {
-      ctx.body = { err, result };
+      ctx.throw(err)
     }
   }
 }
