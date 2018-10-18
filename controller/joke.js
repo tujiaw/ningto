@@ -2,7 +2,7 @@ const { TextJoke } = require('../models/joke')
 const Crontab = require('./crontab')
 const { getTextJoke } = require('../utils/showapi')
 
-module.exports = {
+const joke = {
   saveTextJoke: async function(obj) {
     const f = await TextJoke.getById(obj.id);
     if (f.length) {
@@ -59,7 +59,7 @@ module.exports = {
         const { contentlist } = showapi_res_body
         if (Array.isArray(contentlist)) {
           for (const content of contentlist) {
-            this.saveTextJoke(content)
+            joke.saveTextJoke(content)
           }
         }
         ctx.body = result.data;
@@ -69,3 +69,4 @@ module.exports = {
   }
 }
 
+module.exports = joke

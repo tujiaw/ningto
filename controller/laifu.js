@@ -1,7 +1,7 @@
 const { LaifuJoke } = require('../models/laifu')
 const { getLaifuJoke } = require('../utils/showapi')
 
-module.exports = {
+const laifu = {
   saveLaifuJoke: async function(obj) {
     const f = await LaifuJoke.getByTitle(obj.title);
     if (f.length) {
@@ -17,7 +17,7 @@ module.exports = {
       const { list } = showapi_res_body
       if (Array.isArray(list)) {
         for (const content of list) {
-          this.saveLaifuJoke(content)
+          laifu.saveLaifuJoke(content)
         }
       }
       ctx.body = result.data;
@@ -27,3 +27,4 @@ module.exports = {
   }
 }
 
+module.exports = laifu;
