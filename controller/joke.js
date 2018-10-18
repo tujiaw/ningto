@@ -1,5 +1,6 @@
 const { TextJoke } = require('../models/joke')
 const Crontab = require('./crontab')
+const { getTextJoke } = require('../utils/showapi')
 
 module.exports = {
   saveTextJoke: async function(obj) {
@@ -46,6 +47,25 @@ module.exports = {
       })
     } catch (err) {
       ctx.throw(err)
+    }
+  },
+  fetchfromshowapi: async function(ctx) {
+    const page = ctx.query.page || 1
+    const count = ctx.query.count || 20
+
+    let result;
+    try {
+        result = await getTextJoke(page, count);
+        const { showapi_res_body } = result.data
+        const { contentlist } = showapi_res_body
+        if (Array.isArray(contentlist)) {
+          for (const content of contentlist) {
+            this.saveTextJoke(content)
+          }
+        }
+        ctx.body = result;
+    } catch (err) {
+      ctx.body = { err, result };
     }
   }
 }

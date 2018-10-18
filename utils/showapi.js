@@ -55,7 +55,7 @@ exports.getWchatHot = function(typeid, page) {
 }
 
 exports.getTextJoke = function(page, maxResult = 20) {
-  const appParams = { page: page || 20, maxResult: maxResult }
+  const appParams = { page: page || 1, maxResult: maxResult }
   return showapiRequest('http://route.showapi.com/341-1', 17262, appParams)
 }
 

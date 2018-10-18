@@ -6,6 +6,7 @@ const Qiniu = require('../controller/qiniu')
 const Extends = require('../controller/extends')
 const Comments = require('../controller/comments')
 const Joke = require('../controller/joke')
+const Laifu = require('../controller/laifu')
 const Crontab = require('../controller/crontab')
 
 module.exports = function(app, route) {
@@ -31,6 +32,9 @@ module.exports = function(app, route) {
   app.use(route.post('/api/comments/add', Comments.add))
   app.use(route.get('/api/comments/:postId', Comments.getByPostId))
   app.use(route.get('/api/textjoke', Joke.getTextJoke))
+  
+  app.use(route.get('/showapi/laifu', Laifu.fetchfromshowapi))
+  app.use(route.get('/showapi/textjoke', Joke.fetchfromshowapi))
   
   app.use(route.get('/', Posts.list))
   app.use(route.get('/list', Posts.list))
