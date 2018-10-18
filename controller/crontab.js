@@ -1,5 +1,7 @@
 const { TextJoke } = require('../models/joke')
 const { sendToSumscope } = require('../utils/sendmail')
+const Util = require('../utils/util')
+const axios = require('axios')
 
 function crontab() {
   let hitToday = 0;
@@ -21,6 +23,10 @@ function crontab() {
     const hours = new Date().getHours();
     if (hours === 0) {
       initData();
+
+      Util.internalHandle(2, 5, (index) => {
+        axios.get(`https://www.ningto.com/showapi/textjoke?page=${index}`);
+      })
     }
     if (hours === 17) {
       sendToSumscope('today hit', `count:${hitToday}`);
