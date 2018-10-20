@@ -1,0 +1,13 @@
+.container {
+    
+}
+
+.search-group {
+    width: 50%;
+}
+
+.centerContainer {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+}

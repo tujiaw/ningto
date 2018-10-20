@@ -1,0 +1,27 @@
+{% extends 'main_layout.html' %}
+{% block title %}泞途 - joke{% endblock %}
+{% block subhead %}<link href="/css/poetry.css" rel="stylesheet">{% endblock %}
+{% block content %}
+
+<h2>中华诗词</h2>
+<p>最全的中华古典文集数据库, 包含5.5万首唐诗、26万首宋诗和2.1万首宋词. 唐宋两朝近1.4万古诗人, 和两宋时期1.5K词人. 数据来源于互联网.</p>
+<div class="centerContainer">
+        <div class="input-group search-group">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">唐诗 <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                    <li><a href="#">宋词</a></li>
+                    <li><a href="#">作者</a></li>
+                    <li><a href="#">词牌名</a></li>
+                    </ul>
+                </div><!-- /btn-group -->
+                <input type="text" class="form-control" aria-label="...">
+            </div><!-- /input-group -->
+</div>
+
+{% endblock %}
+{% block extend_script %}
+<script>
+
+</script>
+{% endblock %}
