@@ -43,7 +43,9 @@ $('#searchInput').on('keydown', function(event) {
       success: function(result) {
         if (Array.isArray(result)) {
             console.log(result)
-        }
+        } else {
+			console.log(result)
+		}
       }
     })
   }
