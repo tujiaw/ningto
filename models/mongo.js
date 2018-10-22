@@ -5,8 +5,18 @@ mongoose.Promise = require('bluebird')
 // DeprecationWarning: Mongoose: mpromise (mongoose's default promise library) is deprecated
 var moment = require('moment');
 var objectIdToTimestamp = require('objectid-to-timestamp');
-
 var renderer = new marked.Renderer();
+
+const option = {
+  reconnectTries: Number.MAX_VALUE,
+  reconnectInterval: 3000,
+  useNewUrlParser: true,
+  // user: 'tujiaw',
+  // pass: 'fighting'
+}
+
+mongoose.blogConn = mongoose.createConnection(config.blogUri, option);
+mongoose.poetryConn = mongoose.createConnection(config.poetryUri, option);
 
 const tocObj = { 
   add: function(text, level) {
@@ -74,15 +84,6 @@ marked.setOptions({
       return require("highlight.js").highlightAuto(code).value;
     },
 });
-
-const option = {
-  reconnectTries: Number.MAX_VALUE,
-  reconnectInterval: 3000,
-  useNewUrlParser: true,
-  // user: 'tujiaw',
-  // pass: 'fighting'
-}
-mongoose.connect(config.mongodb, option);
 
 const PROFILE_COUNT = 150;
 module.exports.mongoose = mongoose;

@@ -36,4 +36,4 @@ SearchKeySchema.statics.updateTags = function(tags) {
   return this.updateOne({ prefix: TagPrefix }, { $set: {key: tags}}, { upsert: true}).exec();
 }
 
-module.exports = mongoose.model('SearchKey', SearchKeySchema);
+module.exports = mongoose.blogConn.model('SearchKey', SearchKeySchema);

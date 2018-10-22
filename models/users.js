@@ -25,4 +25,4 @@ UsersSchema.statics.getUserByToken = function(token) {
   return this.findOne({ token: token }).exec();
 }
 
-module.exports = mongoose.model('Users', UsersSchema);
+module.exports = mongoose.blogConn.model('Users', UsersSchema);

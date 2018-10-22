@@ -8,27 +8,51 @@ const {
     LunyuModel,
     ShijingModel
 } = require('../models/poetry');
+const Crontab = require('./crontab')
+const { getRandom } = require('../utils/util')
 
-module.exports.main = async function(ctx) {
-    ctx.body = await ctx.render('poetry');
+async function randomPeotTang() {
+    const maxCount = Crontab.poetryCount().peotTangsCount
+    return await PoetTangModel.getFromIndex(getRandom(0, maxCount))
 }
 
-module.exports.getAuthor = async function(ctx, name) {
-    if (name.length) {
+module.exports.main = async function(ctx) {
+    try {
+        ctx.body = await ctx.render('poetry', Crontab.poetryCount());
+    } catch (err) {
+        ctx.throw(err)
+    }
+}
+
+module.exports.search = async function(ctx) {
+    const type = ctx.query.type || ''
+    const key = ctx.query.key || ''
+    if (type.length && key.length) {
         let result = []
         try {
-            const a = await AuthorSongModel.getByName(name)
-            result = result.concat(Array.isArray(a) ? a : [])
-            const b = await AuthorsSongModel.getByName(name)
-            result = result.concat(Array.isArray(b) ? b : [])
-            const c = await AuthorsTangModel.getByName(name)
-            result = result.concat(Array.isArray(c) ? c : [])
+            if (type === '作者') {
+                const a = await AuthorSongModel.getByAuthor(key)
+                result = result.concat(Array.isArray(a) ? a : [])
+                const b = await AuthorsSongModel.getByAuthor(key)
+                result = result.concat(Array.isArray(b) ? b : [])
+                const c = await AuthorsTangModel.getByAuthor(key)
+                result = result.concat(Array.isArray(c) ? c : [])
+            }
         } catch (err) {
-            ctx.throw(err)
+            result = err
         }
         ctx.body = result
     } else {
-        ctx.throw('name is error')
+        ctx.throw('type or key is error')
+    }
+}
+
+module.exports.randomTang = async function(ctx) {
+    try {
+        const maxCount = Crontab.poetryCount().peotTangsCount
+        ctx.body = await PoetTangModel.getFromIndex(getRandom(0, maxCount))
+    } catch (err) {
+        ctx.throw(err)
     }
 }
 

@@ -36,5 +36,5 @@ TextJokeSchema.statics.get = function(page, count) {
 }
 
 module.exports = {
-    TextJoke: mongoose.model('TextJoke', TextJokeSchema)
+    TextJoke: mongoose.blogConn.model('TextJoke', TextJokeSchema)
 }

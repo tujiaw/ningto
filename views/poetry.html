@@ -4,24 +4,49 @@
 {% block content %}
 
 <h2>中华诗词</h2>
-<p>最全的中华古典文集数据库, 包含5.5万首唐诗、26万首宋诗和2.1万首宋词. 唐宋两朝近1.4万古诗人, 和两宋时期1.5K词人. 数据来源于互联网.</p>
+<p>最全的中华古典文集数据库, 包含{{peotTangsCount}}首唐诗、{{peotSongsCount}}首宋诗和{{ciSongsCount}}万首宋词。 唐宋两朝近{{shiAuthorsCount}}位古诗人, 和两宋时期{{ciAuthorsCount}}位词人。以及论语{{lunyuCount}}首，诗经{{shijingCount}}首。数据来源于互联网.</p>
 <div class="centerContainer">
         <div class="input-group search-group">
                 <div class="input-group-btn">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">唐诗 <span class="caret"></span></button>
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span id="selectedType">唐诗</span> <span class="caret"></span>
+                    </button>
                     <ul class="dropdown-menu">
+                    <li><a href="#">唐诗</a></li>
                     <li><a href="#">宋词</a></li>
                     <li><a href="#">作者</a></li>
                     <li><a href="#">词牌名</a></li>
                     </ul>
                 </div><!-- /btn-group -->
-                <input type="text" class="form-control" aria-label="...">
+                <input type="text" id="searchInput" class="form-control" aria-label="...">
             </div><!-- /input-group -->
 </div>
 
 {% endblock %}
 {% block extend_script %}
 <script>
-
+let prevSearchKey = ''
+$('ul>li>a').on('click', function(e) {
+    $('#selectedType').text($(this).text());
+})
+$('#searchInput').on('keydown', function(event) {
+  if (event.keyCode == '13') {
+    const type = $('#selectedType').text();
+    const key = $(this).val().trim()
+    if (prevSearchKey === key || !type.length) {
+        return;
+    }
+    
+    $.ajax({
+      type: 'GET',
+      url: `/poetry/search?type=${type}&key=${key}`,
+      success: function(result) {
+        if (Array.isArray(result)) {
+            console.log(result)
+        }
+      }
+    })
+  }
+})
 </script>
 {% endblock %}

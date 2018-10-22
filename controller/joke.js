@@ -1,6 +1,7 @@
 const { TextJoke } = require('../models/joke')
 const Crontab = require('./crontab')
 const { getTextJoke } = require('../utils/showapi')
+const { getRandom } = require('../utils/util')
 
 const joke = {
   saveTextJoke: async function(obj) {
@@ -22,11 +23,6 @@ const joke = {
     }
   },
   textJoke: async function(ctx) {
-    const getRandom = (x, y) => {
-      let a = y - x + 1;
-      return a > 0 ? Math.floor(Math.random() * a + x) : 0;
-    }
-
     try {
       const page = ctx.query.page || 1
       const count = ctx.query.count || 20

@@ -18,4 +18,4 @@ CommentsSchema.statics.deleteById = function(commentId) {
     return this.remove({ _id: commentId }).exec()
 }
 
-module.exports = mongoose.model('Comments', CommentsSchema);
+module.exports = mongoose.blogConn.model('Comments', CommentsSchema);

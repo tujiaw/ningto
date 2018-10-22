@@ -28,5 +28,5 @@ LaifuJokeSchema.statics.get = function (page, count) {
 }
 
 module.exports = {
-  LaifuJoke: mongoose.model('LaifuJoke', LaifuJokeSchema)
+  LaifuJoke: mongoose.blogConn.model('LaifuJoke', LaifuJokeSchema)
 }

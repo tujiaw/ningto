@@ -21,3 +21,7 @@ module.exports.asyncSleep = async function(ms) {
     await impl(ms);
 }
 
+module.exports.getRandom = (x, y) => {
+    let a = y - x + 1;
+    return a > 0 ? Math.floor(Math.random() * a + x) : 0;
+}

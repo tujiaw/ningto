@@ -85,4 +85,4 @@ PostSchema.statics.getNextPostById = function(postId) {
   return this.find({ _id: { $lt : postId }}).sort({ _id: -1 }).limit(1).exec();
 }
 
-module.exports = mongoose.model('Posts', PostSchema);
+module.exports = mongoose.blogConn.model('Posts', PostSchema);

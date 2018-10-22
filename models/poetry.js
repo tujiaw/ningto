@@ -36,18 +36,39 @@ const ShijingSchema = new mongoose.Schema({
     content: { type: [String] }
 })
 
-AuthorSongSchema.statics.getByName = function(name) {
-    return this.find({ name: new RegExp(name, 'i') }).limit(20).exec()
+AuthorSongSchema.statics.getByAuthor = function(author) {
+    return this.find({ name: new RegExp('' + author) }).limit(20).exec()
 }
-AuthorsSchema.statics.getByName = function(name) {
-    return this.find({ name: new RegExp(name, 'i') }).limit(20).exec()
+AuthorSongSchema.statics.count = function() {
+    return this.countDocuments().exec();
+}
+CiSongSchema.statics.count = function() {
+    return this.countDocuments().exec();
+}
+AuthorsSchema.statics.getByAuthor = function(author) {
+    return this.find({ name: new RegExp('' + author) }).limit(20).exec()
+}
+AuthorsSchema.statics.count = function() {
+    return this.countDocuments().exec();
+}
+PoetSchema.statics.count = function() {
+    return this.countDocuments().exec();
+}
+PoetSchema.statics.getFromIndex = function(index) {
+    return this.find({}).skip(index).limit(1).exec();
+}
+LunyuSchema.statics.count = function() {
+    return this.countDocuments().exec();
+}
+ShijingSchema.statics.count = function() {
+    return this.countDocuments().exec();
 }
 
-module.exports.AuthorSongModel = mongoose.model('author_song', AuthorSongSchema);
-module.exports.CiSongModel = mongoose.model('ci_song', CiSongSchema);
-module.exports.AuthorsSongModel = mongoose.model('authors_song', AuthorsSchema);
-module.exports.AuthorsTangModel = mongoose.model('authors_tang', AuthorsSchema);
-module.exports.PoetSongModel = mongoose.model('peot_song', PoetSchema);
-module.exports.PoetTangModel = mongoose.model('peot_tang', PoetSchema);
-module.exports.LunyuModel = mongoose.model('lunyu', LunyuSchema);
-module.exports.ShijingModel = mongoose.model('shijing', ShijingSchema);
+module.exports.AuthorSongModel = mongoose.poetryConn.model('author_song', AuthorSongSchema);
+module.exports.CiSongModel = mongoose.poetryConn.model('ci_song', CiSongSchema);
+module.exports.AuthorsSongModel = mongoose.poetryConn.model('authors_song', AuthorsSchema);
+module.exports.AuthorsTangModel = mongoose.poetryConn.model('authors_tang', AuthorsSchema);
+module.exports.PoetSongModel = mongoose.poetryConn.model('peot_song', PoetSchema);
+module.exports.PoetTangModel = mongoose.poetryConn.model('peot_tang', PoetSchema);
+module.exports.LunyuModel = mongoose.poetryConn.model('lunyu', LunyuSchema);
+module.exports.ShijingModel = mongoose.poetryConn.model('shijing', ShijingSchema);

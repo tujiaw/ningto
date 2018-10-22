@@ -13,7 +13,8 @@ module.exports = {
         'Web', 'Tools', 'Bug', 'Life', 'Tips', 'Design', 'Javascript', 'MongoDB', 
         'React', 'Product'],
   //mongodb: 'mongodb\://localhost:27017/nodeblog', // :一定要转义
-  mongodb: 'mongodb\://127.0.0.1:27017/nodeblog',
+  blogUri: 'mongodb\://127.0.0.1:27017/nodeblog',
+  poetryUri: 'mongodb\://127.0.0.1:27017/chinese-poetry',
   qiniu: {
     bucket: 'myimages',
     ak: 'C1NMwcgz9IAjZVnpYF5LvuCJ6HV5MyJek68QhPfz',
