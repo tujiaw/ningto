@@ -46,7 +46,20 @@ app.listen(config.port, () => {
 // 内存泄漏检测
 const memwatch = require('memwatch-next');
 const heapdump = require('heapdump');
+let hd;
 memwatch.on('leak', function(info) { 
+  const mailInfo = {
+    time: new Date().toLocaleTimeString(),
+    leak: info
+  }
+
+  if (!hd) {
+    hd = new memwatch.HeapDiff();
+  } else {
+    mailInfo.diff = hd.end();
+    hd = null;
+  }
+
+  sendToSumscope('leak', mailInfo);
   heapdump.writeSnapshot('./' + Date.now() + '.heapsnapshot');
-  sendToSumscope('leak', info);
 });

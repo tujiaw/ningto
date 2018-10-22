@@ -22,6 +22,7 @@ function crontab() {
   setInterval(() => {
     const hours = new Date().getHours();
     if (hours === 0) {
+      console.log('start 0 hours work')
       initData();
 
       Util.internalHandle(2, 5, (index) => {

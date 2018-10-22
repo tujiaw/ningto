@@ -14,7 +14,7 @@ module.exports = {
       from: 'tujiaw@163.com',
       to: 'jiawei.tu@sumscope.com',
       subject,
-      text: typeof(text) === 'string' ? text : JSON.stringify(text)
+      text: typeof(text) === 'string' ? text : JSON.stringify(text, null, 2)
     };
     transporter.sendMail(options, function (err, info) {
       if (err) {
