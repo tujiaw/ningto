@@ -80,5 +80,6 @@ module.exports = function(app, route) {
   app.use(route.get('/captcha', Extends.captcha))
   app.use(route.get('/textjoke', Joke.textJoke))
   app.use(route.get('/poetry', Poetry.main))
+  app.use(route.get('/poetry/author:name', Poetry.getAuthor))
 }
 

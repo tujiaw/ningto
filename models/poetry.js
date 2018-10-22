@@ -36,6 +36,13 @@ const ShijingSchema = new mongoose.Schema({
     content: { type: [String] }
 })
 
+AuthorSongSchema.statics.getByName = function(name) {
+    return this.find({ name: new RegExp(name, 'i') }).limit(20).exec()
+}
+AuthorsSchema.statics.getByName = function(name) {
+    return this.find({ name: new RegExp(name, 'i') }).limit(20).exec()
+}
+
 module.exports.AuthorSongModel = mongoose.model('author_song', AuthorSongSchema);
 module.exports.CiSongModel = mongoose.model('ci_song', CiSongSchema);
 module.exports.AuthorsSongModel = mongoose.model('authors_song', AuthorsSchema);
