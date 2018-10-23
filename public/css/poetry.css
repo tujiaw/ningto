@@ -1,0 +1,26 @@
+#searchResult {
+    display: flex;
+    justify-content: center;
+    flex: 1;
+    flex-direction: column;
+}
+
+.listItem {
+    text-align: center;
+}
+
+.listItem h4 {
+    font-weight: bold;
+}
+
+.listItem ul {
+    list-style: none;
+    margin-left: 0px;
+    padding-left: 0px;
+}
+
+.listItem li {
+    list-style: none;
+    margin-left: 0px;
+    padding-left: 0px;
+}

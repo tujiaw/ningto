@@ -1,6 +1,47 @@
 {% extends 'main_layout.html' %}
 {% block title %}泞途 - joke{% endblock %}
-{% block subhead %}<link href="/css/poetry.css" rel="stylesheet">{% endblock %}
+{% block subhead %}
+<link href="/css/poetry.css" rel="stylesheet">
+<script id="shici_template" type="text/template">
+  <% for (const item of list) { %>
+    <div class="listItem">
+      <% const title = item.title || item.rhythmic %>
+      <h4><%=title %></h4>
+      <span><%=item.author %></span>
+      <ul>
+        <% for (const row of item.paragraphs) { %>
+          <li><%=row %></li>
+        <% } %>
+      </ul>
+    </div>
+  <% } %>
+</script>
+<script id="lunyu_template" type="text/template">
+  <% for (const item of list) { %>
+    <div class="listItem">
+      <h4><%=item.chapter %></h4>
+      <ul>
+        <% for (const row of item.paragraphs) { %>
+          <li><%=row %></li>
+        <% } %>
+      </ul>
+    </div>
+  <% } %>
+</script>
+<script id="shijing_template" type="text/template">
+  <% for (const item of list) { %>
+    <div class="listItem">
+      <h4><%=item.title %></h4>
+      <span><%=item.chapter %>▪<%=item.section %></span>
+      <ul>
+        <% for (const row of item.content) { %>
+          <li><%=row %></li>
+        <% } %>
+      </ul>
+    </div>
+  <% } %>
+</script>
+{% endblock %}
 {% block content %}
 <div>
   <h2>中华诗词</h2>
@@ -8,42 +49,54 @@
   <div class="input-group search-group">
     <div class="input-group-btn">
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <span id="selectedType">唐诗</span> <span class="caret"></span>
+        <span id="selectedType" type="tangshi" template="shi">唐诗</span> <span class="caret"></span>
       </button>
       <ul class="dropdown-menu">
-        <li><a href="#">唐诗</a></li>
-        <li><a href="#">宋词</a></li>
-        <li><a href="#">作者</a></li>
-        <li><a href="#">词牌名</a></li>
+        <li><a href="#" type="tangshi" template="shici">唐诗</a></li>
+        <li><a href="#" type="songshi" template="shici">宋诗</a></li>
+        <li><a href="#" type="songci" template="shici">宋词</a></li>
+        <li><a href="#" type="lunyu" template="lunyu">论语</a></li>
+        <li><a href="#" type="shijing" template="shijing">诗经</a></li>
+        <li><a href="#" type="zuozhe" template="zuozhe">作者</a></li>
       </ul>
     </div><!-- /btn-group -->
     <input type="text" id="searchInput" class="form-control" aria-label="...">
   </div><!-- /input-group -->
+  <div id="searchResult">
+
+  </div>
 </div>
 {% endblock %}
 {% block extend_script %}
+<script src="/js/thirdparty/ejs.min.js"></script>
 <script>
 let prevSearchKey = ''
 $('ul>li>a').on('click', function(e) {
     $('#selectedType').text($(this).text());
+    $('#selectedType').attr('type', $(this).attr('type'))
+    $('#selectedType').attr('template', $(this).attr('template'))
 })
 $('#searchInput').on('keydown', function(event) {
   if (event.keyCode == '13') {
-    const type = $('#selectedType').text();
+    const type = $('#selectedType').attr('type');
+    const template = $('#selectedType').attr('template');
     const key = $(this).val().trim()
-    if (prevSearchKey === key || !type.length) {
-        return;
+    if (prevSearchKey === key || !type.length || !template) {
+      console.error(`参数错误,type:${type}, template:${template}, key:${key}`)
+      return;
     }
     
     $.ajax({
       type: 'GET',
       url: `/poetry/search?type=${type}&key=${key}`,
       success: function(result) {
+        let html = ''
         if (Array.isArray(result)) {
-            console.log(result)
+          html = ejs.render($(`#${template}_template`).html(), { list: result});
         } else {
-			console.log(result)
-		}
+          html = result
+        }
+        $('#searchResult').html(html)
       }
     })
   }

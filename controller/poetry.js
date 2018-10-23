@@ -30,17 +30,28 @@ module.exports.search = async function(ctx) {
     if (type.length && key.length) {
         let result = []
         try {
-            if (type === '作者') {
+            if (type === 'zuozhe') {
                 const a = await AuthorSongModel.getByAuthor(key)
                 result = result.concat(Array.isArray(a) ? a : [])
                 const b = await AuthorsSongModel.getByAuthor(key)
                 result = result.concat(Array.isArray(b) ? b : [])
                 const c = await AuthorsTangModel.getByAuthor(key)
                 result = result.concat(Array.isArray(c) ? c : [])
+            } else if (type === 'tangshi') {
+                result = await PoetTangModel.search(key)
+            } else if (type === 'songshi') {
+                result = await PoetSongModel.search(key)
+            } else if (type === 'songci') {
+                result = await CiSongModel.search(key)
+            } else if (type === 'lunyu') {
+                result = await LunyuModel.search(key)
+            } else if (type === 'shijing') {
+                result = await ShijingModel.search(key)
             }
         } catch (err) {
             result = err
         }
+        console.log(result)
         ctx.body = result
     } else {
         ctx.throw('type or key is error')
