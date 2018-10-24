@@ -41,6 +41,15 @@
     </div>
   <% } %>
 </script>
+<script id="zuozhe_template" type="text/template">
+  <% for (const item of list) { %>
+    <div class="">
+      <h4><%=item.name %></h4>
+      <% const desc = item.desc || short_description %>
+      <p><%=desc %></p>
+    </div>
+  <% } %>
+</script>
 {% endblock %}
 {% block content %}
 <div>
@@ -70,7 +79,7 @@
 {% block extend_script %}
 <script src="/js/thirdparty/ejs.min.js"></script>
 <script>
-let prevSearchKey = ''
+let prevSearch;
 $('ul>li>a').on('click', function(e) {
     $('#selectedType').text($(this).text());
     $('#selectedType').attr('type', $(this).attr('type'))
@@ -78,14 +87,15 @@ $('ul>li>a').on('click', function(e) {
 })
 $('#searchInput').on('keydown', function(event) {
   if (event.keyCode == '13') {
-    const type = $('#selectedType').attr('type');
-    const template = $('#selectedType').attr('template');
+    const type = $('#selectedType').attr('type').trim();
+    const template = $('#selectedType').attr('template').trim();
     const key = $(this).val().trim()
-    if (prevSearchKey === key || !type.length || !template) {
+    if (prevSearch === (type + key) || !type.length || !template) {
       console.error(`参数错误,type:${type}, template:${template}, key:${key}`)
       return;
     }
     
+    prevSearch = type + key;
     $.ajax({
       type: 'GET',
       url: `/poetry/search?type=${type}&key=${key}`,
