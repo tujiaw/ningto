@@ -16,7 +16,7 @@ const option = {
 }
 
 mongoose.blogConn = mongoose.createConnection(config.blogUri, option);
-mongoose.poetryConn = mongoose.createConnection(config.poetryUri, option);
+//mongoose.poetryConn = mongoose.createConnection(config.poetryUri, option);
 
 const tocObj = { 
   add: function(text, level) {
