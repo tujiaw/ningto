@@ -8,7 +8,6 @@ const Comments = require('../controller/comments')
 const Joke = require('../controller/joke')
 const Laifu = require('../controller/laifu')
 const Crontab = require('../controller/crontab')
-const Poetry = require('../controller/poetry')
 
 module.exports = function(app, route) {
   app.use(async (ctx, next) => {
@@ -79,8 +78,5 @@ module.exports = function(app, route) {
   app.use(route.get('/eval/:evalEncode', Extends.eval))
   app.use(route.get('/captcha', Extends.captcha))
   app.use(route.get('/textjoke', Joke.textJoke))
-  // app.use(route.get('/poetry', Poetry.main))
-  // app.use(route.get('/poetry/search', Poetry.search))
-  // app.use(route.get('/poetry/random/tang', Poetry.randomTang))
 }
 
