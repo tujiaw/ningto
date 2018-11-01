@@ -61,5 +61,5 @@ memwatch.on('leak', function(info) {
   }
 
   sendToSumscope('leak', mailInfo);
-  heapdump.writeSnapshot('./' + Date.now() + '.heapsnapshot');
+  heapdump.writeSnapshot('./heapsnapshot/' + Date.now() + '.heapsnapshot');
 });
