@@ -38,7 +38,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "node app.js",
-    "start": "pm2 start ./app.js --name 'ningto' --merge-logs --log-date-format='YYYY-MM-DD HH:mm Z' "
+    "start": "pm2 start ./app.js --name 'ningto' --merge-logs --log-date-format=\"YYYY-MM-DD HH:mm Z\" "
   },
   "author": "tujiaw",
   "license": "ISC",
