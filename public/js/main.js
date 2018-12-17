@@ -44,7 +44,7 @@ $(document).ready(function() {
   })
 
   if (!(isMobile.Android() || isMobile.IOS())) {
-    // $('.right-bottom-panel').show();
+    $('.right-bottom-panel').show();
     var updatePercent = function() {
       let percent = $(window).scrollTop() / ($(document).height() - $(window).height());
       percent = parseInt(percent * 100);
