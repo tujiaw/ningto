@@ -2,21 +2,26 @@ const xss = require("xss");
 const CommentsModel = require('../models/comments');
 var MongoHelp = require('../models/mongo').mongoHelp;
 
+const kMaxComments = 100;
 module.exports.add = async function(ctx) {
     let result = '';
     try {
         let data = JSON.parse(ctx.request.body);
         if (data.postId.length && data.name.length && data.content.length) {
+          if (data.name.length > 128 || data.content.length > 2048) {
+            result = '名字或内容太长！'
+          } else {
             const count = await CommentsModel.countByPostId(data.postId)
-            if (count >= 1000) {
+            if (count >= kMaxComments) {
                 result = '评论过多禁止发表新的评论'
             } else {
                 data.name = xss(data.name)
                 data.content = xss(data.content)
                 await new CommentsModel(data).save()
             }
+          }
         } else {
-            result = '参数错误'
+            result = '参数错误！'
         }
     } catch (err) {
         result = JSON.stringify(err, null, 2)
@@ -42,7 +47,7 @@ module.exports.reqAdd = async function(ctx) {
     if (data.postId.length && data.name.length && data.content.length) {
         try {
             const count = await CommentsModel.countByPostId(data.postId)
-            if (count >= 1000) {
+            if (count >= kMaxComments) {
                 ctx.body = '评论过多禁止发表新的评论'
                 return
             } else {
