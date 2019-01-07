@@ -11,8 +11,17 @@ const serve = require('koa-static')
 const Koa = require('koa')
 const cors = require('koa2-cors')
 const { sendToSumscope } = require('./utils/sendmail')
+const fs = require('fs')
+
+const log4js = require('log4js')
+log4js.configure('./config/log4js.json')
+const httplog = log4js.getLogger('http')
+const applog = log4js.getLogger('app')
+
 const app = new Koa()
 app.use(cors())
+
+if (!fs.existsSync('./log')) { fs.mkdirSync('./log') }
 
 const SessionConfig = {
   key: 'ningto:sess', /** (string) cookie key (default is koa:sess) */
@@ -27,7 +36,9 @@ const SessionConfig = {
   renew: false, /** (boolean) renew session when session is nearly expired, so we can always keep user logged in. (default is false)*/
 }
 app.keys = ['7BBF9DD3-4C79-4D6A-8220-25605F87E8FA']
-app.use(logger())
+app.use(logger((str, args) => {
+  httplog.debug(str)
+}))
 app.use(serve(path.join(__dirname, 'public')))
 app.use(session(SessionConfig, app))
 app.use(koaBody({ multipart: true }))
@@ -40,26 +51,19 @@ app.context.render = co.wrap(render({
 }))
 require('./routes/routes')(app, route)
 app.listen(config.port, () => {
-  console.log('listening on port ' + config.port)
+  log4js.getLogger('app').debug('listening on port ' + config.port)
 })
 
 // 内存泄漏检测
 const memwatch = require('memwatch-next');
 const heapdump = require('heapdump');
-let hd;
 memwatch.on('leak', function(info) { 
   const mailInfo = {
     time: new Date().toLocaleTimeString(),
     leak: info
   }
 
-  if (!hd) {
-    hd = new memwatch.HeapDiff();
-  } else {
-    mailInfo.diff = hd.end();
-    hd = null;
-  }
-
+  applog.warn(mainInfo)
   sendToSumscope('leak', mailInfo);
   heapdump.writeSnapshot('./heapsnapshot/' + Date.now() + '.heapsnapshot');
 });

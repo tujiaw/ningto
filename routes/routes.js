@@ -8,6 +8,7 @@ const Comments = require('../controller/comments')
 const Joke = require('../controller/joke')
 const Laifu = require('../controller/laifu')
 const Crontab = require('../controller/crontab')
+const log4js = require('log4js')
 
 module.exports = function(app, route) {
   app.use(async (ctx, next) => {

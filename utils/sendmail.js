@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const log = require('log4js').getLogger('app')
 
 const transporter = nodemailer.createTransport({
   service: '163',
@@ -18,9 +19,9 @@ module.exports = {
     };
     transporter.sendMail(options, function (err, info) {
       if (err) {
-        console.log(err);
+        log.debug(err);
       } else {
-        console.log('send success', info)
+        log.debug('send success', info)
       }
     });
   }

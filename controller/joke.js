@@ -2,12 +2,13 @@ const { TextJoke } = require('../models/joke')
 const Crontab = require('./crontab')
 const { getTextJoke } = require('../utils/showapi')
 const { getRandom } = require('../utils/util')
+const log = require('log4js').getLogger('app')
 
 const joke = {
   saveTextJoke: async function(obj) {
     const f = await TextJoke.getById(obj.id);
     if (f.length) {
-      console.log('is exist, id:' + obj.id)
+      log.debug('is exist, id:' + obj.id)
     } else {
       await new TextJoke(obj).save();
     }

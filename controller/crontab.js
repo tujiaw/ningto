@@ -2,6 +2,7 @@ const { TextJoke } = require('../models/joke')
 const { sendToSumscope } = require('../utils/sendmail')
 const Util = require('../utils/util')
 const axios = require('axios')
+const log = require('log4js').getLogger('app')
 
 function crontab() {
   let hitToday = 0;
@@ -9,14 +10,14 @@ function crontab() {
 
   const initData = async () => {
     try {
-      console.log('initdata start')
+      log.debug('initdata start')
       hitToday = 0;
       textJokeTotal = await TextJoke.countDocuments();
       textJokeTotal = textJokeTotal || 10000;
-      console.log(`initData, hitToday:${hitToday}, textJokeTotal:${textJokeTotal}`);
-      console.log('initdata finished')
+      log.debug(`initData, hitToday:${hitToday}, textJokeTotal:${textJokeTotal}`);
+      log.debug('initdata finished')
     } catch (err) {
-      console.log('initdata error', err);
+      log.debug('initdata error', err);
     }
   }
 
@@ -24,7 +25,7 @@ function crontab() {
   setInterval(() => {
     const hours = new Date().getHours();
     if (hours === 0) {
-      console.log('start 0 hours work')
+      log.debug('start 0 hours work')
       initData();
 
       Util.internalHandle(2, 5, (index) => {

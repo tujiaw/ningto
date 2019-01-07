@@ -7,6 +7,7 @@ var MongoHelp = require('../models/mongo').mongoHelp;
 var config = require('../config');
 var moment = require('moment');
 var objectIdToTimestamp = require('objectid-to-timestamp');
+const log = require('log4js').getLogger('app')
 
 const PAGE_COUNT = config.pageCount;
 const SEARCH_KEY_COUNT = config.searchKeyCount;
@@ -192,7 +193,7 @@ module.exports.list = async function(ctx) {
 }
 
 module.exports.title = async function(ctx) {
-  console.log(ctx.query)
+  log.debug(ctx.query)
   const type = ctx.query.type || ''
   const keyword = ctx.query.keyword || ''
   if (type.length === 0 || keyword.length === 0) {
@@ -304,7 +305,7 @@ module.exports.reqAdd = async function(ctx) {
   const user = ctx.session.user
   let post = ctx.request.body
   const tags = post.tags.split(';')
-  console.log(post);
+  log.debug(post);
   if (!post.title || !post.content) {
     ctx.body = await ctx.render('title or content is empty')
     return
@@ -384,7 +385,7 @@ module.exports.remove = async function(ctx, id) {
   }
 
   try {
-    console.log(`remove author:${ctx.session.user._id}, id:${id}`)
+    log.debug(`remove author:${ctx.session.user._id}, id:${id}`)
     await PostsModel.delPostById(id, ctx.session.user._id)
     ctx.redirect('/')
   } catch (err) {

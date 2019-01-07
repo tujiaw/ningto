@@ -1,6 +1,7 @@
 const xss = require("xss");
 const CommentsModel = require('../models/comments');
 var MongoHelp = require('../models/mongo').mongoHelp;
+const log = require('log4js').getLogger('app')
 
 const kMaxComments = 100;
 module.exports.add = async function(ctx) {
@@ -56,7 +57,7 @@ module.exports.reqAdd = async function(ctx) {
                 await new CommentsModel(data).save()
             }
         } catch (err) {
-            console.error(err)
+          log.error(err)
         }
     }
     if (data.postId) {

@@ -7,20 +7,21 @@ var config = require('../config');
 var Base64 = require('js-base64').Base64;
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
+const log = require('log4js').getLogger('app')
 
 module.exports.signin = async function(ctx) {
-  console.log('-------------signin---------------')
+  log.debug('-------------signin---------------')
   ctx.body = await ctx.render('signin')
 }
 
 module.exports.githubLogin = async function(ctx) {
-  console.log('-------------github signin--------------')
+  log.debug('-------------github signin--------------')
   const user = ctx.session.user
   if (user) {
     const userinfo = await UsersModel.getBaseUserById(user._id)
     if (userinfo) {
       ctx.session.user = userinfo
-      console.log(userinfo)
+      log.debug(userinfo)
       ctx.redirect("back")
       return
     }
@@ -30,7 +31,7 @@ module.exports.githubLogin = async function(ctx) {
 
 module.exports.apiGithubLogin = async function(ctx) {
   const token = ctx.query.token || ''
-  console.log('api github login token', token)
+  log.debug('api github login token', token)
   if (token.length) {
     const userinfo = await UsersModel.getUserByToken(token)
     if (userinfo) {
@@ -50,7 +51,7 @@ module.exports.githubRelogin = async function(ctx) {
 }
 
 module.exports.signout = async function(ctx) {
-  console.log('-------------signout---------------')
+  log.debug('-------------signout---------------')
   if (ctx.session.user) {
     ctx.session = null
   }
@@ -64,12 +65,12 @@ module.exports.reqSignin = async function(ctx) {
   } else {
     let result = await UsersModel.getUserByProviderLogin('ningto', req.username)
     if (!result) {
-      console.log('user not find')
+      log.debug('user not find')
       ctx.redirect('back')
       return
     }
     if (sha1(req.password) !== result.password) {
-      console.log('password error')
+      log.debug('password error')
       ctx.redirect('back')
       return
     }
@@ -94,7 +95,7 @@ module.exports.githubOAuthCallbackComment = async function(ctx, next) {
     return;
   }
 
-  console.log('--------access token---------')
+  log.debug('--------access token---------')
   // 获取github token
   const payload = {
       client_id: config.github.client_id,
@@ -111,14 +112,14 @@ module.exports.githubOAuthCallbackComment = async function(ctx, next) {
     body: JSON.stringify(payload)
   })
   access = await access.json()
-  console.log(access)
+  log.debug(access)
   if (!access.access_token) {
     ctx.body = '<span>github access token failed!</span>'  
     return
   }
 
   // 获取github用户信息
-  console.log('------get github user------')
+  log.debug('------get github user------')
   let user = await fetch('https://api.github.com/user?access_token=' + access.access_token, {
     header: {
       'Accept': 'application/json',
@@ -148,7 +149,7 @@ module.exports.githubOAuthCallbackComment = async function(ctx, next) {
       const newUser = resultUserinfo._doc
       newUser.detail_info = null
       ctx.session.user = newUser
-      console.log(ctx.session.user)
+      log.debug(ctx.session.user)
       
       if (req.referrer) {
         ctx.redirect(req.referrer);
@@ -158,7 +159,7 @@ module.exports.githubOAuthCallbackComment = async function(ctx, next) {
       return
     }
   } catch(e) {
-    console.log(e)
+    log.debug(e)
   }
   ctx.body = '<span>save error!</span>'
 }
