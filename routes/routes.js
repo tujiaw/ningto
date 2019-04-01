@@ -73,6 +73,8 @@ module.exports = function(app, route) {
   app.use(route.get('/createpostlist', Extends.createpostlist))
 
   app.use(route.post('/mdfile', Extends.mdfile))
+  app.use(route.get('/html2markdown', Extends.html2markdown))
+  app.use(route.post('/html2markdown', Extends.html2markdown))
 
   app.use(route.get('/github_oauth_callback_comment', User.githubOAuthCallbackComment))
 

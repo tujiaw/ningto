@@ -1,106 +1,70 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="/css/md_viewer.css">
-    <link rel="stylesheet" href="/css/github.css">
-    <link rel="stylesheet" href="/css/github-markdown.min.css">
-    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
-    <title>泊客网 - Markdown预览</title>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-108126205-1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'UA-108126205-1');
-    </script>
-</head>
-<body>
-        <!-- Fixed navbar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="/">泊客网</a>
-          <a class="navbar-brand" href="/mdviewer">Markdown预览</a>
-        </div>
-      </div>
-    </nav>
-    <div class="container">
-      <div id="content">
-          <div id="dropbox">
-            <h1>Drop file here or click to upload</h1>
-            <h3>(The server does not keep a copy)</h3>
-            <h4 id="tips"></h4>
-          </div>
-          <div id="result"></div>
-          <input type="file" id="inputfile" name="file" style="display:none"/> 
-      </div>
-        <footer class="footer navbar-fixed-bottom">
-          <a href="http://www.miitbeian.gov.cn/" target="_blank"><img alt="beian" src="/img/beian_gov_cn.png" style="vertical-align:middle;margin-right:5px;">鄂ICP备17003086号. Copyright © 2016. All Rights Reserved. </a> 
-        </footer>
+{% extends 'md_layout.html' %}
+{% block content %}
+<div id="content">
+    <div id="dropbox">
+        <h1>Drop file here or click to upload</h1>
+        <h3>(The server does not keep a copy)</h3>
+        <h4 id="tips"></h4>
     </div>
+    <div id="result"></div>
+    <input type="file" id="inputfile" name="file" style="display:none"/> 
+</div>
+{% endblock %}
 
-    <script src="https://cdn.jsdelivr.net/jquery/3.2.1/jquery.min.js"></script>
-    <script>
-      var dropbox = document.getElementById("dropbox");    
-      dropbox.addEventListener("click", openfile, false);
-      dropbox.addEventListener("dragenter", dragenter, false);    
-      dropbox.addEventListener("dragover", dragover, false);    
-      dropbox.addEventListener("drop", drop, false);  
+{% block extend_script %}
+<script src="https://cdn.jsdelivr.net/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    var dropbox = document.getElementById("dropbox");    
+    dropbox.addEventListener("click", openfile, false);
+    dropbox.addEventListener("dragenter", dragenter, false);    
+    dropbox.addEventListener("dragover", dragover, false);    
+    dropbox.addEventListener("drop", drop, false);  
 
-      $('#inputfile').change(function() { upload($('#inputfile').get(0).files); })
-      function openfile(e) { $('#inputfile').click(); }
-      function dragenter(e) { e.stopPropagation(); e.preventDefault(); }
-      function dragover(e) { e.stopPropagation(); e.preventDefault(); }
-      function drop(e) { e.stopPropagation(); e.preventDefault(); upload(e.dataTransfer.files); }
+    $('#inputfile').change(function() { upload($('#inputfile').get(0).files); })
+    function openfile(e) { $('#inputfile').click(); }
+    function dragenter(e) { e.stopPropagation(); e.preventDefault(); }
+    function dragover(e) { e.stopPropagation(); e.preventDefault(); }
+    function drop(e) { e.stopPropagation(); e.preventDefault(); upload(e.dataTransfer.files); }
 
-      var tips = $('#tips');
-      function upload(files) {
-        if (files === undefined) {
-          return;
+    var tips = $('#tips');
+    function upload(files) {
+    if (files === undefined) {
+        return;
+    }
+    if (files.length !== 1) {
+        tips.text('Tips:Only one file can be uploaded.');
+        return;
+    }
+
+    var fileObj = files[0];
+    if (fileObj.size > 5 * 1024 * 1024) {
+        tips.text('Tips:No more than 5M.');
+        return;
+    }
+
+    var form = new FormData();
+    form.append("author", "ningto.com");
+    form.append("file", fileObj); // 文件对象
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("post", '/mdfile', true);
+    xhr.onload = function (e) {
+        console.log('over');
+    };
+    xhr.onreadystatechange = function() {
+        $('#dropbox').hide();
+        $('#result').html(xhr.responseText);
+    }
+    xhr.upload.addEventListener("progress", function(evt) {
+        if (evt.lengthComputable) {
+        var percentComplete = Math.round(evt.loaded * 100 / evt.total);
+        console.log(percentComplete);
+        tips.text('Tips:' + percentComplete + '%');
+        } else {
+        tips.text('Tips:upload failed!');
         }
-        if (files.length !== 1) {
-          tips.text('Tips:Only one file can be uploaded.');
-          return;
-        }
-
-        var fileObj = files[0];
-        if (fileObj.size > 5 * 1024 * 1024) {
-          tips.text('Tips:No more than 5M.');
-          return;
-        }
-
-        var FileController = "../mdfile"; // 接收上传文件的后台地址 
-        var form = new FormData();
-        form.append("author", "ningto.com");
-        form.append("file", fileObj); // 文件对象
-
-        var xhr = new XMLHttpRequest();
-        xhr.open("post", FileController, true);
-        xhr.onload = function (e) {
-            console.log('over');
-        };
-        xhr.onreadystatechange = function() {
-          $('#dropbox').hide();
-          $('#result').html(xhr.responseText);
-        }
-        xhr.upload.addEventListener("progress", function(evt) {
-          if (evt.lengthComputable) {
-            var percentComplete = Math.round(evt.loaded * 100 / evt.total);
-            console.log(percentComplete);
-            tips.text('Tips:' + percentComplete + '%');
-          } else {
-            tips.text('Tips:upload failed!');
-          }
-        }, false);
-        xhr.send(form);
-      }
-    </script>
-</body>
-</html>
+    }, false);
+    xhr.send(form);
+    }
+</script>
+{% endblock %}

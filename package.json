@@ -38,7 +38,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "node app.js",
+    "test": "nodemon app.js",
     "start": "pm2 start ./app.js --max-memory-restart 300M --name 'ningto' "
   },
   "author": "tujiaw",

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/md_viewer.css">
+    <link rel="stylesheet" href="/css/github.css">
+    <link rel="stylesheet" href="/css/github-markdown.min.css">
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
+    <title>泊客网 - Markdown预览</title>
+    {% block subhead %}{% endblock %}
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-108126205-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-108126205-1');
+    </script>
+</head>
+<body>
+        <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">泊客网</a>
+          <a class="navbar-brand" href="/mdviewer">Markdown预览</a>
+          <a class="navbar-brand" href="/html2markdown">HTML转Markdown</a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="active"><a href="#">Top <span class="sr-only">(current)</span></a></li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container">
+        {% block content %}
+        <p>Missing content!</p>
+        {% endblock %}
+        <footer class="footer navbar-fixed-bottom">
+          <a href="http://www.miitbeian.gov.cn/" target="_blank"><img alt="beian" src="/img/beian_gov_cn.png" style="vertical-align:middle;margin-right:5px;">鄂ICP备17003086号. Copyright © 2016. All Rights Reserved. </a> 
+        </footer>
+    </div>
+    {% block extend_script %}{% endblock %}
+</body>
+</html>

@@ -86,9 +86,22 @@ module.exports.mdfile = async function(ctx, next) {
     } else {
         return await next();
     }
+  } else if (ctx.request.body.fields.md_text) {
+    const text = ctx.request.body.fields.md_text
+    ctx.body = marked(text)
   } else {
     return await next();
   }
+}
+
+module.exports.html2markdown = async function(ctx, next) {
+    if ('GET' === ctx.method) {
+        ctx.body = await ctx.render('html2md');
+    } else if ('POST' === ctx.method) {
+        ctx.body = 'post'
+    } else {
+        return await next();
+    }
 }
 
 module.exports.createpostlist = async function(ctx, next) {
