@@ -494,6 +494,10 @@ module.exports.test = async function(ctx) {
                 title: newTitle,
                 type: newType
             })
+        } else {
+            await PostsModel.updatePostById(post._id, user._id, {
+                type: newType
+            })
         }
     })
 }
