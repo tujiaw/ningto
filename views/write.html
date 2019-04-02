@@ -11,16 +11,29 @@
         {% set edit_title=post.title %}
         {% set edit_content=post.content %}
         {% set edit_tags=post.tags.join(';') %}
+        {% set edit_type=post.type %}
     {% else %}
         {% set action_path="/add" %}
         {% set edit_title='' %}
         {% set edit_content='' %}
         {% set edit_tags='' %}
+        {% set edit_type='原' %}
     {% endif %}
     <form role="form" action="{{ action_path }}" method="post">
         <div class="form-group">
             <label for="name">文章标题</label>
-            <input type="text" class="form-control" name="title" placeholder="请输入文章标题" value="{{ edit_title }}" required>
+            <div class="input-group">
+                <input type="text" class="form-control" name="title" placeholder="请输入文章标题" value="{{ edit_title }}" required>
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span id="select_type">{{ edit_type }}</span> <span class="caret"></span></button>
+                    <ul class="dropdown-menu dropdown-menu-right type-menu">
+                        <li><a href="javascript:void(0);">原</a></li>
+                        <li><a href="javascript:void(0);">转</a></li>
+                        <li><a href="javascript:void(0);">译</a></li>
+                    </ul>
+                    <input id="type" type="text" name="type" style="display:none" value="{{ edit_type }}">
+                </div><!-- /btn-group -->
+            </div>
         </div>
         <div class="form-group">
             <label for="title">文章内容</label>

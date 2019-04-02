@@ -463,7 +463,8 @@ module.exports.reqEdit = async function(ctx) {
     await PostsModel.updatePostById(post._id, user._id, {
       title: title,
       content: content,
-      tags: tags
+      tags: tags,
+      type: post.type
     })
     ctx.redirect('/post/' + post._id)
   } catch (err) {
@@ -471,3 +472,28 @@ module.exports.reqEdit = async function(ctx) {
   }
 }
 
+module.exports.test = async function(ctx) {
+    const user = ctx.session.user
+    const posts = await PostsModel.getAll()
+    posts.forEach(async post => {
+        let newType = '原'
+        let newTitle = post.title
+        if (newTitle.indexOf('（转载）') > 0) {
+            newTitle = newTitle.replace(/（转载）/, '')
+            newType = '转'
+            console.log(post.title)
+            await PostsModel.updatePostById(post._id, user._id, {
+                title: newTitle,
+                type: newType
+            })
+        } else if (newTitle.indexOf('(转载)') > 0) {
+            newTitle = newTitle.replace(/(转载)/, '')
+            newType = '转'
+            console.log(post.title)
+            await PostsModel.updatePostById(post._id, user._id, {
+                title: newTitle,
+                type: newType
+            })
+        }
+    })
+}

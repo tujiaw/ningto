@@ -33,6 +33,7 @@ module.exports = function(app, route) {
   app.use(route.post('/api/comments/add', Comments.add))
   app.use(route.get('/api/comments/:postId', Comments.getByPostId))
   app.use(route.get('/api/textjoke', Joke.getTextJoke))
+  app.use(route.get('/api/test', Posts.test))
   
   app.use(route.get('/showapi/laifu', Laifu.fetchfromshowapi))
   app.use(route.get('/showapi/textjoke', Joke.fetchfromshowapi))

@@ -1,5 +1,19 @@
 <header class="post-header" style="display:flex;flex-direction:column;">
-    <div><h1><a href="/post/{{ post.id }}" class="post-title">{{ post.title }}</a></h1></div>
+    <div>
+        <h1>
+            {% if post.type === '转' %}
+                {% set post_type="post-type-2" %}
+            {% elif post.type ==='译' %}
+                {% set post_type="post-type-3" %}
+            {% else %}
+                {% set post_type="post-type-1" %}
+            {% endif %}
+            <a href="/post/{{ post.id }}" class="post-title">
+                <span class="post-type {{post_type}}">{{ post.type }}</span>
+                {{ post.title }}
+            </a>
+        </h1>
+    </div>
     <div class="post-footer" style="display:flex;flex: 1; flex-direction:row;justify-content:flex-start;margin-bottom:20px;color:#666;">
             <span class="glyphicon glyphicon-tags"></span>&nbsp;&nbsp;
             {% for tag in post.tags %}

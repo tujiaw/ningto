@@ -8,7 +8,12 @@ var PostSchema = new mongoose.Schema({
   content: { type: String },
   pv: { type: Number },
   tags: { type: [String] },
+  type: { type: String },
 });
+
+PostSchema.statics.getAll = function() {
+    return this.find({}).exec();
+};
 
 PostSchema.statics.getPostById = function(postId) {
   return this.findOne({ _id: postId}).exec();

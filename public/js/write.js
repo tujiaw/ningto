@@ -34,6 +34,11 @@ $(document).ready(function() {
             $(ele).find('span').addClass(selectClass);
         }
     })
+
+    $('.type-menu a').click(function(ele) {
+        $('#select_type').html(ele.target.innerText);
+        $('#type').val(ele.target.innerText);
+    })
 })
 
 
