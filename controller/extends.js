@@ -10,6 +10,8 @@ var iconv = require('iconv-lite');
 var path = require('path');
 var svgCaptcha = require('svg-captcha');
 
+if (!fs.existsSync('./public/upload')) { fs.mkdirSync('./public/upload') }
+
 const readFilePromise = (path, encoding) => {
     return new Promise((resolve, reject) => {
         fs.readFile(path, encoding || '', (err, data) => {
@@ -60,7 +62,7 @@ module.exports.programUpload = async function(ctx) {
 }
 
 module.exports.mdviewer = async function(ctx) {
-    ctx.body = await ctx.render('md_viewer');
+    ctx.body = await ctx.render('tool_mdviewer');
 }
 
 module.exports.mdfile = async function(ctx, next) {
@@ -71,6 +73,7 @@ module.exports.mdfile = async function(ctx, next) {
   if (ctx.request.body.files && ctx.request.body.files.file) {
     const author = ctx.request.body.fields.author;
     const file = ctx.request.body.files.file;
+    console.log('mdfile, file:' + file.path);
     let content = await readFilePromise(file.path, 'utf8');
     if (content && content.length) {
         let matchstr = content.match(/�/g);
@@ -96,9 +99,31 @@ module.exports.mdfile = async function(ctx, next) {
 
 module.exports.html2markdown = async function(ctx, next) {
     if ('GET' === ctx.method) {
-        ctx.body = await ctx.render('html2md');
+        ctx.body = await ctx.render('tool_html2md');
     } else if ('POST' === ctx.method) {
         ctx.body = 'post'
+    } else {
+        return await next();
+    }
+}
+
+module.exports.uploadImage = async function(ctx, next) {
+    if ('GET' === ctx.method) {
+        ctx.body = await ctx.render('tool_image');
+    } else if ('POST' === ctx.method) {
+        const { id } = ctx.request.body.fields
+        const { file } = ctx.request.body.files
+        console.log('uploadImage, file:' + file.path)
+        try {
+            const reader = fs.createReadStream(file.path)
+            const writer = fs.createWriteStream(path.join('./public/upload', file.name))
+            reader.pipe(writer)
+            const response = { id: id, url: ctx.header.origin + '/upload/' + file.name }
+            console.log(response)
+            ctx.body = response
+        } catch (err) {
+            ctx.body = err
+        }
     } else {
         return await next();
     }

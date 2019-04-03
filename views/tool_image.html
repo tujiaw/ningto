@@ -1,0 +1,167 @@
+{% extends 'tool_layout.html' %}
+{% block content %}
+<div id="content">
+    <div id="dropbox">
+        <h1>Drop images here or click to upload</h1>
+        <h3>(No more than 5M)</h3>
+        <h4 id="tips"></h4>
+    </div>
+    <input type="file" id="inputfile" name="file" multiple style="display:none"/> 
+    <div class="uploadTable" style="display: none">
+        <p>上传的文件列表</p>
+        <div class="table-responsive">          
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>文件名</th>
+                    <th>大小</th>
+                    <th>链接(单击拷贝)</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extend_script %}
+<script src="https://cdn.jsdelivr.net/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/1.3.1/js/toastr.min.js"></script>
+<script>
+    var dropbox = document.getElementById("dropbox");    
+    dropbox.addEventListener("click", openfile, false);
+    dropbox.addEventListener("dragenter", dragenter, false);    
+    dropbox.addEventListener("dragover", dragover, false);    
+    dropbox.addEventListener("drop", drop, false);  
+
+    $('#inputfile').change(function() { upload($('#inputfile').get(0).files); })
+    function openfile(e) { $('#inputfile').click(); }
+    function dragenter(e) { e.stopPropagation(); e.preventDefault(); }
+    function dragover(e) { e.stopPropagation(); e.preventDefault(); }
+    function drop(e) { e.stopPropagation(); e.preventDefault(); upload(e.dataTransfer.files); }
+
+    var tips = $('#tips');
+    var getid = getidImpl()
+    function upload(files) {
+        if (files === undefined) {
+            return;
+        }
+
+        for (var i = 0; i < files.length; i++) {
+            if (files[i].size > 5 * 1024 * 1024) {
+                tips.text('Tips:No more than 5M.');    
+                return
+            } else {
+                var id = getid()
+                var fileObj = files[i]
+                FilesAdded(id, fileObj.name, fileObj.size)
+                var form = new FormData();
+                form.append("author", "ningto.com");
+                form.append('id', id);
+                form.append("file", fileObj); // 文件对象
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("post", '/uploadimage', true);
+                xhr.onload = function (e) {
+                    console.log('over');
+                };
+                xhr.onreadystatechange = function(ev) {
+                    if (ev.target.readyState == 4 && ev.target.status == 200) {
+                        const text = ev.target.responseText
+                        const rsp = JSON.parse(text)
+                        console.log(rsp)
+                        FileUploaded(rsp.id, rsp.url)
+                    }
+                }   
+                xhr.upload.addEventListener("progress", function(evt) {
+                    if (evt.lengthComputable) {
+                        //var percentComplete = Math.round(evt.loaded * 100 / evt.total);
+                        //tips.text('Tips:' + percentComplete + '%');
+                    } else {
+                        tips.text('Tips:upload failed!');
+                    }
+                }, false);
+
+                xhr.send(form);
+            }
+        }
+    }
+
+    //////////////////////////////////////
+    toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": true,
+        "progressBar": false,
+        "positionClass": "toast-bottom-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+
+    // Copies a string to the clipboard. Must be called from within an 
+    // event handler such as click. May return false if it failed, but
+    // this is not always possible. Browser support for Chrome 43+, 
+    // Firefox 42+, Safari 10+, Edge and IE 10+.
+    // IE: The clipboard feature may be disabled by an administrator. By
+    // default a prompt is shown the first time the clipboard is 
+    // used (per session).
+    function copyToClipboard(text) {
+        if (window.clipboardData && window.clipboardData.setData) {
+            // IE specific code path to prevent textarea being shown while dialog is visible.
+            return clipboardData.setData("Text", text); 
+
+        } else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
+            var textarea = document.createElement("textarea");
+            textarea.textContent = text;
+            textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in MS Edge.
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                return document.execCommand("copy");  // Security exception may be thrown by some browsers.
+            } catch (ex) {
+                console.warn("Copy to clipboard failed.", ex);
+                return false;
+            } finally {
+                document.body.removeChild(textarea);
+            }
+        }
+    }
+
+    function getidImpl() {
+        var index = 0
+        return function() {
+            return ['upload', Date.now(), ++index].join('_')
+        }
+    }
+
+    function onLinkClick(self) {
+        var url = $(self).find('code').html();
+        if (copyToClipboard(url)) {
+            toastr.success('复制成功')
+        }
+    }
+
+    function FilesAdded(id, name, size) {
+        $('.uploadTable').show();
+        var kbSize = 1;
+        if (size > 1000) {
+            kbSize = Math.ceil(size / 1000);
+        }
+        $('.uploadTable tbody').append(`<tr id="${id}"><td>${name}</td><td>${kbSize} KB</td><td class="link" onclick="onLinkClick(this)"><code>上传中...</code></td></tr>`)
+    }
+
+    function FileUploaded(id, link) {
+        $(`#${id} code`).html(link);
+    } 
+</script>
+{% endblock %}

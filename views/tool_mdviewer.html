@@ -1,4 +1,4 @@
-{% extends 'md_layout.html' %}
+{% extends 'tool_layout.html' %}
 {% block content %}
 <div id="content">
     <div id="dropbox">
@@ -57,11 +57,11 @@
     }
     xhr.upload.addEventListener("progress", function(evt) {
         if (evt.lengthComputable) {
-        var percentComplete = Math.round(evt.loaded * 100 / evt.total);
-        console.log(percentComplete);
-        tips.text('Tips:' + percentComplete + '%');
+            var percentComplete = Math.round(evt.loaded * 100 / evt.total);
+            console.log(percentComplete);
+            tips.text('Tips:' + percentComplete + '%');
         } else {
-        tips.text('Tips:upload failed!');
+            tips.text('Tips:upload failed!');
         }
     }, false);
     xhr.send(form);
