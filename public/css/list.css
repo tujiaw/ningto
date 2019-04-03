@@ -21,28 +21,3 @@ p.more {
     flex-direction: row;
     justify-content: center;
 }
-
-.post-type {
-    display: inline-block;
-    width: 26px;
-    height: 26px;
-    line-height: 26px;
-    text-align: center;
-    font-size: 12px;
-    border-radius: 50%;
-}
-
-.post-type.post-type-1 {
-    color: rgb(187, 5, 5);
-    border: 1px solid rgb(218, 129, 142);
-}
-
-.post-type.post-type-2 {
-    color: rgb(11, 158, 11);
-    border: 1px solid rgb(120, 230, 120);
-}
-
-.post-type.post-type-3 {
-    color: rgb(10, 10, 184);
-    border: 1px solid  rgb(113, 85, 179);
-}

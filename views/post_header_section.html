@@ -1,4 +1,4 @@
-<header class="post-header" style="display:flex;flex-direction:column;">
+<header class="post-header">
     <div>
         <h1>
             {% if post.type === '转' %}
@@ -9,12 +9,12 @@
                 {% set post_type="post-type-1" %}
             {% endif %}
             <a href="/post/{{ post.id }}" class="post-title">
-                <span class="post-type {{post_type}}">{{ post.type }}</span>
+                <span class="post-type-wrap"><span class="post-type {{post_type}}">{{ post.type }}</span></span>
                 {{ post.title }}
             </a>
         </h1>
     </div>
-    <div class="post-footer" style="display:flex;flex: 1; flex-direction:row;justify-content:flex-start;margin-bottom:20px;color:#666;">
+    <div class="post-footer">
             <span class="glyphicon glyphicon-tags"></span>&nbsp;&nbsp;
             {% for tag in post.tags %}
             {% if tag.length > 0 %}
