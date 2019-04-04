@@ -9,6 +9,7 @@ var marked = require('marked');
 var iconv = require('iconv-lite');
 var path = require('path');
 var svgCaptcha = require('svg-captcha');
+var crypto = require('crypto');
 
 if (!fs.existsSync('./public/upload')) { fs.mkdirSync('./public/upload') }
 
@@ -32,6 +33,21 @@ const writeFilePromise = (path, data) => {
                 return reject();
             }
             return resolve();
+        })
+    })
+}
+
+async function file_md5(path) {
+    var md5sum = crypto.createHash('md5');
+    var stream = fs.createReadStream(path);
+    return new Promise((resolve, reject) => {
+        stream.on('data', function(chunk) {
+            md5sum.update(chunk)
+        })
+        
+        stream.on('end', function() {
+            const md5str = md5sum.digest('hex').toUpperCase();
+            resolve(md5str)
         })
     })
 }
@@ -115,10 +131,17 @@ module.exports.uploadImage = async function(ctx, next) {
         const { file } = ctx.request.body.files
         console.log('uploadImage, file:' + file.path)
         try {
-            const reader = fs.createReadStream(file.path)
-            const writer = fs.createWriteStream(path.join('./public/upload', file.name))
-            reader.pipe(writer)
-            const response = { id: id, url: ctx.header.origin + '/upload/' + file.name }
+            const md5 = await file_md5(file.path)
+            const ext = file.name.slice(file.name.lastIndexOf('.'))
+            const newName = md5 + (ext.length > 2 ? ext : '');
+            const dstPath = path.join('./public/upload', newName)
+            if (!fs.exists(dstPath)) {
+                const reader = fs.createReadStream(file.path)
+                const writer = fs.createWriteStream(dstPath)
+                reader.pipe(writer)
+            }
+
+            const response = { id: id, url: ctx.header.origin + '/upload/' + newName }
             console.log(response)
             ctx.body = response
         } catch (err) {
