@@ -3,48 +3,47 @@ const { sendToSumscope } = require('../utils/sendmail')
 const Util = require('../utils/util')
 const axios = require('axios')
 const log = require('log4js').getLogger('app')
+const CronJob = require('cron').CronJob
 
 function crontab() {
-  let hitToday = 0;
-  let textJokeTotal = 0;
+    let hitToday = 0;
+    let textJokeTotal = 0;
 
-  const initData = async () => {
-    try {
-      log.debug('initdata start')
-      hitToday = 0;
-      textJokeTotal = await TextJoke.countDocuments();
-      textJokeTotal = textJokeTotal || 10000;
-      log.debug(`initData, hitToday:${hitToday}, textJokeTotal:${textJokeTotal}`);
-      log.debug('initdata finished')
-    } catch (err) {
-      log.debug('initdata error', err);
-    }
-  }
+    const clearTodayHit = new CronJob('0 0 * * *', function() {
+        log('clear today hit job start')
+        hitToday = 0
+    })
 
-  initData();
-  setInterval(() => {
-    const hours = new Date().getHours();
-    if (hours === 0) {
-      log.debug('start 0 hours work')
-      initData();
+    const textJokeJob = new CronJob('0 5 * * *', function() {
+        log('update text joke job start')
+        Util.internalHandle(2, 5, (index) => {
+            axios.get(`https://www.ningto.com/showapi/textjoke?page=${index}`);
+        })
+    })
 
-      Util.internalHandle(2, 5, (index) => {
-        axios.get(`https://www.ningto.com/showapi/textjoke?page=${index}`);
-      })
-    }
-    if (hours === 17) {
-      sendToSumscope('today hit', `count:${hitToday}`);
-    }
-  }, 3600 * 1000);
+    const sendMailJobj = new CronJob('30 17 * * *', function() {
+        log('send today hit mail job start')
+        sendToSumscope('today hit', `count:${hitToday}`);
+    })
 
-  return {
-    incHitToday: () => {
-      return ++hitToday;
-    },
-    textJokeTotal: () => {
-      return textJokeTotal;
+    clearTodayHit.start();
+    textJokeJob.start();
+    sendMailJobj.start();
+
+    (async function() {
+        textJokeTotal = await TextJoke.countDocuments();
+        textJokeTotal = textJokeTotal || 10000;
+        log.debug(`initData, textJokeTotal:${textJokeTotal}`);
+    })()
+    
+    return {
+        incHitToday: () => {
+            return ++hitToday;
+        },
+        textJokeTotal: () => {
+            return textJokeTotal;
+        }
     }
-  }
 }
 
 module.exports = crontab();

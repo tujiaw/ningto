@@ -16,7 +16,6 @@ const fs = require('fs')
 const log4js = require('log4js')
 log4js.configure('./config/log4js.json')
 const httplog = log4js.getLogger('http')
-const applog = log4js.getLogger('app')
 
 const app = new Koa()
 app.use(cors())
@@ -51,19 +50,6 @@ app.context.render = co.wrap(render({
 }))
 require('./routes/routes')(app, route)
 app.listen(config.port, () => {
-  log4js.getLogger('app').debug('listening on port ' + config.port)
+  log4js.getLogger().debug('listening on port ' + config.port)
 })
 
-// 内存泄漏检测
-const memwatch = require('memwatch-next');
-const heapdump = require('heapdump');
-memwatch.on('leak', function(info) { 
-  const mailInfo = {
-    time: new Date().toLocaleTimeString(),
-    leak: info
-  }
-
-  applog.warn(mainInfo)
-  sendToSumscope('leak', mailInfo);
-  heapdump.writeSnapshot('./heapsnapshot/' + Date.now() + '.heapsnapshot');
-});

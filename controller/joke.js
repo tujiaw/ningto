@@ -2,7 +2,7 @@ const { TextJoke } = require('../models/joke')
 const Crontab = require('./crontab')
 const { getTextJoke } = require('../utils/showapi')
 const { getRandom } = require('../utils/util')
-const log = require('log4js').getLogger('app')
+const log = require('log4js').getLogger()
 
 const joke = {
   saveTextJoke: async function(obj) {
@@ -10,6 +10,7 @@ const joke = {
     if (f.length) {
       log.debug('is exist, id:' + obj.id)
     } else {
+      log.debug('new joke save:' + JSON.stringify(obj))
       await new TextJoke(obj).save();
     }
   },

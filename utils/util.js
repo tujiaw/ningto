@@ -1,4 +1,4 @@
-module.exports.internalHandle = function(internalSecond, count, fn) {
+exports.internalHandle = function(internalSecond, count, fn) {
     let i = 0;
     const id = setInterval(() => {
         ++i;
@@ -10,7 +10,7 @@ module.exports.internalHandle = function(internalSecond, count, fn) {
     }, internalSecond * 1000)
 }
 
-module.exports.asyncSleep = async function(ms) {
+exports.asyncSleep = async function(ms) {
     function impl(ms) {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
@@ -21,7 +21,15 @@ module.exports.asyncSleep = async function(ms) {
     await impl(ms);
 }
 
-module.exports.getRandom = (x, y) => {
+exports.getRandom = (x, y) => {
     let a = y - x + 1;
     return a > 0 ? Math.floor(Math.random() * a + x) : 0;
+}
+
+exports.encodeBase64 = function(str) {
+    return new Buffer(str).toString('base64')
+}
+
+exports.decodeBase64 = function(str) {
+    return new Buffer(str, 'base64').toString()
 }

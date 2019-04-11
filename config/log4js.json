@@ -1,5 +1,8 @@
 {
   "appenders": {
+    "out": {
+      "type": "stdout"
+    },
     "access": {
       "type": "dateFile",
       "filename": "log/access.log",

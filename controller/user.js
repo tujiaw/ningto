@@ -4,10 +4,10 @@ var UsersModel = require('../models/users');
 var MongoHelp = require('../models/mongo').mongoHelp;
 var sha1 = require('sha1');
 var config = require('../config');
-var Base64 = require('js-base64').Base64;
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
 const log = require('log4js').getLogger('app')
+const { encodeBase64 } = require('../utils/util')
 
 module.exports.signin = async function(ctx) {
   log.debug('-------------signin---------------')
@@ -138,7 +138,7 @@ module.exports.githubOAuthCallbackComment = async function(ctx, next) {
     login: user.login,
     token: access.access_token,
     avatar_url: user.avatar_url,
-    detail_info: Base64.encode(JSON.stringify(user))
+    detail_info: encodeBase64(JSON.stringify(user))
   }
   try {
     const resultUserinfo = await UsersModel.findOneAndUpdate(
