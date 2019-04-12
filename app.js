@@ -15,6 +15,7 @@ const fs = require('fs')
 
 const log4js = require('log4js')
 log4js.configure('./config/log4js.json')
+const applog = log4js.getLogger()
 const httplog = log4js.getLogger('http')
 
 const app = new Koa()
@@ -34,6 +35,7 @@ const SessionConfig = {
   rolling: false, /** (boolean) Force a session identifier cookie to be set on every response. The expiration is reset to the original maxAge, resetting the expiration countdown. (default is false) */
   renew: false, /** (boolean) renew session when session is nearly expired, so we can always keep user logged in. (default is false)*/
 }
+
 app.keys = ['7BBF9DD3-4C79-4D6A-8220-25605F87E8FA']
 app.use(logger((str, args) => {
   httplog.debug(str)
@@ -48,8 +50,11 @@ app.context.render = co.wrap(render({
   cache: 'memory',
   ext: 'html',
 }))
+app.on('error', (err, ctx) => {
+    applog.error(err)
+})
 require('./routes/routes')(app, route)
 app.listen(config.port, () => {
-  log4js.getLogger().debug('listening on port ' + config.port)
+  applog.info('listening on port ' + config.port)
 })
 
