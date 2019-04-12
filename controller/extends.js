@@ -167,11 +167,14 @@ module.exports.createpostlist = async function(ctx, next) {
 }
 
 module.exports.addHit = async function(pathname) {
-    await SearchKeyModel.addHit(pathname);
-    const totalHit = await SearchKeyModel.totalHit();
-    return Promise.resolve(totalHit.count);
+    await SearchKeyModel.addHit(pathname)
+    const hit = await SearchKeyModel.hit()
+    const result = {}
+    for (const item of hit) {
+        result[item.key] = item.count
+    }
+    return result
 }
-
 
 module.exports.eval = async function(ctx, evalEncode) {
     if (!evalEncode) {

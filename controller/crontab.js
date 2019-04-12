@@ -1,4 +1,5 @@
 const { TextJoke } = require('../models/joke')
+const { SearchKey } = require('../models/searchKey')
 const { sendToSumscope } = require('../utils/sendmail')
 const Util = require('../utils/util')
 const axios = require('axios')
@@ -6,12 +7,11 @@ const log = require('log4js').getLogger()
 const CronJob = require('cron').CronJob
 
 function crontab() {
-    let hitToday = 0;
     let textJokeTotal = 0;
 
     const clearTodayHit = new CronJob('0 0 * * *', function() {
         log.info('clear today hit job start')
-        hitToday = 0
+        SearchKey.clearTodayHit()
     })
 
     const textJokeJob = new CronJob('0 5 * * *', function() {
@@ -23,7 +23,7 @@ function crontab() {
 
     const sendMailJobj = new CronJob('30 17 * * *', function() {
         log.info('send today hit mail job start')
-        sendToSumscope('today hit', `count:${hitToday}`);
+        //sendToSumscope('today hit', `count:${hitToday}`);
     })
 
     clearTodayHit.start();
@@ -37,9 +37,6 @@ function crontab() {
     })()
 
     return {
-        incHitToday: () => {
-            return ++hitToday;
-        },
         textJokeTotal: () => {
             return textJokeTotal;
         }

@@ -12,10 +12,10 @@ const log4js = require('log4js')
 
 module.exports = function(app, route) {
   app.use(async (ctx, next) => {
-    const totalhit = await Extends.addHit(ctx.path);
+    const { totalhit, todayhit } = await Extends.addHit(ctx.path);
     const globalData = {
       totalhit: totalhit, 
-      todayhit: Crontab.incHitToday()
+      todayhit: todayhit
     }
     if (ctx.session.user) {
       globalData.user = ctx.session.user

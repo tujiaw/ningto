@@ -3,7 +3,7 @@ var config = require('../config');
 var PAGE_COUNT = config.pageCount;
 
 const SearchPrefix = 'search';
-const TotalHitPrefix = 'totalhit';
+const HitPrefix = 'hit';
 const TagsPrefix = 'tags';
 
 var SearchKeySchema = new mongoose.Schema({
@@ -21,11 +21,18 @@ SearchKeySchema.statics.setSearchKey = function(key) {
 };
 
 SearchKeySchema.statics.addHit = function(pathname) {
-  return this.updateOne({ prefix: TotalHitPrefix }, { $inc: {count: 1}}, {upsert: true}).exec();
+    return Promise.all([
+        this.updateOne({ prefix: HitPrefix, key: 'todayhit' }, { $inc: {count: 1}}, {upsert: true}).exec(), 
+        this.updateOne({ prefix: HitPrefix, key: 'totalhit' }, { $inc: {count: 1}}, {upsert: true}).exec()]
+    )
 }
 
-SearchKeySchema.statics.totalHit = function() {
-  return this.findOne({ prefix: TotalHitPrefix }, 'count').exec();
+SearchKeySchema.statics.hit = function() {
+  return this.find({ prefix: HitPrefix }).exec();
+}
+
+SearchKeySchema.statics.clearTodayHit = function() {
+    return this.updateOne({ prefix: HitPrefix, key: 'todayhit'}, { $set: {todayhit: 0}}).exec();
 }
 
 SearchKeySchema.statics.getTags = function() {
