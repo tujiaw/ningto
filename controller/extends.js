@@ -1,8 +1,6 @@
 'use strict'
 
-var config = require('../config');
 var PostsModel = require('../models/posts');
-var SearchKeyModel = require('../models/searchKey');
 var MongoHelp = require('../models/mongo').mongoHelp;
 var fs = require('fs');
 var marked = require('marked');
@@ -10,6 +8,7 @@ var iconv = require('iconv-lite');
 var path = require('path');
 var svgCaptcha = require('svg-captcha');
 var crypto = require('crypto');
+var global = require('./global')
 
 if (!fs.existsSync('./public/upload')) { fs.mkdirSync('./public/upload') }
 
@@ -166,24 +165,25 @@ module.exports.createpostlist = async function(ctx, next) {
     ctx.body = html;
 }
 
-module.exports.addHit = async function(pathname) {
-    await SearchKeyModel.addHit(pathname)
-    const hit = await SearchKeyModel.hit()
-    const result = {}
-    for (const item of hit) {
-        result[item.key] = item.count
-    }
-    return result
+module.exports.cacheHit = async function(ctx) {
+  if (ctx.method == 'GET' && ctx.path != '/captcha') {
+    global.addTodayHit(1)
+    global.addTotalHit(1)
+  }
+  return { 
+    totalhit: global.getTotalHit(),
+    todayhit: global.getTodayHit(),
+  }
 }
 
 module.exports.eval = async function(ctx, evalEncode) {
-    if (!evalEncode) {
-        ctx.throw(404, 'invalid eval encode');
-    }
-    var express = decodeURIComponent(evalEncode);
-    ctx.body = eval(express);
+  if (!evalEncode) {
+      ctx.throw(404, 'invalid eval encode');
+  }
+  var express = decodeURIComponent(evalEncode);
+  ctx.body = eval(express);
 }
 
 module.exports.captcha = async function(ctx) {
-    ctx.body = svgCaptcha.create();
+  ctx.body = svgCaptcha.create();
 }

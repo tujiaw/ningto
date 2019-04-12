@@ -54,6 +54,7 @@ app.on('error', (err, ctx) => {
     applog.error(err)
 })
 require('./routes/routes')(app, route)
+require('./controller/crontab')()
 app.listen(config.port, () => {
   applog.info('listening on port ' + config.port)
 })

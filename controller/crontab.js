@@ -1,17 +1,22 @@
-const { TextJoke } = require('../models/joke')
-const { SearchKey } = require('../models/searchKey')
+const SearchKey = require('../models/searchKey')
 const { sendToSumscope } = require('../utils/sendmail')
 const Util = require('../utils/util')
+const global = require('./global')
 const axios = require('axios')
 const log = require('log4js').getLogger()
 const CronJob = require('cron').CronJob
 
-function crontab() {
-    let textJokeTotal = 0;
-
+function crontabStart() {
     const clearTodayHit = new CronJob('0 0 * * *', function() {
         log.info('clear today hit job start')
         SearchKey.clearTodayHit()
+        global.setTodayHit(0)
+    })
+
+    const updateHit = new CronJob('* * * * *', function() {
+        if (global.getTodayHit() > 0) {
+            SearchKey.sethit(global.getTodayHit(), global.getTotalHit())
+        }
     })
 
     const textJokeJob = new CronJob('0 5 * * *', function() {
@@ -26,21 +31,10 @@ function crontab() {
         //sendToSumscope('today hit', `count:${hitToday}`);
     })
 
-    clearTodayHit.start();
-    textJokeJob.start();
-    sendMailJobj.start();
-
-    (async function() {
-        textJokeTotal = await TextJoke.countDocuments();
-        textJokeTotal = textJokeTotal || 10000;
-        log.info(`initData, textJokeTotal:${textJokeTotal}`);
-    })()
-
-    return {
-        textJokeTotal: () => {
-            return textJokeTotal;
-        }
-    }
+    clearTodayHit.start()
+    textJokeJob.start()
+    sendMailJobj.start()
+    updateHit.start()
 }
 
-module.exports = crontab();
+module.exports = crontabStart

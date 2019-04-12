@@ -1,5 +1,5 @@
 const { TextJoke } = require('../models/joke')
-const Crontab = require('./crontab')
+const global = require('./global')
 const { getTextJoke } = require('../utils/showapi')
 const { getRandom } = require('../utils/util')
 const log = require('log4js').getLogger()
@@ -29,7 +29,7 @@ const joke = {
       const page = ctx.query.page || 1
       const count = ctx.query.count || 20
       const PAGE_PREFIX = '/textjoke?page=';
-      const totalPage = Crontab.textJokeTotal() / count;
+      const totalPage = global.getTotalTextJokeCount() / count;
 
       const prevPage = Math.max(1, parseInt(page) - 1);
       const nextPage = Math.min(totalPage, parseInt(page) + 1);

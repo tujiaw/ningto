@@ -20,15 +20,28 @@ SearchKeySchema.statics.setSearchKey = function(key) {
   return this.updateOne({ prefix: SearchPrefix, key: key }, { $inc: {count: 1} }, {upsert: true}).exec();
 };
 
-SearchKeySchema.statics.addHit = function(pathname) {
+SearchKeySchema.statics.sethit = function(todayhit, totalhit) {
     return Promise.all([
-        this.updateOne({ prefix: HitPrefix, key: 'todayhit' }, { $inc: {count: 1}}, {upsert: true}).exec(), 
-        this.updateOne({ prefix: HitPrefix, key: 'totalhit' }, { $inc: {count: 1}}, {upsert: true}).exec()]
+        this.updateOne({ prefix: HitPrefix, key: 'todayhit' }, { $set: {count: todayhit}}, {upsert: true}).exec(), 
+        this.updateOne({ prefix: HitPrefix, key: 'totalhit' }, { $set: {count: totalhit}}, {upsert: true}).exec()]
     )
 }
 
 SearchKeySchema.statics.hit = function() {
-  return this.find({ prefix: HitPrefix }).exec();
+    return new Promise((resolve, reject) => {
+        this.find({ prefix: HitPrefix }).exec()
+        .then(data => {
+            const result = {}
+            for (const item of data) {
+                result[item.key] = item.count
+            }
+            resolve(result)
+        })
+        .catch(err => {
+            console.log(err)
+            reject({ todayhit:0, totalhit: 0})
+        })
+    })
 }
 
 SearchKeySchema.statics.clearTodayHit = function() {
