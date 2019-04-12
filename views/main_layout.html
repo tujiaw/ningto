@@ -21,11 +21,11 @@
   <nav id="top-navbar">
     <p>
       <a href="http://ningto.com" style="color:red;">
-        {% if totalhit %}
-            您是第{{ totalhit }}位访问者
-        {% endif%}
         {% if todayhit %}
-            今日点击{{ todayhit }}
+            今日点击{{todayhit}}
+        {% endif%}
+        {% if totalhit %}
+            总点击{{totalhit}}
         {% endif%}
     </a> |
       {% block top_navbar_start_menu %}{% endblock %}
