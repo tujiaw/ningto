@@ -1,15 +1,16 @@
 <header class="post-header">
     <div>
         <h1>
-            {% if post.type === '转' %}
+            {% set typeText = post.type || '原' %}
+            {% if typeText === '转' %}
                 {% set post_type="post-type-2" %}
-            {% elif post.type ==='译' %}
+            {% elif typeText ==='译' %}
                 {% set post_type="post-type-3" %}
             {% else %}
                 {% set post_type="post-type-1" %}
             {% endif %}
             <a href="/post/{{ post.id }}" class="post-title">
-                <span class="post-type-wrap"><span class="post-type {{post_type}}">{{ post.type }}</span></span>
+                <span class="post-type-wrap"><span class="post-type {{post_type}}">{{ typeText }}</span></span>
                 {{ post.title }}
             </a>
         </h1>
