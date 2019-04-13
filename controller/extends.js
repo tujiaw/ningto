@@ -1,6 +1,7 @@
 'use strict'
 
 var PostsModel = require('../models/posts');
+var CommentsModel = require('../models/comments');
 var MongoHelp = require('../models/mongo').mongoHelp;
 var fs = require('fs');
 var marked = require('marked');
@@ -52,20 +53,50 @@ async function file_md5(path) {
 }
 
 module.exports.about = async function(ctx) {
-    let aboutInfo = { 
+    let about = { 
         postCount: 0,
         postHits: 0,
         lastUpdate: '2017-04-19'
     }
     let posts = await PostsModel.getPostsProfile()
     posts.forEach(function(item) {
-        aboutInfo.postCount++;
-        aboutInfo.postHits += item.pv;
+        about.postCount++;
+        about.postHits += item.pv;
     })
     if (posts.length) {
-        aboutInfo.lastUpdate = MongoHelp.id2time(posts[0]._doc._id, 'YYYY-MM-DD');
+        about.lastUpdate = MongoHelp.id2time(posts[0]._doc._id, 'YYYY-MM-DD');
     }
-    ctx.body = await ctx.render('about', { about: aboutInfo });
+
+    const MAX_SHOW_COMMENTS = 20
+    const commentList = await CommentsModel.getLastList(MAX_SHOW_COMMENTS)
+    const comment = {
+        title: '最近评论列表',
+        list: []
+    }
+    if (commentList && Array.isArray(commentList)) {
+        MongoHelp.addAllCreateDateTime(commentList)
+        const postTitle = {}
+        for (const comment of commentList) {
+            if (!postTitle[comment.postId]) {
+                const post = await PostsModel.getPostById(comment.postId)
+                if (post) {
+                    postTitle[comment.postId] = post.title
+                }
+              }
+        }
+        comment.list = commentList.map(item => {
+          return {
+              id: item.id,
+              url: '/post/' + item.postId,
+              title: postTitle[item.postId],
+              name: item.name,
+              content: item.content,
+              created_at: item.created_at
+          }
+        })
+    }
+
+    ctx.body = await ctx.render('about', { about, comment });
 }
 
 module.exports.program = async function(ctx) {

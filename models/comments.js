@@ -18,4 +18,8 @@ CommentsSchema.statics.deleteById = function(commentId) {
     return this.remove({ _id: commentId }).exec()
 }
 
+CommentsSchema.statics.getLastList = function(count) {
+    return this.find({}).sort({ _id: -1 }).limit(count).exec()
+}
+
 module.exports = mongoose.blogConn.model('Comments', CommentsSchema);

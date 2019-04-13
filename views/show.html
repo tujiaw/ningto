@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="/css/github-markdown.min.css">
 <link rel="stylesheet" href="/css/post_header_section.css">
 <link rel="stylesheet" href="/css/show.css">
+<link rel="stylesheet" href="/css/comments.css">
 {% endblock %}
 {% block content %}
 <div class="show-content">
@@ -37,24 +38,7 @@
     </nav>
 </div>
 
-{% if comments && comments.length %}
-<form role="form" class="comments commentList" action="/comments/add" method="post">
-    <h3>评论列表</h3><br />
-    {% for comment in comments %}
-    <div class="form-group" id={{ comment.id }}>
-        <div>
-            {% if user.login==="tujiaw" %}
-            <a id="delete" class="glyphicon glyphicon glyphicon-remove"></a>
-            {% endif %}
-            <span id="name">{{comment.name}}</span>
-            <span> 说道：</span>
-        </div>
-        <div id="time">{{comment.created_at}}</div>
-        <div id="content">{{comment.content}}</div>
-    </div>
-    {% endfor %}
-</form>
-{% endif %}
+{% include "comments.html" %}
 
 <form role="form" class="comments commentInput" action="/comments/add" method="post">
     <h3>发表评论</h3>

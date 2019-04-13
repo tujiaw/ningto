@@ -1,0 +1,20 @@
+{% if comment %}
+<form role="form" class="comments commentList" action="/comments/add" method="post">
+    <h3>{{comment.title}}</h3><br />
+    {% for item in comment.list %}
+    <div class="form-group" id={{ item.id }}>
+        <div>
+            {% if user.login==="tujiaw" %}
+                <a id="delete" class="glyphicon glyphicon glyphicon-remove"></a>
+            {% endif %}
+            <span id="name">{{item.name}}</span>
+            <span id="time">{{item.created_at}}</span>
+            {% if item.url && item.title %}
+                <a href="{{ item.url }}" style="color: #6ba44e;font-size:12px;">{{ item.title }}</a>
+            {% endif %}
+        </div>
+        <div id="content">{{item.content}}</div>
+    </div>
+    {% endfor %}
+</form>
+{% endif %}
