@@ -17,4 +17,22 @@
     </div>
     {% endfor %}
 </form>
+<script>
+    $('.commentList #delete').on('click', function () {
+            const commentId = $(this).parent().parent().attr('id')
+            if (commentId && commentId.length) {
+                    $.ajax({
+                            type: 'POST',
+                            url: '/comments/remove/',
+                            data: {
+                                    commentId: commentId
+                            },
+                            success: function (result) {
+                                    console.log(result)
+                                    $('#' + commentId).hide();
+                            }
+                    })
+            }
+    })
+</script>
 {% endif %}
