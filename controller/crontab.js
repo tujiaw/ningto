@@ -6,7 +6,7 @@ const axios = require('axios')
 const log = require('log4js').getLogger()
 const CronJob = require('cron').CronJob
 
-const bing = require('./config').bing
+const bing = require('../config').bing
 const path = require('path')
 const url = require('url')
 const fs = require('fs')
@@ -62,7 +62,7 @@ function crontabStart() {
     })
 
     // 每天下午一点下载必应壁纸
-    const bingJob = new CronJob('0 13 * * *', function() {
+    const bingJob = new CronJob('2 13 * * *', function() {
         log.info('down bing wallpaper job start')
         try {
             downloadBingWallpaper()
