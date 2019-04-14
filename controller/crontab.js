@@ -73,7 +73,7 @@ function crontabStart() {
 
     clearTodayHit.start()
     textJokeJob.start()
-    sendMailJobj.start()
+    sendMailJob.start()
     updateHit.start()
     bingJob.start()
 }
