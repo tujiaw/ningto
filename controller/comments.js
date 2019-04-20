@@ -4,13 +4,36 @@ var MongoHelp = require('../models/mongo').mongoHelp;
 const log = require('log4js').getLogger('app')
 
 const kMaxComments = 100;
+function isCommentValid(content) {
+    if (content.length < 3) {
+        return false
+    }
+
+    const MAX_WORD_LEN = 15
+    const chineseRegex =/[\u4E00-\u9FA5]+/; 
+    const strList = content.split(/[ ，。；？！、,.;:!\/]/)
+    for (let str of strList) {
+        str = str.trim()
+        if (str.length < MAX_WORD_LEN) {
+            continue
+        } else if (chineseRegex.test(str)) {
+            continue
+        } else {
+            return false;
+        }
+    }
+    return true;
+}
+
 module.exports.add = async function(ctx) {
     let result = '';
     try {
         let data = JSON.parse(ctx.request.body);
         if (data.postId.length && data.name.length && data.content.length) {
-          if (data.name.length > 128 || data.content.length > 2048) {
+          if (data.name.length > 128 || data.content.length > 1024) {
             result = '名字或内容太长！'
+          } else if (!isCommentValid(data.content)) {
+            result = '评论不合法！'
           } else {
             const count = await CommentsModel.countByPostId(data.postId)
             if (count >= kMaxComments) {
