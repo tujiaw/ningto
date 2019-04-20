@@ -74,6 +74,8 @@ module.exports.reqAdd = async function(ctx) {
             if (count >= kMaxComments) {
                 ctx.body = '评论过多禁止发表新的评论'
                 return
+            } else if (!isCommentValid(data.content)) {
+                result = '评论不合法！'
             } else {
                 data.name = xss(data.name)
                 data.content = xss(data.content)
