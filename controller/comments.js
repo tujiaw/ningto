@@ -67,6 +67,9 @@ module.exports.reqRemove = async function(ctx) {
 }
 
 module.exports.reqAdd = async function(ctx) {
+    ctx.redirect('/');
+    return; // 禁用评论
+
     let data = ctx.request.body
     if (data.postId.length && data.name.length && data.content.length) {
         try {
