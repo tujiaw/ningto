@@ -1,7 +1,8 @@
 {% extends 'main_layout.html' %} 
 {% block title %}泊客网 - 关于{% endblock %} 
 {% block subhead %}
-  <link href="/css/about.css" type="text/css" rel="stylesheet" />
+	<link href="/css/about.css" type="text/css" rel="stylesheet" />
+	<link href="/css/comments.css" type="text/css" rel="stylesheet" />
 {% endblock %} 
 {% block content %}
 <div class="container">
@@ -54,6 +55,7 @@
   </div> <!--ghProfile-->
 </div> <!--card-->
 <br>
+{% include "comments.html" %}
 {% endblock %}
 {% block extend_script %}
 {% endblock %}

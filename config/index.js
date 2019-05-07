@@ -24,7 +24,8 @@ module.exports = {
   github: {
     client_id: '531ad8e4517595748d97',
     client_secret: 'bf123fc9fe25a30e3e33d7a07daf825b73e07dc6',
-  }
+  },
+  bing: 'https://bing.biturl.top'
 };
 
 // 1.安装mondb

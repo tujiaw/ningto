@@ -253,10 +253,13 @@ module.exports.show = async function(ctx, id) {
     }
 
     const commentList = await CommentsModel.getByPostId(id)
-    let comments = []
+    const comment = {
+      title: '文章评论列表',
+      list: []
+    }
     if (commentList && Array.isArray(commentList)) {
         MongoHelp.addAllCreateDateTime(commentList)
-        comments = commentList.map(item => {
+        comment.list = commentList.map(item => {
           return {
               id: item.id,
               name: item.name,
@@ -266,13 +269,7 @@ module.exports.show = async function(ctx, id) {
         })
     }
 
-    const result = {
-      post: post,
-      comments: comments,
-      prevPost: prevPost,
-      nextPost: nextPost
-    }
-
+    const result = { post, comment, prevPost, nextPost }
     if (isRestapi(ctx)) {
       result.rightSidebarData = await getRightSidebarData(ctx)
       result.toc = result.post.toc
