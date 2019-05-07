@@ -11,7 +11,7 @@ module.exports = {
   },
   tags: ['Windows', 'Linux', 'Android', 'IOS', 'Mac', 'Mobile', 'C/C++', 'Qt', 'Node.js', 'Java', 'Database', 
         'Web', 'Tools', 'Bug', 'Life', 'Tips', 'Design', 'Javascript', 'MongoDB', 
-        'React', 'Product'],
+        'React', 'Product', 'Go'],
   //mongodb: 'mongodb\://localhost:27017/nodeblog', // :一定要转义
   blogUri: 'mongodb\://127.0.0.1:27017/nodeblog',
   poetryUri: 'mongodb\://127.0.0.1:27017/chinese-poetry',
